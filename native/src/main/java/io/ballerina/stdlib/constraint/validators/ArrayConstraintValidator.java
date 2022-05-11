@@ -16,25 +16,25 @@
  * under the License.
  */
 
-package io.ballerina.stdlib.constraint;
-
-import io.ballerina.runtime.api.Environment;
-import io.ballerina.runtime.api.Module;
+package io.ballerina.stdlib.constraint.validators;
 
 /**
- * Utility functions relevant to module operations.
+ * Extern functions for validating array constraints `@constraint:Array` of Ballerina.
  */
-public class ModuleUtils {
+public class ArrayConstraintValidator extends AbstractLengthValidator {
 
-    private static Module constraintModule;
-
-    private ModuleUtils() {}
-
-    public static void setModule(Environment env) {
-        constraintModule = env.getCurrentModule();
+    @Override
+    boolean validateLength(Object fieldValue, long constraintValue) {
+        return (Long) fieldValue == constraintValue;
     }
 
-    public static Module getModule() {
-        return constraintModule;
+    @Override
+    boolean validateMinLength(Object fieldValue, long constraintValue) {
+        return (Long) fieldValue >= constraintValue;
+    }
+
+    @Override
+    boolean validateMaxLength(Object fieldValue, long constraintValue) {
+        return (Long) fieldValue <= constraintValue;
     }
 }

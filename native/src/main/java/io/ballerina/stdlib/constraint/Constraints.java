@@ -18,23 +18,28 @@
 
 package io.ballerina.stdlib.constraint;
 
-import io.ballerina.runtime.api.Environment;
-import io.ballerina.runtime.api.Module;
+import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.attachments.RecordFieldAttachment;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Utility functions relevant to module operations.
+ * Extern functions for validating constraints.
  */
-public class ModuleUtils {
+public class Constraints {
 
-    private static Module constraintModule;
+    @SuppressWarnings({"unchecked", "unused"})
+    public static Object validate(Object obj) {
+        Set<String> failedConstraints = new HashSet<>();
+        if (obj instanceof BMap) {
+            new RecordFieldAttachment().validateRecord((BMap<BString, Object>) obj, failedConstraints);
+        }
 
-    private ModuleUtils() {}
-
-    public static void setModule(Environment env) {
-        constraintModule = env.getCurrentModule();
-    }
-
-    public static Module getModule() {
-        return constraintModule;
+        if (!failedConstraints.isEmpty()) {
+            return ErrorUtils.buildError(failedConstraints);
+        }
+        return null;
     }
 }
