@@ -19,11 +19,11 @@
 package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
-import io.ballerina.stdlib.constraint.attachments.RecordFieldAttachment;
+import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
+import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
+import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -31,13 +31,15 @@ import java.util.Set;
  */
 public class Constraints {
 
-    @SuppressWarnings({"unchecked", "unused"})
     public static Object validate(Object value, BTypedesc typedesc) {
-        Set<String> failedConstraints = new HashSet<>();
+        AbstractAnnotations annotations;
         if (value instanceof BMap) {
-            new RecordFieldAttachment().validateRecord((BMap<BString, Object>) value, typedesc, failedConstraints);
+            annotations = new RecordFieldAnnotations();
+        } else {
+            annotations = new TypeAnnotations();
         }
-
+        annotations.validate(value, typedesc);
+        Set<String> failedConstraints = annotations.getFailedConstraints();
         if (!failedConstraints.isEmpty()) {
             return ErrorUtils.buildError(failedConstraints);
         }

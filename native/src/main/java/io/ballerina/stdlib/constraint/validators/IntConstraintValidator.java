@@ -29,7 +29,13 @@ import java.util.Set;
  */
 public class IntConstraintValidator extends AbstractValueValidator {
 
-    public void validate(BMap<BString, Object> constraints, Number fieldValue, Set<String> failedConstraints) {
+    private final Set<String> failedConstraints;
+
+    public IntConstraintValidator(Set<String> failedConstraints) {
+        this.failedConstraints = failedConstraints;
+    }
+
+    public void validate(BMap<BString, Object> constraints, Number fieldValue) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             Long constraintValue = (Long) constraint.getValue();
             super.validate(constraint, fieldValue, constraintValue, failedConstraints);

@@ -31,7 +31,13 @@ import java.util.Set;
  */
 public class NumberConstraintValidator extends AbstractValueValidator {
 
-    public void validate(BMap<BString, Object> constraints, Number fieldValue, Set<String> failedConstraints) {
+    private final Set<String> failedConstraints;
+
+    public NumberConstraintValidator(Set<String> failedConstraints) {
+        this.failedConstraints = failedConstraints;
+    }
+
+    public void validate(BMap<BString, Object> constraints, Number fieldValue) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             BigDecimal constraintValue = ((BDecimal) constraint.getValue()).value();
             super.validate(constraint, fieldValue, constraintValue, failedConstraints);

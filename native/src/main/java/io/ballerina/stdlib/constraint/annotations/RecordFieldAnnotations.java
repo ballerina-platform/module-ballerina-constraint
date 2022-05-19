@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package io.ballerina.stdlib.constraint.attachments;
+package io.ballerina.stdlib.constraint.annotations;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.utils.StringUtils;
@@ -26,35 +26,30 @@ import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.Constants;
-import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
-import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
-import io.ballerina.stdlib.constraint.validators.IntConstraintValidator;
-import io.ballerina.stdlib.constraint.validators.NumberConstraintValidator;
-import io.ballerina.stdlib.constraint.validators.StringConstraintValidator;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Extern functions for validating constraints on record fields.
  */
-public class RecordFieldAttachment {
+public class RecordFieldAnnotations extends AbstractAnnotations {
 
     @SuppressWarnings("unchecked")
-    public void validateRecord(BMap<BString, Object> record, BTypedesc typedesc, Set<String> failedConstraints) {
-        validateRecordAnnotations(record, typedesc, failedConstraints);
+    @Override
+    public void validate(Object value, BTypedesc typedesc) {
+        BMap<BString, Object> record = (BMap<BString, Object>) value;
+        validateRecordAnnotations(record, typedesc);
         for (BString key : record.getKeys()) {
             if (record.get(key) instanceof BMap) {
                 record = ((BMap<BString, Object>) record.get(key));
                 typedesc = record.getTypedesc();
-                validateRecord(record, typedesc, failedConstraints);
+                validate(record, typedesc);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void validateRecordAnnotations(BMap<BString, Object> record, BTypedesc typedesc,
-                                           Set<String> failedConstraints) {
+    private void validateRecordAnnotations(BMap<BString, Object> record, BTypedesc typedesc) {
         BMap<BString, Object> recordAnnotations = ((AnnotatableType) typedesc.getDescribingType()).getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
@@ -65,29 +60,29 @@ public class RecordFieldAttachment {
                     String annotationTag = annotationRecord.getKey().getValue().
                             substring(Constants.PREFIX_ANNOTATION_RECORD.length());
                     BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
-                    validateRecordAnnotationTags(annotationTag, constraints, fieldValue, failedConstraints);
+                    validateRecordAnnotationTags(annotationTag, constraints, fieldValue);
                 }
             }
         }
     }
 
     private void validateRecordAnnotationTags(String annotationTag, BMap<BString, Object> constraints,
-                                              Object fieldValue, Set<String> failedConstraints) {
+                                              Object fieldValue) {
         switch (annotationTag) {
             case Constants.ANNOTATION_TAG_INT:
-                new IntConstraintValidator().validate(constraints, (Number) fieldValue, failedConstraints);
+                super.intConstraintValidator.validate(constraints, (Number) fieldValue);
                 break;
             case Constants.ANNOTATION_TAG_FLOAT:
-                new FloatConstraintValidator().validate(constraints, (Number) fieldValue, failedConstraints);
+                super.floatConstraintValidator.validate(constraints, (Number) fieldValue);
                 break;
             case Constants.ANNOTATION_TAG_NUMBER:
-                new NumberConstraintValidator().validate(constraints, (Number) fieldValue, failedConstraints);
+                super.numberConstraintValidator.validate(constraints, (Number) fieldValue);
                 break;
             case Constants.ANNOTATION_TAG_STRING:
-                new StringConstraintValidator().validate(constraints, fieldValue, failedConstraints);
+                super.stringConstraintValidator.validate(constraints, (String) fieldValue);
                 break;
             case Constants.ANNOTATION_TAG_ARRAY:
-                new ArrayConstraintValidator().validate(constraints, fieldValue, failedConstraints);
+                super.arrayConstraintValidator.validate(constraints, (Long) fieldValue);
                 break;
             default:
                 break;

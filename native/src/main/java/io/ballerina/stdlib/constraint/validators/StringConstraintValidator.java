@@ -18,10 +18,25 @@
 
 package io.ballerina.stdlib.constraint.validators;
 
+import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BString;
+
+import java.util.Set;
+
 /**
  * Extern functions for validating string constraints `@constraint:String` of Ballerina.
  */
 public class StringConstraintValidator extends AbstractLengthValidator {
+
+    private final Set<String> failedConstraints;
+
+    public StringConstraintValidator(Set<String> failedConstraints) {
+        this.failedConstraints = failedConstraints;
+    }
+
+    public void validate(BMap<BString, Object> constraints, String fieldValue) {
+        super.validate(constraints, fieldValue, failedConstraints);
+    }
 
     @Override
     boolean validateLength(Object fieldValue, long constraintValue) {

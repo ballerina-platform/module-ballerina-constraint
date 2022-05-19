@@ -29,8 +29,8 @@ import java.util.Set;
  */
 public abstract class AbstractValueValidator {
 
-    void validate(Map.Entry<BString, Object> constraint, Number fieldValue, Number constraintValue,
-                  Set<String> failedConstraints) {
+    public void validate(Map.Entry<BString, Object> constraint, Number fieldValue, Number constraintValue,
+                         Set<String> failedConstraints) {
         switch (constraint.getKey().getValue()) {
             case Constants.CONSTRAINT_MIN_VALUE:
                 if (!validateMinValue(fieldValue, constraintValue)) {
