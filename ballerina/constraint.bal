@@ -16,11 +16,11 @@
 
 import ballerina/jballerina.java;
 
-public annotation IntConstraints Int on type, parameter, record field;
-public annotation FloatConstraints Float on type, parameter, record field;
-public annotation NumberConstraints Number on type, parameter, record field;
-public annotation StringConstraints String on type, parameter, record field;
-public annotation ArrayConstraints Array on type, parameter, record field;
+public annotation IntConstraints Int on type, record field;
+public annotation FloatConstraints Float on type, record field;
+public annotation NumberConstraints Number on type, record field;
+public annotation StringConstraints String on type, record field;
+public annotation ArrayConstraints Array on type, record field;
 
 // invalid combinations (compiler plugin validations):
 // 1. minValue + minValueExclusive
@@ -62,6 +62,6 @@ public type ArrayConstraints record {|
    int maxLength?;
 |};
 
-public isolated function validate(anydata c) returns Error? = @java:Method {
+public isolated function validate(anydata value, typedesc<anydata> td = <>) returns td|Error = @java:Method {
     'class: "io.ballerina.stdlib.constraint.Constraints"
 } external;

@@ -20,11 +20,11 @@ package io.ballerina.stdlib.constraint.attachments;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.utils.StringUtils;
-import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.Constants;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
@@ -41,18 +41,21 @@ import java.util.Set;
 public class RecordFieldAttachment {
 
     @SuppressWarnings("unchecked")
-    public void validateRecord(BMap<BString, Object> record, Set<String> failedConstraints) {
-        validateRecordAnnotations(record, failedConstraints);
+    public void validateRecord(BMap<BString, Object> record, BTypedesc typedesc, Set<String> failedConstraints) {
+        validateRecordAnnotations(record, typedesc, failedConstraints);
         for (BString key : record.getKeys()) {
             if (record.get(key) instanceof BMap) {
-                validateRecord((BMap<BString, Object>) record.get(key), failedConstraints);
+                record = ((BMap<BString, Object>) record.get(key));
+                typedesc = record.getTypedesc();
+                validateRecord(record, typedesc, failedConstraints);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void validateRecordAnnotations(BMap<BString, Object> record, Set<String> failedConstraints) {
-        BMap<BString, Object> recordAnnotations = ((AnnotatableType) TypeUtils.getType(record)).getAnnotations();
+    private void validateRecordAnnotations(BMap<BString, Object> record, BTypedesc typedesc,
+                                           Set<String> failedConstraints) {
+        BMap<BString, Object> recordAnnotations = ((AnnotatableType) typedesc.getDescribingType()).getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
                 String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);

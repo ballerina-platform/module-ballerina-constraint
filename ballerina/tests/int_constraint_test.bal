@@ -23,8 +23,8 @@ type NoIntConstraints record {
 @test:Config {}
 isolated function testNoIntConstraints() {
     NoIntConstraints rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    NoIntConstraints|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -39,8 +39,8 @@ type IntConstraintMinValue record {
 @test:Config {}
 isolated function testIntConstraintMinValueSuccess1() {
     IntConstraintMinValue rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMinValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -48,8 +48,8 @@ isolated function testIntConstraintMinValueSuccess1() {
 @test:Config {}
 isolated function testIntConstraintMinValueSuccess2() {
     IntConstraintMinValue rec = {value: 18};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMinValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -57,7 +57,7 @@ isolated function testIntConstraintMinValueSuccess2() {
 @test:Config {}
 isolated function testIntConstraintMinValueFailure() {
     IntConstraintMinValue rec = {value: 16};
-    error? validation = validate(rec);
+    IntConstraintMinValue|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -75,8 +75,8 @@ type IntConstraintMaxValue record {
 @test:Config {}
 isolated function testIntConstraintMaxValueSuccess1() {
     IntConstraintMaxValue rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMaxValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -84,8 +84,8 @@ isolated function testIntConstraintMaxValueSuccess1() {
 @test:Config {}
 isolated function testIntConstraintMaxValueSuccess2() {
     IntConstraintMaxValue rec = {value: 100};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMaxValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -93,7 +93,7 @@ isolated function testIntConstraintMaxValueSuccess2() {
 @test:Config {}
 isolated function testIntConstraintMaxValueFailure() {
     IntConstraintMaxValue rec = {value: 120};
-    error? validation = validate(rec);
+    IntConstraintMaxValue|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {
@@ -111,8 +111,8 @@ type IntConstraintMinValueExclusive record {
 @test:Config {}
 isolated function testIntConstraintMinValueExclusiveSuccess() {
     IntConstraintMinValueExclusive rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMinValueExclusive|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -120,7 +120,7 @@ isolated function testIntConstraintMinValueExclusiveSuccess() {
 @test:Config {}
 isolated function testIntConstraintMinValueExclusiveFailure1() {
     IntConstraintMinValueExclusive rec = {value: 18};
-    error? validation = validate(rec);
+    IntConstraintMinValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
     } else {
@@ -131,7 +131,7 @@ isolated function testIntConstraintMinValueExclusiveFailure1() {
 @test:Config {}
 isolated function testIntConstraintMinValueExclusiveFailure2() {
     IntConstraintMinValueExclusive rec = {value: 16};
-    error? validation = validate(rec);
+    IntConstraintMinValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
     } else {
@@ -149,8 +149,8 @@ type IntConstraintMaxValueExclusive record {
 @test:Config {}
 isolated function testIntConstraintMaxValueExclusiveSuccess() {
     IntConstraintMaxValueExclusive rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraintMaxValueExclusive|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -158,7 +158,7 @@ isolated function testIntConstraintMaxValueExclusiveSuccess() {
 @test:Config {}
 isolated function testIntConstraintMaxValueExclusiveFailure1() {
     IntConstraintMaxValueExclusive rec = {value: 100};
-    error? validation = validate(rec);
+    IntConstraintMaxValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
     } else {
@@ -169,7 +169,7 @@ isolated function testIntConstraintMaxValueExclusiveFailure1() {
 @test:Config {}
 isolated function testIntConstraintMaxValueExclusiveFailure2() {
     IntConstraintMaxValueExclusive rec = {value: 120};
-    error? validation = validate(rec);
+    IntConstraintMaxValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
     } else {
@@ -188,8 +188,8 @@ type IntConstraint record {
 @test:Config {}
 isolated function testIntConstraintSuccess1() {
     IntConstraint rec = {value: 20};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -197,8 +197,8 @@ isolated function testIntConstraintSuccess1() {
 @test:Config {}
 isolated function testIntConstraintSuccess2() {
     IntConstraint rec = {value: 18};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -206,8 +206,8 @@ isolated function testIntConstraintSuccess2() {
 @test:Config {}
 isolated function testIntConstraintSuccess3() {
     IntConstraint rec = {value: 100};
-    error? validation = validate(rec);
-    if validation !is () {
+    IntConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -215,7 +215,7 @@ isolated function testIntConstraintSuccess3() {
 @test:Config {}
 isolated function testIntConstraintFailure1() {
     IntConstraint rec = {value: 16};
-    error? validation = validate(rec);
+    IntConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -226,7 +226,7 @@ isolated function testIntConstraintFailure1() {
 @test:Config {}
 isolated function testIntConstraintFailure2() {
     IntConstraint rec = {value: 120};
-    error? validation = validate(rec);
+    IntConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {

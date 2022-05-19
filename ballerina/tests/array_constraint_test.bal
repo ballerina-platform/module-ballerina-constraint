@@ -23,8 +23,8 @@ type NoArrayConstraints record {
 @test:Config {}
 isolated function testNoArrayConstraints() {
     NoArrayConstraints rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
-    error? validation = validate(rec);
-    if validation !is () {
+    NoArrayConstraints|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -39,8 +39,8 @@ type ArrayConstraintLength record {
 @test:Config {}
 isolated function testArrayConstraintLengthSuccess() {
     ArrayConstraintLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraintLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -48,7 +48,7 @@ isolated function testArrayConstraintLengthSuccess() {
 @test:Config {}
 isolated function testArrayConstraintLengthFailure1() {
     ArrayConstraintLength rec = {value: [(), true, 123]};
-    error? validation = validate(rec);
+    ArrayConstraintLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
     } else {
@@ -59,7 +59,7 @@ isolated function testArrayConstraintLengthFailure1() {
 @test:Config {}
 isolated function testArrayConstraintLengthFailure2() {
     ArrayConstraintLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
-    error? validation = validate(rec);
+    ArrayConstraintLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
     } else {
@@ -77,8 +77,8 @@ type ArrayConstraintMinLength record {
 @test:Config {}
 isolated function testArrayConstraintMinLengthSuccess1() {
     ArrayConstraintMinLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraintMinLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -86,8 +86,8 @@ isolated function testArrayConstraintMinLengthSuccess1() {
 @test:Config {}
 isolated function testArrayConstraintMinLengthSuccess2() {
     ArrayConstraintMinLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraintMinLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -95,7 +95,7 @@ isolated function testArrayConstraintMinLengthSuccess2() {
 @test:Config {}
 isolated function testArrayConstraintMinLengthFailure() {
     ArrayConstraintMinLength rec = {value: [(), true, 123]};
-    error? validation = validate(rec);
+    ArrayConstraintMinLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -113,8 +113,8 @@ type ArrayConstraintMaxLength record {
 @test:Config {}
 isolated function testArrayConstraintMaxLengthSuccess1() {
     ArrayConstraintMaxLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraintMaxLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -122,8 +122,8 @@ isolated function testArrayConstraintMaxLengthSuccess1() {
 @test:Config {}
 isolated function testArrayConstraintMaxLengthSuccess2() {
     ArrayConstraintMaxLength rec = {value: [(), true, 123]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraintMaxLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -131,7 +131,7 @@ isolated function testArrayConstraintMaxLengthSuccess2() {
 @test:Config {}
 isolated function testArrayConstraintMaxLengthFailure() {
     ArrayConstraintMaxLength rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
-    error? validation = validate(rec);
+    ArrayConstraintMaxLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {
@@ -150,8 +150,8 @@ type ArrayConstraint record {
 @test:Config {}
 isolated function testArrayConstraintSuccess1() {
     ArrayConstraint rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -159,8 +159,8 @@ isolated function testArrayConstraintSuccess1() {
 @test:Config {}
 isolated function testArrayConstraintSuccess2() {
     ArrayConstraint rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -168,8 +168,8 @@ isolated function testArrayConstraintSuccess2() {
 @test:Config {}
 isolated function testArrayConstraintSuccess3() {
     ArrayConstraint rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", (), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
-    if validation !is () {
+    ArrayConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -177,7 +177,7 @@ isolated function testArrayConstraintSuccess3() {
 @test:Config {}
 isolated function testArrayConstraintFailure1() {
     ArrayConstraint rec = {value: [(), true, 123]};
-    error? validation = validate(rec);
+    ArrayConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -188,7 +188,7 @@ isolated function testArrayConstraintFailure1() {
 @test:Config {}
 isolated function testArrayConstraintFailure2() {
     ArrayConstraint rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", (), true, 123, 123.45, 123.45d, "s3cr3t", (), true, 123, 123.45, 123.45d, "s3cr3t"]};
-    error? validation = validate(rec);
+    ArrayConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {

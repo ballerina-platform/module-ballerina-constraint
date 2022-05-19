@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.attachments.RecordFieldAttachment;
 
 import java.util.HashSet;
@@ -31,10 +32,10 @@ import java.util.Set;
 public class Constraints {
 
     @SuppressWarnings({"unchecked", "unused"})
-    public static Object validate(Object obj) {
+    public static Object validate(Object value, BTypedesc typedesc) {
         Set<String> failedConstraints = new HashSet<>();
-        if (obj instanceof BMap) {
-            new RecordFieldAttachment().validateRecord((BMap<BString, Object>) obj, failedConstraints);
+        if (value instanceof BMap) {
+            new RecordFieldAttachment().validateRecord((BMap<BString, Object>) value, typedesc, failedConstraints);
         }
 
         if (!failedConstraints.isEmpty()) {

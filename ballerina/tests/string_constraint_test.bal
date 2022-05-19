@@ -23,8 +23,8 @@ type NoStringConstraints record {
 @test:Config {}
 isolated function testNoStringConstraints() {
     NoStringConstraints rec = {value: "s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    NoStringConstraints|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -39,8 +39,8 @@ type StringConstraintLength record {
 @test:Config {}
 isolated function testStringConstraintLengthSuccess() {
     StringConstraintLength rec = {value: "s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraintLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -48,7 +48,7 @@ isolated function testStringConstraintLengthSuccess() {
 @test:Config {}
 isolated function testStringConstraintLengthFailure1() {
     StringConstraintLength rec = {value: "s3cr3t1"};
-    error? validation = validate(rec);
+    StringConstraintLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
     } else {
@@ -59,7 +59,7 @@ isolated function testStringConstraintLengthFailure1() {
 @test:Config {}
 isolated function testStringConstraintLengthFailure2() {
     StringConstraintLength rec = {value: "s3cr3"};
-    error? validation = validate(rec);
+    StringConstraintLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
     } else {
@@ -77,8 +77,8 @@ type StringConstraintMinLength record {
 @test:Config {}
 isolated function testStringConstraintMinLengthSuccess1() {
     StringConstraintMinLength rec = {value: "s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraintMinLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -86,8 +86,8 @@ isolated function testStringConstraintMinLengthSuccess1() {
 @test:Config {}
 isolated function testStringConstraintMinLengthSuccess2() {
     StringConstraintMinLength rec = {value: "s3cr3ts"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraintMinLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -95,7 +95,7 @@ isolated function testStringConstraintMinLengthSuccess2() {
 @test:Config {}
 isolated function testStringConstraintMinLengthFailure() {
     StringConstraintMinLength rec = {value: "s3c"};
-    error? validation = validate(rec);
+    StringConstraintMinLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -113,8 +113,8 @@ type StringConstraintMaxLength record {
 @test:Config {}
 isolated function testStringConstraintMaxLengthSuccess1() {
     StringConstraintMaxLength rec = {value: "s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraintMaxLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -122,8 +122,8 @@ isolated function testStringConstraintMaxLengthSuccess1() {
 @test:Config {}
 isolated function testStringConstraintMaxLengthSuccess2() {
     StringConstraintMaxLength rec = {value: "s3c"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraintMaxLength|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -131,7 +131,7 @@ isolated function testStringConstraintMaxLengthSuccess2() {
 @test:Config {}
 isolated function testStringConstraintMaxLengthFailure() {
     StringConstraintMaxLength rec = {value: "s3cr3ts"};
-    error? validation = validate(rec);
+    StringConstraintMaxLength|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {
@@ -150,8 +150,8 @@ type StringConstraint record {
 @test:Config {}
 isolated function testStringConstraintSuccess1() {
     StringConstraint rec = {value: "b@!s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -159,8 +159,8 @@ isolated function testStringConstraintSuccess1() {
 @test:Config {}
 isolated function testStringConstraintSuccess2() {
     StringConstraint rec = {value: "s3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -168,8 +168,8 @@ isolated function testStringConstraintSuccess2() {
 @test:Config {}
 isolated function testStringConstraintSuccess3() {
     StringConstraint rec = {value: "s3cr3ts3cr3t"};
-    error? validation = validate(rec);
-    if validation !is () {
+    StringConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -177,7 +177,7 @@ isolated function testStringConstraintSuccess3() {
 @test:Config {}
 isolated function testStringConstraintFailure1() {
     StringConstraint rec = {value: "s3crt"};
-    error? validation = validate(rec);
+    StringConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -188,7 +188,7 @@ isolated function testStringConstraintFailure1() {
 @test:Config {}
 isolated function testStringConstraintFailure2() {
     StringConstraint rec = {value: "s3cr3ts3cr3ts3cr3t"};
-    error? validation = validate(rec);
+    StringConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {

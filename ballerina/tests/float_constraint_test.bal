@@ -23,8 +23,8 @@ type NoFloatConstraints record {
 @test:Config {}
 isolated function testNoFloatConstraints() {
     NoFloatConstraints rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    NoFloatConstraints|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -39,8 +39,8 @@ type FloatConstraintMinValue record {
 @test:Config {}
 isolated function testFloatConstraintMinValueSuccess1() {
     FloatConstraintMinValue rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMinValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -48,8 +48,8 @@ isolated function testFloatConstraintMinValueSuccess1() {
 @test:Config {}
 isolated function testFloatConstraintMinValueSuccess2() {
     FloatConstraintMinValue rec = {value: 18.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMinValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -57,7 +57,7 @@ isolated function testFloatConstraintMinValueSuccess2() {
 @test:Config {}
 isolated function testFloatConstraintMinValueFailure() {
     FloatConstraintMinValue rec = {value: 16.5};
-    error? validation = validate(rec);
+    FloatConstraintMinValue|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -75,8 +75,8 @@ type FloatConstraintMaxValue record {
 @test:Config {}
 isolated function testFloatConstraintMaxValueSuccess1() {
     FloatConstraintMaxValue rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMaxValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -84,8 +84,8 @@ isolated function testFloatConstraintMaxValueSuccess1() {
 @test:Config {}
 isolated function testFloatConstraintMaxValueSuccess2() {
     FloatConstraintMaxValue rec = {value: 100.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMaxValue|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -93,7 +93,7 @@ isolated function testFloatConstraintMaxValueSuccess2() {
 @test:Config {}
 isolated function testFloatConstraintMaxValueFailure() {
     FloatConstraintMaxValue rec = {value: 120.5};
-    error? validation = validate(rec);
+    FloatConstraintMaxValue|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {
@@ -111,8 +111,8 @@ type FloatConstraintMinValueExclusive record {
 @test:Config {}
 isolated function testFloatConstraintMinValueExclusiveSuccess() {
     FloatConstraintMinValueExclusive rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMinValueExclusive|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -120,7 +120,7 @@ isolated function testFloatConstraintMinValueExclusiveSuccess() {
 @test:Config {}
 isolated function testFloatConstraintMinValueExclusiveFailure1() {
     FloatConstraintMinValueExclusive rec = {value: 18.5};
-    error? validation = validate(rec);
+    FloatConstraintMinValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
     } else {
@@ -131,7 +131,7 @@ isolated function testFloatConstraintMinValueExclusiveFailure1() {
 @test:Config {}
 isolated function testFloatConstraintMinValueExclusiveFailure2() {
     FloatConstraintMinValueExclusive rec = {value: 16.5};
-    error? validation = validate(rec);
+    FloatConstraintMinValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
     } else {
@@ -149,8 +149,8 @@ type FloatConstraintMaxValueExclusive record {
 @test:Config {}
 isolated function testFloatConstraintMaxValueExclusiveSuccess() {
     FloatConstraintMaxValueExclusive rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraintMaxValueExclusive|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -158,7 +158,7 @@ isolated function testFloatConstraintMaxValueExclusiveSuccess() {
 @test:Config {}
 isolated function testFloatConstraintMaxValueExclusiveFailure1() {
     FloatConstraintMaxValueExclusive rec = {value: 100.5};
-    error? validation = validate(rec);
+    FloatConstraintMaxValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
     } else {
@@ -169,7 +169,7 @@ isolated function testFloatConstraintMaxValueExclusiveFailure1() {
 @test:Config {}
 isolated function testFloatConstraintMaxValueExclusiveFailure2() {
     FloatConstraintMaxValueExclusive rec = {value: 120.5};
-    error? validation = validate(rec);
+    FloatConstraintMaxValueExclusive|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
     } else {
@@ -188,8 +188,8 @@ type FloatConstraint record {
 @test:Config {}
 isolated function testFloatConstraintSuccess1() {
     FloatConstraint rec = {value: 20.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -197,8 +197,8 @@ isolated function testFloatConstraintSuccess1() {
 @test:Config {}
 isolated function testFloatConstraintSuccess2() {
     FloatConstraint rec = {value: 18.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -206,8 +206,8 @@ isolated function testFloatConstraintSuccess2() {
 @test:Config {}
 isolated function testFloatConstraintSuccess3() {
     FloatConstraint rec = {value: 100.5};
-    error? validation = validate(rec);
-    if validation !is () {
+    FloatConstraint|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -215,7 +215,7 @@ isolated function testFloatConstraintSuccess3() {
 @test:Config {}
 isolated function testFloatConstraintFailure1() {
     FloatConstraint rec = {value: 16.5};
-    error? validation = validate(rec);
+    FloatConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -226,7 +226,7 @@ isolated function testFloatConstraintFailure1() {
 @test:Config {}
 isolated function testFloatConstraintFailure2() {
     FloatConstraint rec = {value: 120.5};
-    error? validation = validate(rec);
+    FloatConstraint|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {

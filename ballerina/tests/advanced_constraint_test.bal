@@ -32,8 +32,8 @@ type Person record {
 @test:Config {}
 isolated function testMultipleConstraintSuccess() {
     Person rec = {name: "Steve", age: 18};
-    error? validation = validate(rec);
-    if validation !is () {
+    Person|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -41,7 +41,7 @@ isolated function testMultipleConstraintSuccess() {
 @test:Config {}
 isolated function testMultipleConstraintFailure1() {
     Person rec = {name: "John", age: 18};
-    error? validation = validate(rec);
+    Person|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -52,7 +52,7 @@ isolated function testMultipleConstraintFailure1() {
 @test:Config {}
 isolated function testMultipleConstraintFailure2() {
     Person rec = {name: "John Steve", age: 18};
-    error? validation = validate(rec);
+    Person|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {
@@ -63,7 +63,7 @@ isolated function testMultipleConstraintFailure2() {
 @test:Config {}
 isolated function testMultipleConstraintFailure3() {
     Person rec = {name: "Steve", age: 16};
-    error? validation = validate(rec);
+    Person|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -74,7 +74,7 @@ isolated function testMultipleConstraintFailure3() {
 @test:Config {}
 isolated function testMultipleConstraintFailure4() {
     Person rec = {name: "John", age: 16};
-    error? validation = validate(rec);
+    Person|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue','minLength' constraint(s).");
     } else {
@@ -97,8 +97,8 @@ type Student record {
 @test:Config {}
 isolated function testMultipleConstraintOnSingleFieldSuccess1() {
     Student rec = {name: "Steve", age: 18};
-    error? validation = validate(rec);
-    if validation !is () {
+    Student|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -106,8 +106,8 @@ isolated function testMultipleConstraintOnSingleFieldSuccess1() {
 @test:Config {}
 isolated function testMultipleConstraintOnSingleFieldSuccess2() {
     Student rec = {name: "Steve", age: 50};
-    error? validation = validate(rec);
-    if validation !is () {
+    Student|error validation = validate(rec);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -115,7 +115,7 @@ isolated function testMultipleConstraintOnSingleFieldSuccess2() {
 @test:Config {}
 isolated function testMultipleConstraintOnSingleFieldFailure1() {
     Student rec = {name: "Steve", age: 16};
-    error? validation = validate(rec);
+    Student|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -126,7 +126,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure1() {
 @test:Config {}
 isolated function testMultipleConstraintOnSingleFieldFailure2() {
     Student rec = {name: "Steve", age: 55};
-    error? validation = validate(rec);
+    Student|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {
@@ -161,8 +161,8 @@ type Baz record {|
 @test:Config {}
 isolated function testNestedRecordSuccess() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: {value: 50}}};
-    error? validation = validate(foo);
-    if validation !is () {
+    Foo|error validation = validate(foo);
+    if validation is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -170,7 +170,7 @@ isolated function testNestedRecordSuccess() {
 @test:Config {}
 isolated function testNestedRecordFailure1() {
     Foo foo = {value: "Bob", bar: {value: "Steve", baz: {value: 50}}};
-    error? validation = validate(foo);
+    Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
     } else {
@@ -181,7 +181,7 @@ isolated function testNestedRecordFailure1() {
 @test:Config {}
 isolated function testNestedRecordFailure2() {
     Foo foo = {value: "Alice", bar: {value: "Bob", baz: {value: 50}}};
-    error? validation = validate(foo);
+    Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
@@ -192,7 +192,7 @@ isolated function testNestedRecordFailure2() {
 @test:Config {}
 isolated function testNestedRecordFailure3() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: {value: 120}}};
-    error? validation = validate(foo);
+    Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
     } else {
@@ -203,7 +203,7 @@ isolated function testNestedRecordFailure3() {
 @test:Config {}
 isolated function testNestedRecordFailure4() {
     Foo foo = {value: "Eve", bar: {value: "Bob", baz: {value: 120}}};
-    error? validation = validate(foo);
+    Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue','minLength','length' constraint(s).");
     } else {
