@@ -16,10 +16,14 @@ rootProject.name = 'constraint'
 include ':checkstyle'
 include ':constraint-native'
 include ':constraint-ballerina'
+include ':constraint-compiler-plugin'
+include ':constraint-compiler-plugin-tests'
 
 project(':checkstyle').projectDir = file("build-config${File.separator}checkstyle")
 project(':constraint-native').projectDir = file('native')
 project(':constraint-ballerina').projectDir = file('ballerina')
+project(':constraint-compiler-plugin').projectDir = file('compiler-plugin')
+project(':constraint-compiler-plugin-tests').projectDir = file('compiler-plugin-tests')
 
 gradleEnterprise {
     buildScan {
