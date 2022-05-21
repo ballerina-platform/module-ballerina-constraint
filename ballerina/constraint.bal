@@ -16,11 +16,11 @@
 
 import ballerina/jballerina.java;
 
-public annotation IntConstraints Int on type, record field;
-public annotation FloatConstraints Float on type, record field;
-public annotation NumberConstraints Number on type, record field;
-public annotation StringConstraints String on type, record field;
-public annotation ArrayConstraints Array on type, record field;
+public annotation IntConstraints Int on record field;
+public annotation FloatConstraints Float on record field;
+public annotation NumberConstraints Number on record field;
+public annotation StringConstraints String on record field;
+public annotation ArrayConstraints Array on record field;
 
 // invalid combinations (compiler plugin validations):
 // 1. minValue + minValueExclusive
