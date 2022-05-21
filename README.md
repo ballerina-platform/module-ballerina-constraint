@@ -7,6 +7,10 @@ Ballerina Constraint Library
   [![GitHub issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/constraint.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fconstraint)
   [![codecov](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint/branch/master/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint) 
 
+This library provides features to validate the values that have been assigned to Ballerina types.
+
+The Ballerina `constraint` library facilitates APIs to do validations on the Ballerina types further with the use of annotations.
+
 ## Issues and projects
 
 Issues and Projects tabs are disabled for this repository as this is part of the Ballerina Standard Library. To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Standard Library parent repository](https://github.com/ballerina-platform/ballerina-standard-library).

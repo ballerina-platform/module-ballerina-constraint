@@ -16,7 +16,7 @@
 
 import ballerina/test;
 
-// Multiple type of annotations in a single record
+// Multiple types of annotations in a single record
 type Person record {
     @String {
         minLength: 5,
@@ -82,7 +82,7 @@ isolated function testMultipleConstraintFailure4() {
     }
 }
 
-// Multiple type of annotations in a single record
+// Multiple types of annotations in a single record field
 type Student record {
     string name;
     @Number {
@@ -134,7 +134,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure2() {
     }
 }
 
-// Annotations on nested records
+// Multiple annotations on nested records
 type Foo record {
     @String {
         length: 5
