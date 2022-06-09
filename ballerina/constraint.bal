@@ -17,19 +17,19 @@
 import ballerina/jballerina.java;
 
 # The annotation which is used for the constraints on `int` type.
-public annotation IntConstraints Int on record field;
+public annotation IntConstraints Int on type, record field;
 
 # The annotation which is used for the constraints on `float` type.
-public annotation FloatConstraints Float on record field;
+public annotation FloatConstraints Float on type, record field;
 
 # The annotation which is used for the constraints on `int`, `float` and `decimal` types.
-public annotation NumberConstraints Number on record field;
+public annotation NumberConstraints Number on type, record field;
 
 # The annotation which is used for the constraints on `string` type.
-public annotation StringConstraints String on record field;
+public annotation StringConstraints String on type, record field;
 
 # The annotation which is used for the constraints on `anydata[]` type.
-public annotation ArrayConstraints Array on record field;
+public annotation ArrayConstraints Array on type, record field;
 
 # Represents the constraints associated with `int` type.
 #

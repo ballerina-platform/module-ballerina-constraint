@@ -18,6 +18,11 @@
 
 package io.ballerina.stdlib.constraint.annotations;
 
+import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.values.BArray;
+import io.ballerina.runtime.api.values.BDecimal;
+import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
 
 /**
@@ -26,7 +31,24 @@ import io.ballerina.runtime.api.values.BTypedesc;
 public class TypeAnnotations extends AbstractAnnotations {
 
     @Override
-    public void validate(Object type, BTypedesc typedesc) {
-        // TODO: Blocked on runtime issue: https://github.com/ballerina-platform/ballerina-lang/issues/35270
+    public void validate(Object value, BTypedesc typedesc) {
+        validateTypeAnnotations(value, typedesc);
+    }
+
+    private void validateTypeAnnotations(Object value, BTypedesc typedesc) {
+        BMap<BString, Object> typeAnnotations = ((AnnotatableType) typedesc.getDescribingType()).getAnnotations();
+        Object fieldValue = getFieldValue(value);
+        super.validateAnnotations(typeAnnotations, fieldValue);
+    }
+
+    private Object getFieldValue(Object value) {
+        if (value instanceof BDecimal) {
+            return ((BDecimal) value).value();
+        } else if (value instanceof BString) {
+            return ((BString) value).getValue();
+        } else if (value instanceof BArray) {
+            return ((BArray) value).getLength();
+        }
+        return value;
     }
 }
