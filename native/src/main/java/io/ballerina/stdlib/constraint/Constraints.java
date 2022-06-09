@@ -32,17 +32,20 @@ import java.util.Set;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
-        AbstractAnnotations annotations;
-        if (value instanceof BMap) {
-            annotations = new RecordFieldAnnotations();
-        } else {
-            annotations = new TypeAnnotations();
-        }
+        AbstractAnnotations annotations = getAnnotationImpl(value);
         annotations.validate(value, typedesc);
         Set<String> failedConstraints = annotations.getFailedConstraints();
         if (!failedConstraints.isEmpty()) {
             return ErrorUtils.buildError(failedConstraints);
         }
         return null;
+    }
+
+    private static AbstractAnnotations getAnnotationImpl(Object value) {
+        if (value instanceof BMap) {
+            return new RecordFieldAnnotations();
+        } else {
+            return new TypeAnnotations();
+        }
     }
 }

@@ -18,7 +18,10 @@
 
 package io.ballerina.stdlib.constraint.annotations;
 
+import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BString;
 import io.ballerina.runtime.api.values.BTypedesc;
+import io.ballerina.stdlib.constraint.Constants;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.IntConstraintValidator;
@@ -26,6 +29,7 @@ import io.ballerina.stdlib.constraint.validators.NumberConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.StringConstraintValidator;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -53,5 +57,37 @@ public abstract class AbstractAnnotations {
 
     public Set<String> getFailedConstraints() {
         return failedConstraints;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue) {
+        for (Map.Entry<BString, Object> annotationRecord : annotations.entrySet()) {
+            String annotationTag = annotationRecord.getKey().getValue().
+                    substring(Constants.PREFIX_ANNOTATION_RECORD.length());
+            BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
+            validateAnnotationTags(annotationTag, constraints, fieldValue);
+        }
+    }
+
+    private void validateAnnotationTags(String annotationTag, BMap<BString, Object> constraints, Object fieldValue) {
+        switch (annotationTag) {
+            case Constants.ANNOTATION_TAG_INT:
+                this.intConstraintValidator.validate(constraints, (Number) fieldValue);
+                break;
+            case Constants.ANNOTATION_TAG_FLOAT:
+                this.floatConstraintValidator.validate(constraints, (Number) fieldValue);
+                break;
+            case Constants.ANNOTATION_TAG_NUMBER:
+                this.numberConstraintValidator.validate(constraints, (Number) fieldValue);
+                break;
+            case Constants.ANNOTATION_TAG_STRING:
+                this.stringConstraintValidator.validate(constraints, (String) fieldValue);
+                break;
+            case Constants.ANNOTATION_TAG_ARRAY:
+                this.arrayConstraintValidator.validate(constraints, (Long) fieldValue);
+                break;
+            default:
+                break;
+        }
     }
 }

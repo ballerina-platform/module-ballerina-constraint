@@ -54,38 +54,10 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
                 String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);
+                BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
-                BMap<BString, Object> constraintAnnotations = (BMap<BString, Object>) entry.getValue();
-                for (Map.Entry<BString, Object> annotationRecord : constraintAnnotations.entrySet()) {
-                    String annotationTag = annotationRecord.getKey().getValue().
-                            substring(Constants.PREFIX_ANNOTATION_RECORD.length());
-                    BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
-                    validateRecordAnnotationTags(annotationTag, constraints, fieldValue);
-                }
+                super.validateAnnotations(recordFieldAnnotations, fieldValue);
             }
-        }
-    }
-
-    private void validateRecordAnnotationTags(String annotationTag, BMap<BString, Object> constraints,
-                                              Object fieldValue) {
-        switch (annotationTag) {
-            case Constants.ANNOTATION_TAG_INT:
-                super.intConstraintValidator.validate(constraints, (Number) fieldValue);
-                break;
-            case Constants.ANNOTATION_TAG_FLOAT:
-                super.floatConstraintValidator.validate(constraints, (Number) fieldValue);
-                break;
-            case Constants.ANNOTATION_TAG_NUMBER:
-                super.numberConstraintValidator.validate(constraints, (Number) fieldValue);
-                break;
-            case Constants.ANNOTATION_TAG_STRING:
-                super.stringConstraintValidator.validate(constraints, (String) fieldValue);
-                break;
-            case Constants.ANNOTATION_TAG_ARRAY:
-                super.arrayConstraintValidator.validate(constraints, (Long) fieldValue);
-                break;
-            default:
-                break;
         }
     }
 
