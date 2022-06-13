@@ -20,3 +20,6 @@ type Foo record {
     @constraint:Float {}
     float value;
 };
+
+@constraint:Float {}
+type FloatType float;

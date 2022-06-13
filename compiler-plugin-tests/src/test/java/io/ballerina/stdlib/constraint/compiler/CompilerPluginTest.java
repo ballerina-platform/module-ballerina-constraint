@@ -58,16 +58,14 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_2");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 9);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_INT, TYPE_NIL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_INT, TYPE_BOOLEAN);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_INT, TYPE_FLOAT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_INT, TYPE_DECIMAL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_INT, TYPE_STRING);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_INT, TYPE_XML);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_INT, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_INT, TYPE_MAP_OF_ANYDATA);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_INT, TYPE_TABLE_OF_ANYDATA);
+        String[] expectedErrorTypes = new String[]{TYPE_NIL, TYPE_BOOLEAN, TYPE_FLOAT, TYPE_DECIMAL, TYPE_STRING,
+                TYPE_XML, TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA, TYPE_NIL, TYPE_BOOLEAN,
+                TYPE_FLOAT, TYPE_DECIMAL, TYPE_STRING, TYPE_XML, TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA,
+                TYPE_TABLE_OF_ANYDATA};
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorTypes.length);
+        for (int i = 0; i < expectedErrorTypes.length; i++) {
+            CompilerPluginTestUtils.assertError101(diagnosticResult, i, ANNOTATION_TAG_INT, expectedErrorTypes[i]);
+        }
     }
 
     @Test
@@ -75,16 +73,14 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_3");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 9);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_FLOAT, TYPE_NIL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_FLOAT, TYPE_BOOLEAN);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_FLOAT, TYPE_INT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_FLOAT, TYPE_DECIMAL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_FLOAT, TYPE_STRING);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_FLOAT, TYPE_XML);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_FLOAT, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_FLOAT, TYPE_MAP_OF_ANYDATA);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_FLOAT, TYPE_TABLE_OF_ANYDATA);
+        String[] expectedErrorTypes = new String[]{TYPE_NIL, TYPE_BOOLEAN, TYPE_INT, TYPE_DECIMAL, TYPE_STRING,
+                TYPE_XML, TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA, TYPE_NIL, TYPE_BOOLEAN,
+                TYPE_INT, TYPE_DECIMAL, TYPE_STRING, TYPE_XML, TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA,
+                TYPE_TABLE_OF_ANYDATA};
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorTypes.length);
+        for (int i = 0; i < expectedErrorTypes.length; i++) {
+            CompilerPluginTestUtils.assertError101(diagnosticResult, i, ANNOTATION_TAG_FLOAT, expectedErrorTypes[i]);
+        }
     }
 
     @Test
@@ -92,14 +88,13 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_4");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 7);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_NUMBER, TYPE_NIL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_NUMBER, TYPE_BOOLEAN);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_NUMBER, TYPE_STRING);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_NUMBER, TYPE_XML);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_NUMBER, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_NUMBER, TYPE_MAP_OF_ANYDATA);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_NUMBER, TYPE_TABLE_OF_ANYDATA);
+        String[] expectedErrorTypes = new String[]{TYPE_NIL, TYPE_BOOLEAN, TYPE_STRING, TYPE_XML, TYPE_ANYDATA_ARRAY,
+                TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA, TYPE_NIL, TYPE_BOOLEAN, TYPE_STRING, TYPE_XML,
+                TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA};
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorTypes.length);
+        for (int i = 0; i < expectedErrorTypes.length; i++) {
+            CompilerPluginTestUtils.assertError101(diagnosticResult, i, ANNOTATION_TAG_NUMBER, expectedErrorTypes[i]);
+        }
     }
 
     @Test
@@ -107,16 +102,13 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_5");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 9);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_STRING, TYPE_NIL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_STRING, TYPE_BOOLEAN);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_STRING, TYPE_INT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_STRING, TYPE_FLOAT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_STRING, TYPE_DECIMAL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_STRING, TYPE_XML);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_STRING, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_STRING, TYPE_MAP_OF_ANYDATA);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_STRING, TYPE_TABLE_OF_ANYDATA);
+        String[] expectedErrorTypes = new String[]{TYPE_NIL, TYPE_BOOLEAN, TYPE_INT, TYPE_FLOAT, TYPE_DECIMAL, TYPE_XML,
+                TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA, TYPE_NIL, TYPE_BOOLEAN, TYPE_INT,
+                TYPE_FLOAT, TYPE_DECIMAL, TYPE_XML, TYPE_ANYDATA_ARRAY, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA};
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorTypes.length);
+        for (int i = 0; i < expectedErrorTypes.length; i++) {
+            CompilerPluginTestUtils.assertError101(diagnosticResult, i, ANNOTATION_TAG_STRING, expectedErrorTypes[i]);
+        }
     }
 
     @Test
@@ -124,16 +116,13 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_6");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 9);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_ARRAY, TYPE_NIL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_ARRAY, TYPE_BOOLEAN);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_ARRAY, TYPE_INT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_ARRAY, TYPE_FLOAT);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_ARRAY, TYPE_DECIMAL);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_ARRAY, TYPE_STRING);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_ARRAY, TYPE_XML);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_ARRAY, TYPE_MAP_OF_ANYDATA);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_ARRAY, TYPE_TABLE_OF_ANYDATA);
+        String[] expectedErrorTypes = new String[]{TYPE_NIL, TYPE_BOOLEAN, TYPE_INT, TYPE_FLOAT, TYPE_DECIMAL,
+                TYPE_STRING, TYPE_XML, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA, TYPE_NIL, TYPE_BOOLEAN, TYPE_INT,
+                TYPE_FLOAT, TYPE_DECIMAL, TYPE_STRING, TYPE_XML, TYPE_MAP_OF_ANYDATA, TYPE_TABLE_OF_ANYDATA};
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorTypes.length);
+        for (int i = 0; i < expectedErrorTypes.length; i++) {
+            CompilerPluginTestUtils.assertError101(diagnosticResult, i, ANNOTATION_TAG_ARRAY, expectedErrorTypes[i]);
+        }
     }
 
     @Test
@@ -141,13 +130,17 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_7");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 6);
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_STRING, "string?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_NUMBER, "int?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_INT, "int?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_FLOAT, "float?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_NUMBER, "decimal?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_ARRAY, "float[]?");
+        Assert.assertEquals(diagnosticResult.errorCount(), 10);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_INT, "int?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_FLOAT, "float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_NUMBER, "decimal?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_STRING, "string?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_ARRAY, "float[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_INT, "int?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_FLOAT, "float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_NUMBER, "decimal?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_STRING, "string?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 9, ANNOTATION_TAG_ARRAY, "float[]?");
     }
 
     @Test
@@ -155,8 +148,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_8");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 1);
-        CompilerPluginTestUtils.assertError102(diagnosticResult, 0, ANNOTATION_TAG_INT);
+        int expectedErrorCount = 2;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_INT);
+        }
     }
 
     @Test
@@ -164,8 +160,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_9");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 1);
-        CompilerPluginTestUtils.assertError102(diagnosticResult, 0, ANNOTATION_TAG_FLOAT);
+        int expectedErrorCount = 2;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_FLOAT);
+        }
     }
 
     @Test
@@ -173,8 +172,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_10");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 1);
-        CompilerPluginTestUtils.assertError102(diagnosticResult, 0, ANNOTATION_TAG_NUMBER);
+        int expectedErrorCount = 2;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_NUMBER);
+        }
     }
 
     @Test
@@ -182,8 +184,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_11");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 1);
-        CompilerPluginTestUtils.assertError102(diagnosticResult, 0, ANNOTATION_TAG_STRING);
+        int expectedErrorCount = 2;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_STRING);
+        }
     }
 
     @Test
@@ -191,8 +196,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_12");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 1);
-        CompilerPluginTestUtils.assertError102(diagnosticResult, 0, ANNOTATION_TAG_ARRAY);
+        int expectedErrorCount = 2;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_ARRAY);
+        }
     }
 
     @Test
@@ -200,9 +208,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_13");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 2);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 0, ANNOTATION_TAG_INT);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 1, ANNOTATION_TAG_INT);
+        int expectedErrorCount = 4;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_INT);
+        }
     }
 
     @Test
@@ -210,9 +220,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_14");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 2);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 0, ANNOTATION_TAG_FLOAT);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 1, ANNOTATION_TAG_FLOAT);
+        int expectedErrorCount = 4;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_FLOAT);
+        }
     }
 
     @Test
@@ -220,9 +232,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_15");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 2);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 0, ANNOTATION_TAG_NUMBER);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 1, ANNOTATION_TAG_NUMBER);
+        int expectedErrorCount = 4;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_NUMBER);
+        }
     }
 
     @Test
@@ -230,9 +244,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_16");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 2);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 0, ANNOTATION_TAG_STRING);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 1, ANNOTATION_TAG_STRING);
+        int expectedErrorCount = 4;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_STRING);
+        }
     }
 
     @Test
@@ -240,9 +256,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_17");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 2);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 0, ANNOTATION_TAG_ARRAY);
-        CompilerPluginTestUtils.assertError103(diagnosticResult, 1, ANNOTATION_TAG_ARRAY);
+        int expectedErrorCount = 4;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_ARRAY);
+        }
     }
 
     @Test
@@ -250,10 +268,11 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_18");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 3);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 0, ANNOTATION_TAG_STRING, TYPE_STRING);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_STRING, TYPE_STRING);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_STRING, TYPE_STRING);
+        int expectedErrorCount = 6;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_STRING, TYPE_STRING);
+        }
     }
 
     @Test
@@ -261,9 +280,10 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_19");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 3);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 0, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
-        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
+        int expectedErrorCount = 6;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        for (int i = 0; i < expectedErrorCount; i++) {
+            CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
+        }
     }
 }

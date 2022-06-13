@@ -20,3 +20,6 @@ type Foo record {
     @constraint:Int {}
     int value;
 };
+
+@constraint:Int {}
+type IntType int;

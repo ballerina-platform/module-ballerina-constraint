@@ -28,3 +28,15 @@ type Foo record {
     }
     decimal value2;
 };
+
+@constraint:Number {
+    minValue: 1,
+    minValueExclusive: 0
+}
+type DecimalType1 decimal;
+
+@constraint:Number {
+    maxValue: 10,
+    maxValueExclusive: 11
+}
+type DecimalType2 decimal;

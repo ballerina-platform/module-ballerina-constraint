@@ -28,3 +28,15 @@ type Foo record {
     }
     float value2;
 };
+
+@constraint:Float {
+    minValue: 1,
+    minValueExclusive: 0
+}
+type FloatType1 float;
+
+@constraint:Float {
+    maxValue: 10,
+    maxValueExclusive: 11
+}
+type FloatType2 float;

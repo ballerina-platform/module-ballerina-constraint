@@ -30,5 +30,6 @@ public class ConstraintCodeAnalyzer extends CodeAnalyzer {
     @Override
     public void init(CodeAnalysisContext codeAnalysisContext) {
         codeAnalysisContext.addSyntaxNodeAnalysisTask(new RecordFieldConstraintValidator(), SyntaxKind.RECORD_FIELD);
+        codeAnalysisContext.addSyntaxNodeAnalysisTask(new TypeConstraintValidator(), SyntaxKind.TYPE_DEFINITION);
     }
 }

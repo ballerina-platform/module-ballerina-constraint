@@ -22,6 +22,7 @@ import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.ExpressionNode;
 import io.ballerina.compiler.syntax.tree.MappingConstructorExpressionNode;
 import io.ballerina.compiler.syntax.tree.MappingFieldNode;
+import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.NodeLocation;
 import io.ballerina.compiler.syntax.tree.SeparatedNodeList;
 import io.ballerina.compiler.syntax.tree.SpecificFieldNode;
@@ -42,8 +43,22 @@ import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.
  */
 public class ConstraintCompilerPluginUtils {
 
-    static void checkAnnotationTagCompatibility(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                String annotationTag, String fieldType) {
+    static void validateConstraints(SyntaxNodeAnalysisContext ctx, NodeList<AnnotationNode> annotationNodes,
+                                    String fieldType) {
+        for (AnnotationNode annotationNode : annotationNodes) {
+            String[] annotationParts = annotationNode.annotReference().toString().trim().split(Constants.SYMBOL_COLON);
+            if (annotationParts[0].equals(Constants.MODULE_NAME)) {
+                String annotationTag = annotationParts[1];
+                checkAnnotationTagCompatibility(ctx, annotationNode, annotationTag, fieldType);
+                checkAnnotationConstraintsAvailability(ctx, annotationNode, annotationTag);
+                checkAnnotationConstraintsCompatibility(ctx, annotationNode, annotationTag);
+                checkAnnotationConstraintsValidity(ctx, annotationNode, annotationTag, fieldType);
+            }
+        }
+    }
+
+    private static void checkAnnotationTagCompatibility(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
+                                                        String annotationTag, String fieldType) {
         if (!isAnnotationTagCompatible(annotationTag, fieldType)) {
             reportAnnotationTagIncompatibility(ctx, annotationTag, fieldType, annotationNode.location());
         }
@@ -67,16 +82,16 @@ public class ConstraintCompilerPluginUtils {
         }
     }
 
-    static void checkAnnotationConstraintsAvailability(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                       String annotationTag) {
+    private static void checkAnnotationConstraintsAvailability(SyntaxNodeAnalysisContext ctx,
+                                                               AnnotationNode annotationNode, String annotationTag) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.filter(node -> node.fields().size() > 0).isEmpty()) {
             reportConstraintsUnavailability(ctx, annotationTag, annotationNode.location());
         }
     }
 
-    static void checkAnnotationConstraintsCompatibility(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                        String annotationTag) {
+    private static void checkAnnotationConstraintsCompatibility(SyntaxNodeAnalysisContext ctx,
+                                                                AnnotationNode annotationNode, String annotationTag) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.isPresent()) {
             ArrayList<String> constraintsList = new ArrayList<>();
@@ -111,8 +126,8 @@ public class ConstraintCompilerPluginUtils {
         }
     }
 
-    static void checkAnnotationConstraintsValidity(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                   String annotationTag, String fieldType) {
+    private static void checkAnnotationConstraintsValidity(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
+                                                           String annotationTag, String fieldType) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.isPresent()) {
             SeparatedNodeList<MappingFieldNode> constraints = value.get().fields();
@@ -140,29 +155,29 @@ public class ConstraintCompilerPluginUtils {
         }
     }
 
-    static void reportAnnotationTagIncompatibility(SyntaxNodeAnalysisContext ctx, String annotationTag,
-                                                   String fieldType, NodeLocation nodeLocation) {
+    private static void reportAnnotationTagIncompatibility(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                           String fieldType, NodeLocation nodeLocation) {
         DiagnosticInfo diagnosticInfo = new DiagnosticInfo(CONSTRAINT_101.getCode(),
                 String.format(CONSTRAINT_101.getMessage(), annotationTag, fieldType), CONSTRAINT_101.getSeverity());
         ctx.reportDiagnostic(DiagnosticFactory.createDiagnostic(diagnosticInfo, nodeLocation));
     }
 
-    static void reportConstraintsUnavailability(SyntaxNodeAnalysisContext ctx, String annotationTag,
-                                                NodeLocation nodeLocation) {
+    private static void reportConstraintsUnavailability(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                        NodeLocation nodeLocation) {
         DiagnosticInfo diagnosticInfo = new DiagnosticInfo(CONSTRAINT_102.getCode(),
                 String.format(CONSTRAINT_102.getMessage(), annotationTag), CONSTRAINT_102.getSeverity());
         ctx.reportDiagnostic(DiagnosticFactory.createDiagnostic(diagnosticInfo, nodeLocation));
     }
 
-    static void reportConstraintsIncompatibility(SyntaxNodeAnalysisContext ctx, String annotationTag,
-                                                 NodeLocation location) {
+    private static void reportConstraintsIncompatibility(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                         NodeLocation location) {
         DiagnosticInfo diagnosticInfo = new DiagnosticInfo(CONSTRAINT_103.getCode(),
                 String.format(CONSTRAINT_103.getMessage(), annotationTag), CONSTRAINT_103.getSeverity());
         ctx.reportDiagnostic(DiagnosticFactory.createDiagnostic(diagnosticInfo, location));
     }
 
-    static void reportConstraintsInvalidity(SyntaxNodeAnalysisContext ctx, String annotationTag, String fieldType,
-                                            NodeLocation location) {
+    private static void reportConstraintsInvalidity(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                    String fieldType, NodeLocation location) {
         DiagnosticInfo diagnosticInfo = new DiagnosticInfo(CONSTRAINT_104.getCode(),
                 String.format(CONSTRAINT_104.getMessage(), fieldType, annotationTag), CONSTRAINT_104.getSeverity());
         ctx.reportDiagnostic(DiagnosticFactory.createDiagnostic(diagnosticInfo, location));

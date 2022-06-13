@@ -20,3 +20,6 @@ type Foo record {
     @constraint:String {}
     string value;
 };
+
+@constraint:String {}
+type StringType string;

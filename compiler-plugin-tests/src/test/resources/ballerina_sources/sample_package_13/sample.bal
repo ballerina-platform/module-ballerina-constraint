@@ -28,3 +28,15 @@ type Foo record {
     }
     int value2;
 };
+
+@constraint:Int {
+    minValue: 1,
+    minValueExclusive: 0
+}
+type IntType1 int;
+
+@constraint:Int {
+    maxValue: 10,
+    maxValueExclusive: 11
+}
+type IntType2 int;

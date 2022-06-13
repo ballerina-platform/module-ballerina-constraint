@@ -28,3 +28,15 @@ type Foo record {
     }
     anydata[] value2;
 };
+
+@constraint:Array {
+    length: 10,
+    minLength: 8
+}
+type ArrayType1 anydata[];
+
+@constraint:Array {
+    length: 10,
+    maxLength: 12
+}
+type ArrayType2 anydata[];

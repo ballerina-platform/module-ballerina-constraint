@@ -17,15 +17,6 @@
 import ballerina/constraint;
 
 type BankAccount record {
-    @constraint:String {
-        minLength: 5,
-        maxLength: 8
-    }
-    string? name;
-    int? number;
-    @constraint:Number {
-        maxValue: 50
-    }
     @constraint:Int {
         minValue: 0
     }
@@ -39,8 +30,40 @@ type BankAccount record {
         maxValue: 1
     }
     decimal? interest;
+    @constraint:String {
+        minLength: 5,
+        maxLength: 8
+    }
+    string? name;
     @constraint:Array {
         maxLength: 10
     }
     float[]? last10Transactions;
 };
+
+@constraint:Int {
+    minValue: 0
+}
+type AccountAge int?;
+
+@constraint:Float {
+    minValue: 0
+}
+type AccountAmount float?;
+
+@constraint:Number {
+    minValue: 0,
+    maxValue: 1
+}
+type AccountInterest decimal?;
+
+@constraint:String {
+    minLength: 5,
+    maxLength: 8
+}
+type AccountName string?;
+
+@constraint:Array {
+    maxLength: 10
+}
+type AccountLast10Transactions float[]?;

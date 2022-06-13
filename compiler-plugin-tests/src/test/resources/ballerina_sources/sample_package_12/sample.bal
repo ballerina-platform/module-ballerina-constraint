@@ -20,3 +20,6 @@ type Foo record {
     @constraint:Array {}
     anydata[] value;
 };
+
+@constraint:Array {}
+type ArrayType anydata[];

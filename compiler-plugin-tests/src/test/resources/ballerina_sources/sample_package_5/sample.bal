@@ -58,3 +58,53 @@ type Foo record {
     }
     table<map<anydata>> t;
 };
+
+@constraint:String {
+    length: 10
+}
+type NilType ();
+
+@constraint:String {
+    length: 10
+}
+type BooleanType boolean;
+
+@constraint:String {
+    length: 10
+}
+type IntType int;
+
+@constraint:String {
+    length: 10
+}
+type FloatType float;
+
+@constraint:String {
+    length: 10
+}
+type DecimalType decimal;
+
+@constraint:String {
+    length: 10
+}
+type StringType string;
+
+@constraint:String {
+    length: 10
+}
+type XmlType xml;
+
+@constraint:String {
+    length: 10
+}
+type ArrayType anydata[];
+
+@constraint:String {
+    length: 10
+}
+type MapType map<anydata>;
+
+@constraint:String {
+    length: 10
+}
+type TableType table<map<anydata>>;

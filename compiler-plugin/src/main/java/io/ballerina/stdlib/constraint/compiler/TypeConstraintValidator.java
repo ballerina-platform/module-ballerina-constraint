@@ -21,7 +21,7 @@ package io.ballerina.stdlib.constraint.compiler;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
 import io.ballerina.compiler.syntax.tree.NodeList;
-import io.ballerina.compiler.syntax.tree.RecordFieldNode;
+import io.ballerina.compiler.syntax.tree.TypeDefinitionNode;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.Diagnostic;
@@ -33,9 +33,9 @@ import java.util.Optional;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
- * Validates Ballerina Constraint annotations on record fields.
+ * Validates Ballerina Constraint annotations on types.
  */
-public class RecordFieldConstraintValidator implements AnalysisTask<SyntaxNodeAnalysisContext> {
+public class TypeConstraintValidator implements AnalysisTask<SyntaxNodeAnalysisContext> {
 
     @Override
     public void perform(SyntaxNodeAnalysisContext syntaxNodeAnalysisContext) {
@@ -45,17 +45,17 @@ public class RecordFieldConstraintValidator implements AnalysisTask<SyntaxNodeAn
         if (erroneousCompilation) {
             return;
         }
-        RecordFieldNode recordFieldNode = ((RecordFieldNode) syntaxNodeAnalysisContext.node());
-        validateRecordFieldConstraints(syntaxNodeAnalysisContext, recordFieldNode);
+        TypeDefinitionNode typeDefinitionNode = ((TypeDefinitionNode) syntaxNodeAnalysisContext.node());
+        validateTypeConstraints(syntaxNodeAnalysisContext, typeDefinitionNode);
     }
 
-    private void validateRecordFieldConstraints(SyntaxNodeAnalysisContext ctx, RecordFieldNode recordFieldNode) {
-        Optional<MetadataNode> optionalMetadataNode = recordFieldNode.metadata();
+    private void validateTypeConstraints(SyntaxNodeAnalysisContext ctx, TypeDefinitionNode typeDefinitionNode) {
+        Optional<MetadataNode> optionalMetadataNode = typeDefinitionNode.metadata();
         if (optionalMetadataNode.isEmpty()) {
             return;
         }
         NodeList<AnnotationNode> annotationNodes = optionalMetadataNode.get().annotations();
-        String fieldType = recordFieldNode.typeName().toString().trim();
+        String fieldType = typeDefinitionNode.typeDescriptor().toString().trim();
         validateConstraints(ctx, annotationNodes, fieldType);
     }
 }

@@ -20,3 +20,6 @@ type Foo record {
     @constraint:Number {}
     decimal value;
 };
+
+@constraint:Number {}
+type DecimalType decimal;

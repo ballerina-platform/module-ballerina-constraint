@@ -27,3 +27,14 @@ type Foo record {
     }
     string value2;
 };
+
+@constraint:String {
+    length: -1
+}
+type StringType1 string;
+
+@constraint:String {
+    minLength: -1,
+    maxLength: -1
+}
+type StringType2 string;

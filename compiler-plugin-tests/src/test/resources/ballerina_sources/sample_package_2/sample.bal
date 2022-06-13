@@ -68,3 +68,63 @@ type Foo record {
     }
     table<map<anydata>> t;
 };
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type NilType ();
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type BooleanType boolean;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type IntType int;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type FloatType float;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type DecimalType decimal;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type StringType string;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type XmlType xml;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type ArrayType anydata[];
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type MapType map<anydata>;
+
+@constraint:Int {
+    minValue: 0,
+    maxValue: 10
+}
+type TableType table<map<anydata>>;
