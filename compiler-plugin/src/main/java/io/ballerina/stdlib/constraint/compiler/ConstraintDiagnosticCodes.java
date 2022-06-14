@@ -27,10 +27,10 @@ import static io.ballerina.tools.diagnostics.DiagnosticSeverity.ERROR;
  */
 public enum ConstraintDiagnosticCodes {
 
-    CONSTRAINT_101("CONSTRAINT_101", "invalid constraint annotation '@%s' on type '%s'", ERROR),
-    CONSTRAINT_102("CONSTRAINT_102", "no constraints found on annotation '@%s'", ERROR),
-    CONSTRAINT_103("CONSTRAINT_103", "incompatible constraints found on annotation '@%s'", ERROR),
-    CONSTRAINT_104("CONSTRAINT_104", "invalid value for the constraint(s) on annotation '@%s'", ERROR);
+    CONSTRAINT_101("CONSTRAINT_101", "invalid `@constraint:%s` annotation on `%s` type", ERROR),
+    CONSTRAINT_102("CONSTRAINT_102", "no constraints found on `@constraint:%s` annotation on `%s` type", ERROR),
+    CONSTRAINT_103("CONSTRAINT_103", "incompatible constraints on `@constraint:%s` annotation on `%s` type", ERROR),
+    CONSTRAINT_104("CONSTRAINT_104", "invalid constraint value on `@constraint:%s` annotation on `%s` type", ERROR);
 
     private final String code;
     private final String message;

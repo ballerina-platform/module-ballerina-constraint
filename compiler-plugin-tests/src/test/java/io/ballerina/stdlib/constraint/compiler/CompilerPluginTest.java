@@ -151,7 +151,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 2;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_INT);
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_INT, TYPE_INT);
         }
     }
 
@@ -163,7 +163,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 2;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_FLOAT);
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_FLOAT, TYPE_FLOAT);
         }
     }
 
@@ -175,7 +175,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 2;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_NUMBER);
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_NUMBER, TYPE_DECIMAL);
         }
     }
 
@@ -187,7 +187,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 2;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_STRING);
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_STRING, TYPE_STRING);
         }
     }
 
@@ -199,7 +199,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 2;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_ARRAY);
+            CompilerPluginTestUtils.assertError102(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
         }
     }
 
@@ -211,7 +211,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 4;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_INT);
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_INT, TYPE_INT);
         }
     }
 
@@ -223,7 +223,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 4;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_FLOAT);
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_FLOAT, TYPE_FLOAT);
         }
     }
 
@@ -235,7 +235,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 4;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_NUMBER);
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_NUMBER, TYPE_DECIMAL);
         }
     }
 
@@ -247,7 +247,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 4;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_STRING);
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_STRING, TYPE_STRING);
         }
     }
 
@@ -259,7 +259,7 @@ public class CompilerPluginTest {
         int expectedErrorCount = 4;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
         for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_ARRAY);
+            CompilerPluginTestUtils.assertError103(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
         }
     }
 

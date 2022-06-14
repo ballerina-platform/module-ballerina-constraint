@@ -60,24 +60,24 @@ public class CompilerPluginTestUtils {
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_101.getCode());
     }
 
-    static void assertError102(DiagnosticResult diagnosticResult, int index, String annotationTag) {
+    static void assertError102(DiagnosticResult diagnosticResult, int index, String annotationTag, String fieldType) {
         Diagnostic diagnostic = (Diagnostic) diagnosticResult.errors().toArray()[index];
         Assert.assertEquals(diagnostic.diagnosticInfo().messageFormat(),
-                String.format(CONSTRAINT_102.getMessage(), annotationTag));
+                String.format(CONSTRAINT_102.getMessage(), annotationTag, fieldType));
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_102.getCode());
     }
 
-    static void assertError103(DiagnosticResult diagnosticResult, int index, String annotationTag) {
+    static void assertError103(DiagnosticResult diagnosticResult, int index, String annotationTag, String fieldType) {
         Diagnostic diagnostic = (Diagnostic) diagnosticResult.errors().toArray()[index];
         Assert.assertEquals(diagnostic.diagnosticInfo().messageFormat(),
-                String.format(CONSTRAINT_103.getMessage(), annotationTag));
+                String.format(CONSTRAINT_103.getMessage(), annotationTag, fieldType));
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_103.getCode());
     }
 
     static void assertError104(DiagnosticResult diagnosticResult, int index, String annotationTag, String fieldType) {
         Diagnostic diagnostic = (Diagnostic) diagnosticResult.errors().toArray()[index];
         Assert.assertEquals(diagnostic.diagnosticInfo().messageFormat(),
-                String.format(CONSTRAINT_104.getMessage(), fieldType, annotationTag));
+                String.format(CONSTRAINT_104.getMessage(), annotationTag, fieldType));
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_104.getCode());
     }
 }
