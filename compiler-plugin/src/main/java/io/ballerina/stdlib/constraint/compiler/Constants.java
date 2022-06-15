@@ -25,7 +25,7 @@ public class Constants {
 
     static final String MODULE_NAME = "constraint";
     static final String SYMBOL_COLON = ":";
-    static final String SYMBOL_ARRAY = "[]";
+    public static final String SYMBOL_ARRAY = "[]";
     static final String SYMBOL_NEW_LINE = "\n";
     static final String SYMBOL_DECIMAL = "d";
 
@@ -35,16 +35,16 @@ public class Constants {
     static final String ANNOTATION_TAG_STRING = "String";
     static final String ANNOTATION_TAG_ARRAY = "Array";
 
-    static final String TYPE_INT = "int";
-    static final String TYPE_FLOAT = "float";
-    static final String TYPE_DECIMAL = "decimal";
-    static final String TYPE_STRING = "string";
+    public static final String TYPE_INT = "int";
+    public static final String TYPE_FLOAT = "float";
+    public static final String TYPE_DECIMAL = "decimal";
+    public static final String TYPE_STRING = "string";
 
-    static final String CONSTRAINT_MIN_VALUE = "minValue";
-    static final String CONSTRAINT_MAX_VALUE = "maxValue";
-    static final String CONSTRAINT_MIN_VALUE_EXCLUSIVE = "minValueExclusive";
-    static final String CONSTRAINT_MAX_VALUE_EXCLUSIVE = "maxValueExclusive";
-    static final String CONSTRAINT_LENGTH = "length";
-    static final String CONSTRAINT_MIN_LENGTH = "minLength";
-    static final String CONSTRAINT_MAX_LENGTH = "maxLength";
+    public static final String CONSTRAINT_MIN_VALUE = "minValue";
+    public static final String CONSTRAINT_MAX_VALUE = "maxValue";
+    public static final String CONSTRAINT_MIN_VALUE_EXCLUSIVE = "minValueExclusive";
+    public static final String CONSTRAINT_MAX_VALUE_EXCLUSIVE = "maxValueExclusive";
+    public static final String CONSTRAINT_LENGTH = "length";
+    public static final String CONSTRAINT_MIN_LENGTH = "minLength";
+    public static final String CONSTRAINT_MAX_LENGTH = "maxLength";
 }

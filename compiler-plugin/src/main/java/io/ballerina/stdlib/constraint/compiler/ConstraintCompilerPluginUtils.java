@@ -34,6 +34,10 @@ import io.ballerina.tools.diagnostics.DiagnosticInfo;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.Constants.MODULE_NAME;
+import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_COLON;
+import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_DECIMAL;
+import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_NEW_LINE;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.CONSTRAINT_101;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.CONSTRAINT_102;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.CONSTRAINT_103;
@@ -43,6 +47,8 @@ import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.
  * The compiler plugin utility functions.
  */
 public class ConstraintCompilerPluginUtils {
+
+    private static final ConstraintCompatibilityMatrix matrix = new ConstraintCompatibilityMatrix();
 
     static void populateFieldTypeList(UnionTypeDescriptorNode node, ArrayList<String> fieldTypeList) {
         fieldTypeList.add(node.rightTypeDesc().toString().trim());
@@ -56,8 +62,8 @@ public class ConstraintCompilerPluginUtils {
     static void validateConstraints(SyntaxNodeAnalysisContext ctx, NodeList<AnnotationNode> annotationNodes,
                                     String fieldType, ArrayList<String> fieldTypeList) {
         for (AnnotationNode annotationNode : annotationNodes) {
-            String[] annotationParts = annotationNode.annotReference().toString().trim().split(Constants.SYMBOL_COLON);
-            if (annotationParts[0].equals(Constants.MODULE_NAME)) {
+            String[] annotationParts = annotationNode.annotReference().toString().trim().split(SYMBOL_COLON);
+            if (annotationParts[0].equals(MODULE_NAME)) {
                 String annotationTag = annotationParts[1];
                 checkAnnotationTagCompatibility(ctx, annotationNode, annotationTag, fieldType, fieldTypeList);
                 checkAnnotationConstraintsAvailability(ctx, annotationNode, annotationTag, fieldType);
@@ -71,28 +77,10 @@ public class ConstraintCompilerPluginUtils {
                                                         String annotationTag, String fieldType,
                                                         ArrayList<String> fieldTypeList) {
         for (String type : fieldTypeList) {
-            if (!isAnnotationTagCompatible(annotationTag, type)) {
+            if (!matrix.isAnnotationTagCompatible(annotationTag, type)) {
                 reportAnnotationTagIncompatibility(ctx, annotationTag, fieldType, annotationNode.location());
                 break;
             }
-        }
-    }
-
-    private static boolean isAnnotationTagCompatible(String annotationTag, String fieldType) {
-        switch (annotationTag) {
-            case Constants.ANNOTATION_TAG_INT:
-                return fieldType.equals(Constants.TYPE_INT);
-            case Constants.ANNOTATION_TAG_FLOAT:
-                return fieldType.equals(Constants.TYPE_FLOAT);
-            case Constants.ANNOTATION_TAG_NUMBER:
-                return fieldType.equals(Constants.TYPE_INT) || fieldType.equals(Constants.TYPE_FLOAT) ||
-                        fieldType.equals(Constants.TYPE_DECIMAL);
-            case Constants.ANNOTATION_TAG_ARRAY:
-                return fieldType.endsWith(Constants.SYMBOL_ARRAY);
-            case Constants.ANNOTATION_TAG_STRING:
-                return fieldType.equals(Constants.TYPE_STRING);
-            default:
-                return false;
         }
     }
 
@@ -116,29 +104,9 @@ public class ConstraintCompilerPluginUtils {
                 SpecificFieldNode node = (SpecificFieldNode) constraint;
                 constraintsList.add(node.fieldName().toString().trim());
             }
-            if (!isAnnotationConstraintsCompatible(annotationTag, constraintsList)) {
+            if (!matrix.isAnnotationConstraintsCompatible(annotationTag, constraintsList)) {
                 reportConstraintsIncompatibility(ctx, annotationTag, fieldType, annotationNode.location());
             }
-        }
-    }
-
-    private static boolean isAnnotationConstraintsCompatible(String annotationTag, ArrayList<String> constraints) {
-        switch (annotationTag) {
-            case Constants.ANNOTATION_TAG_INT:
-            case Constants.ANNOTATION_TAG_FLOAT:
-            case Constants.ANNOTATION_TAG_NUMBER:
-                return !(constraints.contains(Constants.CONSTRAINT_MIN_VALUE) &&
-                        constraints.contains(Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE) ||
-                        constraints.contains(Constants.CONSTRAINT_MAX_VALUE) &&
-                                constraints.contains(Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE));
-            case Constants.ANNOTATION_TAG_ARRAY:
-            case Constants.ANNOTATION_TAG_STRING:
-                return !(constraints.contains(Constants.CONSTRAINT_LENGTH) &&
-                        constraints.contains(Constants.CONSTRAINT_MIN_LENGTH) ||
-                        constraints.contains(Constants.CONSTRAINT_LENGTH) &&
-                                constraints.contains(Constants.CONSTRAINT_MAX_LENGTH));
-            default:
-                return false;
         }
     }
 
@@ -152,23 +120,13 @@ public class ConstraintCompilerPluginUtils {
                 Optional<ExpressionNode> valueExpr = node.valueExpr();
                 if (valueExpr.isPresent()) {
                     String constraintValue = valueExpr.get().toString().trim()
-                            .replaceAll(Constants.SYMBOL_NEW_LINE, "")
-                            .replaceAll(Constants.SYMBOL_DECIMAL, "");
-                    if (!isAnnotationConstraintsValid(annotationTag, Double.parseDouble(constraintValue))) {
+                            .replaceAll(SYMBOL_NEW_LINE, "")
+                            .replaceAll(SYMBOL_DECIMAL, "");
+                    if (!matrix.isAnnotationConstraintsValid(annotationTag, Double.parseDouble(constraintValue))) {
                         reportConstraintsInvalidity(ctx, annotationTag, fieldType, annotationNode.location());
                     }
                 }
             }
-        }
-    }
-
-    private static boolean isAnnotationConstraintsValid(String annotationTag, double constraintValue) {
-        switch (annotationTag) {
-            case Constants.ANNOTATION_TAG_ARRAY:
-            case Constants.ANNOTATION_TAG_STRING:
-                return constraintValue >= 0;
-            default:
-                return true;
         }
     }
 
