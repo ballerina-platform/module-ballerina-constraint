@@ -16,54 +16,143 @@
 
 import ballerina/constraint;
 
-type BankAccount record {
+type A record {
     @constraint:Int {
-        minValue: 0
+        maxValue: 100
     }
-    int? age;
+    int? value1;
+    @constraint:Int {
+        maxValue: 100
+    }
+    int|float value2;
+};
+
+type B record {
     @constraint:Float {
-        minValue: 0
+        maxValue: 99.9
     }
-    float? amount;
+    float? value1;
+    @constraint:Float {
+        maxValue: 99.9
+    }
+    float|int value2;
+};
+
+type C record {
     @constraint:Number {
-        minValue: 0,
-        maxValue: 1
+        maxValue: 99.9d
     }
-    decimal? interest;
+    decimal? value1;
+    @constraint:Number {
+        maxValue: 99.9d
+    }
+    decimal|float value2;
+    @constraint:Number {
+        maxValue: 99.9d
+    }
+    decimal|float? value3;
+    @constraint:Number {
+        maxValue: 99.9d
+    }
+    decimal|float|int value4;
+    @constraint:Number {
+        maxValue: 99.9d
+    }
+    decimal|float|int? value5;
+};
+
+type D record {
     @constraint:String {
-        minLength: 5,
-        maxLength: 8
+        minLength: 8
     }
-    string? name;
+    string? value1;
+    @constraint:String {
+        minLength: 8
+    }
+    string|int value2;
+};
+
+type E record {
     @constraint:Array {
         maxLength: 10
     }
-    float[]? last10Transactions;
+    anydata[]? value1;
+    @constraint:Array {
+        maxLength: 10
+    }
+    int[]|float[] value2;
+    @constraint:Array {
+        maxLength: 10
+    }
+    int[]|float[]? value3;
 };
 
 @constraint:Int {
-    minValue: 0
+    maxValue: 100
 }
-type AccountAge int?;
+type UnionIntType1 int?;
+
+@constraint:Int {
+    maxValue: 100
+}
+type UnionIntType2 int|float;
 
 @constraint:Float {
-    minValue: 0
+    maxValue: 99.9
 }
-type AccountAmount float?;
+type UnionFloatType1 float?;
+
+@constraint:Float {
+    maxValue: 99.9
+}
+type UnionFloatType2 float|int;
 
 @constraint:Number {
-    minValue: 0,
-    maxValue: 1
+    maxValue: 99.9d
 }
-type AccountInterest decimal?;
+type UnionDecimalType1 decimal?;
+
+@constraint:Number {
+    maxValue: 99.9d
+}
+type UnionDecimalType2 decimal|float;
+
+@constraint:Number {
+    maxValue: 99.9d
+}
+type UnionDecimalType3 decimal|float?;
+
+@constraint:Number {
+    maxValue: 99.9d
+}
+type UnionDecimalType4 decimal|float|int;
+
+@constraint:Number {
+    maxValue: 99.9d
+}
+type UnionDecimalType5 decimal|float|int?;
 
 @constraint:String {
-    minLength: 5,
-    maxLength: 8
+    minLength: 8
 }
-type AccountName string?;
+type UnionStringType1 string?;
+
+@constraint:String {
+    minLength: 8
+}
+type UnionStringType2 string|int;
 
 @constraint:Array {
     maxLength: 10
 }
-type AccountLast10Transactions float[]?;
+type UnionArrayType1 anydata[]?;
+
+@constraint:Array {
+    maxLength: 10
+}
+type UnionArrayType2 int[]|float[];
+
+@constraint:Array {
+    maxLength: 10
+}
+type UnionArrayType3 int[]|float[]?;

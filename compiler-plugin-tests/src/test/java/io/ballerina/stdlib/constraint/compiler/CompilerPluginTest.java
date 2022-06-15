@@ -130,17 +130,29 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_7");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 10);
+        Assert.assertEquals(diagnosticResult.errorCount(), 22);
         CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_INT, "int?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_FLOAT, "float?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_NUMBER, "decimal?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_STRING, "string?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_ARRAY, "float[]?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_INT, "int?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_FLOAT, "float?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_NUMBER, "decimal?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_STRING, "string?");
-        CompilerPluginTestUtils.assertError101(diagnosticResult, 9, ANNOTATION_TAG_ARRAY, "float[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_INT, "int|float");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_FLOAT, "float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_FLOAT, "float|int");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_NUMBER, "decimal?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 5, ANNOTATION_TAG_NUMBER, "decimal|float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 6, ANNOTATION_TAG_NUMBER, "decimal|float|int?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 7, ANNOTATION_TAG_STRING, "string?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 8, ANNOTATION_TAG_STRING, "string|int");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 9, ANNOTATION_TAG_ARRAY, "anydata[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 10, ANNOTATION_TAG_ARRAY, "int[]|float[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 11, ANNOTATION_TAG_INT, "int?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 12, ANNOTATION_TAG_INT, "int|float");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 13, ANNOTATION_TAG_FLOAT, "float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 14, ANNOTATION_TAG_FLOAT, "float|int");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 15, ANNOTATION_TAG_NUMBER, "decimal?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 16, ANNOTATION_TAG_NUMBER, "decimal|float?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 17, ANNOTATION_TAG_NUMBER, "decimal|float|int?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 18, ANNOTATION_TAG_STRING, "string?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 19, ANNOTATION_TAG_STRING, "string|int");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 20, ANNOTATION_TAG_ARRAY, "anydata[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 21, ANNOTATION_TAG_ARRAY, "int[]|float[]?");
     }
 
     @Test

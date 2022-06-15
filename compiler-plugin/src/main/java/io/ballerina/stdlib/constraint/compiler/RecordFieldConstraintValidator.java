@@ -22,14 +22,17 @@ import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
 import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.RecordFieldNode;
+import io.ballerina.compiler.syntax.tree.UnionTypeDescriptorNode;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.Diagnostic;
 import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.populateFieldTypeList;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
@@ -56,6 +59,12 @@ public class RecordFieldConstraintValidator implements AnalysisTask<SyntaxNodeAn
         }
         NodeList<AnnotationNode> annotationNodes = optionalMetadataNode.get().annotations();
         String fieldType = recordFieldNode.typeName().toString().trim();
-        validateConstraints(ctx, annotationNodes, fieldType);
+        ArrayList<String> fieldTypeList = new ArrayList<>();
+        if (recordFieldNode.typeName() instanceof UnionTypeDescriptorNode) {
+            populateFieldTypeList((UnionTypeDescriptorNode) recordFieldNode.typeName(), fieldTypeList);
+        } else {
+            fieldTypeList.add(fieldType);
+        }
+        validateConstraints(ctx, annotationNodes, fieldType, fieldTypeList);
     }
 }

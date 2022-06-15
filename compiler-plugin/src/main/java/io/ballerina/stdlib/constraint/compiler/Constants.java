@@ -27,6 +27,7 @@ public class Constants {
     static final String SYMBOL_COLON = ":";
     static final String SYMBOL_ARRAY = "[]";
     static final String SYMBOL_NEW_LINE = "\n";
+    static final String SYMBOL_DECIMAL = "d";
 
     static final String ANNOTATION_TAG_INT = "Int";
     static final String ANNOTATION_TAG_FLOAT = "Float";
