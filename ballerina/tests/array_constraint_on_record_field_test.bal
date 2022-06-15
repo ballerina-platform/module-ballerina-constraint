@@ -195,3 +195,73 @@ isolated function testArrayConstraintOnRecordFieldFailure2() {
         test:assertFail("Expected error not found.");
     }
 }
+
+type ArrayConstraintOnUnionRecordField record {
+    @Array {
+        minLength: 6,
+        maxLength: 12
+    }
+    int[]|string[] value;
+};
+
+@test:Config {}
+isolated function testArrayConstraintOnUnionRecordFieldSuccess1() {
+    ArrayConstraintOnUnionRecordField rec = {value: [1, 2, 3, 4, 5, 6, 7, 8]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testArrayConstraintOnUnionRecordFieldSuccess2() {
+    ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h"]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testArrayConstraintOnUnionRecordFieldFailure1() {
+    ArrayConstraintOnUnionRecordField rec = {value: [1, 2, 3]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testArrayConstraintOnUnionRecordFieldFailure2() {
+    ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c"]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testArrayConstraintOnRecordFieldFailure3() {
+    ArrayConstraintOnUnionRecordField rec = {value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testArrayConstraintOnRecordFieldFailure4() {
+     ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"]};
+    ArrayConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

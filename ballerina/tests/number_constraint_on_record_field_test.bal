@@ -330,3 +330,128 @@ isolated function testNumberConstraintOnRecordFieldFailure3() {
         test:assertFail("Expected error not found.");
     }
 }
+
+type NumberConstraintOnUnionRecordField record {|
+    @Number {
+        minValue: 18.5d
+    }
+    int|float intFloatValue;
+    @Number {
+        maxValue: 100.5d
+    }
+    int|decimal intDecimalValue;
+    @Number {
+        minValueExclusive: 18.5d
+    }
+    float|decimal floatDecimalValue;
+    @Number {
+        maxValueExclusive: 100.5d
+    }
+    int|float|decimal intFloatDecimalValue;
+|};
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldSuccess1() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20, intDecimalValue: 100, floatDecimalValue: 20.5, intFloatDecimalValue: 100};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldSuccess2() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20.5, intDecimalValue: 100.5d, floatDecimalValue: 20.5d, intFloatDecimalValue: 99.5d};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure1() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 16, intDecimalValue: 100, floatDecimalValue: 20.5, intFloatDecimalValue: 100};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure2() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20, intDecimalValue: 120, floatDecimalValue: 20.5, intFloatDecimalValue: 100};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure3() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20, intDecimalValue: 20, floatDecimalValue: 16.5, intFloatDecimalValue: 100};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure4() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20, intDecimalValue: 20, floatDecimalValue: 20.5, intFloatDecimalValue: 120};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure5() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 16.5, intDecimalValue: 100.5d, floatDecimalValue: 20.5d, intFloatDecimalValue: 99.5d};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure6() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20.5, intDecimalValue: 120.5d, floatDecimalValue: 20.5d, intFloatDecimalValue: 99.5d};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure7() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20.5, intDecimalValue: 100.5d, floatDecimalValue: 18.5d, intFloatDecimalValue: 99.5d};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNumberConstraintOnUnionRecordFieldFailure8() {
+    NumberConstraintOnUnionRecordField rec = {intFloatValue: 20.5, intDecimalValue: 100.5d, floatDecimalValue: 20.5d, intFloatDecimalValue: 100.5d};
+    NumberConstraintOnUnionRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

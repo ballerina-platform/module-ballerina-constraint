@@ -474,3 +474,159 @@ isolated function testNumberConstraintOnTypeFailure6() {
         test:assertFail("Expected error not found.");
     }
 }
+
+//@Number {
+//    minValue: 18.5d
+//}
+//type NumberConstraintOnUnionIntFloatType int|float;
+//
+//@Number {
+//    maxValue: 100.5d
+//}
+//type NumberConstraintOnUnionIntDecimalType int|decimal;
+//
+//@Number {
+//    minValueExclusive: 18.5d
+//}
+//type NumberConstraintOnUnionFloatDecimalType float|decimal;
+//
+//@Number {
+//    maxValueExclusive: 100.5d
+//}
+//type NumberConstraintOnUnionIntFloatDecimalType int|float|decimal;
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeSuccess1() {
+//    NumberConstraintOnUnionIntFloatType typIntFloat = 20;
+//    NumberConstraintOnUnionIntFloatType|error validationIntFloat = validate(typIntFloat);
+//    if validationIntFloat is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionIntDecimalType typIntDecimal = 100;
+//    NumberConstraintOnUnionIntFloatType|error validationIntDecimal = validate(typIntDecimal);
+//    if validationIntDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionFloatDecimalType typFloatDecimal = 20.5;
+//    NumberConstraintOnUnionIntFloatType|error validationFloatDecimal = validate(typFloatDecimal);
+//    if validationFloatDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionIntFloatDecimalType typIntFloatDecimal = 100;
+//    NumberConstraintOnUnionIntFloatType|error validationIntFloatDecimal = validate(typIntFloatDecimal);
+//    if validationIntFloatDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeSuccess2() {
+//    NumberConstraintOnUnionIntFloatType typIntFloat = 20.5;
+//    NumberConstraintOnUnionIntFloatType|error validationIntFloat = validate(typIntFloat);
+//    if validationIntFloat is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionIntDecimalType typIntDecimal = 100.5d;
+//    NumberConstraintOnUnionIntFloatType|error validationIntDecimal = validate(typIntDecimal);
+//    if validationIntDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionFloatDecimalType typFloatDecimal = 20.5d;
+//    NumberConstraintOnUnionIntFloatType|error validationFloatDecimal = validate(typFloatDecimal);
+//    if validationFloatDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//    NumberConstraintOnUnionIntFloatDecimalType typIntFloatDecimal = 99.5d;
+//    NumberConstraintOnUnionIntFloatType|error validationIntFloatDecimal = validate(typIntFloatDecimal);
+//    if validationIntFloatDecimal is error {
+//        test:assertFail("Unexpected error found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure1() {
+//    NumberConstraintOnUnionIntFloatType typ = 16;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure2() {
+//    NumberConstraintOnUnionIntDecimalType typ = 120;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure3() {
+//    NumberConstraintOnUnionFloatDecimalType typ = 16.5;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure4() {
+//    NumberConstraintOnUnionIntFloatDecimalType typ = 120;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure5() {
+//    NumberConstraintOnUnionIntFloatType typ = 16.5;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure6() {
+//    NumberConstraintOnUnionIntDecimalType typ = 120.5d;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure7() {
+//    NumberConstraintOnUnionFloatDecimalType typ = 18.5d;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
+//
+//@test:Config {}
+//isolated function testNumberConstraintOnUnionTypeFailure8() {
+//    NumberConstraintOnUnionIntFloatDecimalType typ = 100.5d;
+//    NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
+//    if validation is error {
+//        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+//    } else {
+//        test:assertFail("Expected error not found.");
+//    }
+//}
