@@ -475,26 +475,28 @@ isolated function testNumberConstraintOnTypeFailure6() {
     }
 }
 
-//@Number {
-//    minValue: 18.5d
-//}
-//type NumberConstraintOnUnionIntFloatType int|float;
-//
-//@Number {
-//    maxValue: 100.5d
-//}
-//type NumberConstraintOnUnionIntDecimalType int|decimal;
-//
-//@Number {
-//    minValueExclusive: 18.5d
-//}
-//type NumberConstraintOnUnionFloatDecimalType float|decimal;
-//
-//@Number {
-//    maxValueExclusive: 100.5d
-//}
-//type NumberConstraintOnUnionIntFloatDecimalType int|float|decimal;
-//
+@Number {
+    minValue: 18.5d
+}
+type NumberConstraintOnUnionIntFloatType int|float;
+
+@Number {
+    maxValue: 100.5d
+}
+type NumberConstraintOnUnionIntDecimalType int|decimal;
+
+@Number {
+    minValueExclusive: 18.5d
+}
+type NumberConstraintOnUnionFloatDecimalType float|decimal;
+
+@Number {
+    maxValueExclusive: 100.5d
+}
+type NumberConstraintOnUnionIntFloatDecimalType int|float|decimal;
+
+// TODO: Disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/36543
+
 //@test:Config {}
 //isolated function testNumberConstraintOnUnionTypeSuccess1() {
 //    NumberConstraintOnUnionIntFloatType typIntFloat = 20;
