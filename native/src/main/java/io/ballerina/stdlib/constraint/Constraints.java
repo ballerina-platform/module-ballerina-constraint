@@ -33,10 +33,14 @@ public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
         AbstractAnnotations annotations = getAnnotationImpl(value);
-        annotations.validate(value, typedesc);
+        try {
+            annotations.validate(value, typedesc);
+        } catch (Exception e) {
+            return ErrorUtils.buildUnexpectedError();
+        }
         Set<String> failedConstraints = annotations.getFailedConstraints();
         if (!failedConstraints.isEmpty()) {
-            return ErrorUtils.buildError(failedConstraints);
+            return ErrorUtils.buildValidationError(failedConstraints);
         }
         return null;
     }

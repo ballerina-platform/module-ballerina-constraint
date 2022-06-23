@@ -29,13 +29,21 @@ import java.util.Set;
  */
 public class ErrorUtils {
 
-    static BError buildError(Set<String> failedConstraints) {
-        StringBuilder errorMsg = new StringBuilder("Validation failed for ");
+    private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found!";
+    private static final String VALIDATION_ERROR_MESSAGE_PREFIX = "Validation failed for ";
+    private static final String VALIDATION_ERROR_MESSAGE_SUFFIX = " constraint(s).";
+
+    static BError buildUnexpectedError() {
+        return createError(UNEXPECTED_ERROR_MESSAGE);
+    }
+
+    static BError buildValidationError(Set<String> failedConstraints) {
+        StringBuilder errorMsg = new StringBuilder(VALIDATION_ERROR_MESSAGE_PREFIX);
         for (String constraint : failedConstraints) {
             errorMsg.append("'").append(constraint).append("',");
         }
         errorMsg.deleteCharAt(errorMsg.length() - 1);
-        errorMsg.append(" constraint(s).");
+        errorMsg.append(VALIDATION_ERROR_MESSAGE_SUFFIX);
         return createError(errorMsg.toString());
     }
 

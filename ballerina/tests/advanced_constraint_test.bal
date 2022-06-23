@@ -16,7 +16,8 @@
 
 import ballerina/test;
 
-// Multiple types of annotations in a single record
+// Testing multiple types of annotations in a single record
+
 type Person record {
     @String {
         minLength: 5,
@@ -82,7 +83,8 @@ isolated function testMultipleConstraintFailure4() {
     }
 }
 
-// Multiple types of annotations in a single record field
+// Testing multiple types of annotations in a single record field
+
 type Student record {
     string name;
     @Number {
@@ -134,7 +136,8 @@ isolated function testMultipleConstraintOnSingleFieldFailure2() {
     }
 }
 
-// Multiple annotations on nested records
+// Testing multiple types of annotations on nested records
+
 type Foo record {
     @String {
         length: 5
@@ -206,6 +209,100 @@ isolated function testNestedRecordFailure4() {
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue','minLength','length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+// Testing multiple types of annotations on record fields and annotations on types used as record fields
+
+@Int {
+    minValue: 16
+}
+type CustomType int;
+
+type CustomRecord record {
+    CustomType value1;
+    @String {
+        length: 5
+    }
+    string value2;
+};
+
+@test:Config {}
+isolated function testAnnotationsOnRecordFieldAndCustomTypeAsRecordFieldSuccess1() {
+    CustomRecord rec = {value1: 20, value2: "Alice"};
+    CustomRecord|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testAnnotationsOnRecordFieldAndCustomTypeAsRecordFieldFailure1() {
+    CustomRecord rec = {value1: 15, value2: "Alice"};
+    CustomRecord|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testAnnotationsOnRecordFieldAndCustomTypeAsRecordFieldFailure2() {
+    CustomRecord rec = {value1: 20, value2: "Bob"};
+    CustomRecord|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+// Testing annotation validations by passing invalid typedesc
+
+type ValidRecord record {
+    @String {
+        length: 5
+    }
+    string value;
+};
+
+type InvalidRecord record {
+    @Int {
+        minValue: 16
+    }
+    int value;
+};
+
+@test:Config {}
+isolated function testMismatchedObjectAndTypeDescForRecord() {
+    ValidRecord rec = {value: "Alice"};
+    InvalidRecord|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Unexpected error found!");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@String {
+    length: 5
+}
+type ValidType string;
+
+@Int {
+    minValue: 16
+}
+type InvalidType int;
+
+@test:Config {}
+isolated function testMismatchedObjectAndTypeDescForType() {
+    ValidType typ = "Alice";
+    InvalidType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Unexpected error found!");
     } else {
         test:assertFail("Expected error not found.");
     }
