@@ -38,10 +38,10 @@ public annotation ArrayConstraints Array on type, record field;
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type IntConstraints record {|
-   int minValue?;
-   int maxValue?;
-   int minValueExclusive?;
-   int maxValueExclusive?;
+    int minValue?;
+    int maxValue?;
+    int minValueExclusive?;
+    int maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `float` type.
@@ -51,10 +51,10 @@ public type IntConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type FloatConstraints record {|
-   float minValue?;
-   float maxValue?;
-   float minValueExclusive?;
-   float maxValueExclusive?;
+    float minValue?;
+    float maxValue?;
+    float minValueExclusive?;
+    float maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `int`, `float` and `decimal` types.
@@ -64,10 +64,10 @@ public type FloatConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type NumberConstraints record {|
-   decimal minValue?;
-   decimal maxValue?;
-   decimal minValueExclusive?;
-   decimal maxValueExclusive?;
+    decimal minValue?;
+    decimal maxValue?;
+    decimal minValueExclusive?;
+    decimal maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `string` type.
@@ -76,9 +76,9 @@ public type NumberConstraints record {|
 # + minLength - The inclusive lower bound of the number of characters of the constrained `string` type
 # + maxLength - The inclusive upper bound of the number of characters of the constrained `string` type
 public type StringConstraints record {|
-   int length?;
-   int minLength?;
-   int maxLength?;
+    int length?;
+    int minLength?;
+    int maxLength?;
 |};
 
 # Represents the constraints associated with `anydata[]` type.
@@ -87,9 +87,9 @@ public type StringConstraints record {|
 # + minLength - The inclusive lower bound of the number of members of the constrained type
 # + maxLength - The inclusive upper bound of the number of members of the constrained type
 public type ArrayConstraints record {|
-   int length?;
-   int minLength?;
-   int maxLength?;
+    int length?;
+    int minLength?;
+    int maxLength?;
 |};
 
 # Validates the provided value against the configured annotations.

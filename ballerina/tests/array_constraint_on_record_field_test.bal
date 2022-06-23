@@ -257,7 +257,7 @@ isolated function testArrayConstraintOnRecordFieldFailure3() {
 
 @test:Config {}
 isolated function testArrayConstraintOnRecordFieldFailure4() {
-     ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"]};
+    ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");

@@ -192,66 +192,66 @@ isolated function testArrayConstraintOnTypeFailure2() {
 }
 type ArrayConstraintOnUnionType int[]|string[];
 
-// TODO: Disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/36543
+// TODO: Following test cases are disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/36543
 
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeSuccess1() {
-//    ArrayConstraintOnUnionType typ = [1, 2, 3, 4, 5, 6, 7, 8];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertFail("Unexpected error found.");
-//    }
-//}
-//
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeSuccess2() {
-//    ArrayConstraintOnUnionType typ = ["a", "b", "c", "d", "e", "f", "g", "h"];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertFail("Unexpected error found.");
-//    }
-//}
-//
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeFailure1() {
-//    ArrayConstraintOnUnionType typ = [1, 2, 3];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
-//    } else {
-//        test:assertFail("Expected error not found.");
-//    }
-//}
-//
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeFailure2() {
-//    ArrayConstraintOnUnionType typ = ["a", "b", "c"];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
-//    } else {
-//        test:assertFail("Expected error not found.");
-//    }
-//}
-//
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeFailure3() {
-//    ArrayConstraintOnUnionType typ = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
-//    } else {
-//        test:assertFail("Expected error not found.");
-//    }
-//}
-//
-//@test:Config {}
-//isolated function testArrayConstraintOnUnionTypeFailure4() {
-//     ArrayConstraintOnUnionType typ = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"];
-//    ArrayConstraintOnUnionType|error validation = validate(typ);
-//    if validation is error {
-//        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
-//    } else {
-//        test:assertFail("Expected error not found.");
-//    }
-//}
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeSuccess1() {
+    ArrayConstraintOnUnionType typ = [1, 2, 3, 4, 5, 6, 7, 8];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeSuccess2() {
+    ArrayConstraintOnUnionType typ = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeFailure1() {
+    ArrayConstraintOnUnionType typ = [1, 2, 3];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeFailure2() {
+    ArrayConstraintOnUnionType typ = ["a", "b", "c"];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeFailure3() {
+    ArrayConstraintOnUnionType typ = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {enable: false}
+isolated function testArrayConstraintOnUnionTypeFailure4() {
+    ArrayConstraintOnUnionType typ = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"];
+    ArrayConstraintOnUnionType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
