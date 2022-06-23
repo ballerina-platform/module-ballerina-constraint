@@ -19,6 +19,9 @@
 package io.ballerina.stdlib.constraint.annotations;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.Field;
+import io.ballerina.runtime.api.types.RecordType;
+import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
@@ -57,6 +60,15 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
                 super.validateAnnotations(recordFieldAnnotations, fieldValue);
+            }
+        }
+        for (Field recordField : ((RecordType) typedesc.getDescribingType()).getFields().values()) {
+            Type fieldType = recordField.getFieldType();
+            if (fieldType instanceof AnnotatableType) {
+                String fieldName = recordField.getFieldName();
+                BMap<BString, Object> typeAnnotations = ((AnnotatableType) fieldType).getAnnotations();
+                Object fieldValue = getFieldValue(record, fieldName);
+                super.validateAnnotations(typeAnnotations, fieldValue);
             }
         }
     }
