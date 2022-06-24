@@ -27,7 +27,6 @@ import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.Constants;
 
 import java.util.Map;
@@ -39,21 +38,21 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void validate(Object value, BTypedesc typedesc) {
+    public void validate(Object value, Type type) {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
-        validateRecordAnnotations(record, typedesc);
+        validateRecordAnnotations(record, type);
         for (BString key : record.getKeys()) {
             if (record.get(key) instanceof BMap) {
                 record = ((BMap<BString, Object>) record.get(key));
-                typedesc = record.getTypedesc();
-                validate(record, typedesc);
+                type = record.getTypedesc().getDescribingType();
+                validate(record, type);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void validateRecordAnnotations(BMap<BString, Object> record, BTypedesc typedesc) {
-        BMap<BString, Object> recordAnnotations = ((AnnotatableType) typedesc.getDescribingType()).getAnnotations();
+    private void validateRecordAnnotations(BMap<BString, Object> record, Type type) {
+        BMap<BString, Object> recordAnnotations = ((AnnotatableType) type).getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
                 String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);
@@ -62,7 +61,7 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 super.validateAnnotations(recordFieldAnnotations, fieldValue);
             }
         }
-        for (Field recordField : ((RecordType) typedesc.getDescribingType()).getFields().values()) {
+        for (Field recordField : ((RecordType) type).getFields().values()) {
             Type fieldType = recordField.getFieldType();
             if (fieldType instanceof AnnotatableType) {
                 String fieldName = recordField.getFieldName();

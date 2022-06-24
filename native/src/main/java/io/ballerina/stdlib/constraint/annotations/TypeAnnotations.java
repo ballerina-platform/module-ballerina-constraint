@@ -19,11 +19,11 @@
 package io.ballerina.stdlib.constraint.annotations;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.runtime.api.values.BTypedesc;
 
 /**
  * Extern functions for validating constraints on types.
@@ -31,12 +31,12 @@ import io.ballerina.runtime.api.values.BTypedesc;
 public class TypeAnnotations extends AbstractAnnotations {
 
     @Override
-    public void validate(Object value, BTypedesc typedesc) {
-        validateTypeAnnotations(value, typedesc);
+    public void validate(Object value, Type type) {
+        validateTypeAnnotations(value, type);
     }
 
-    private void validateTypeAnnotations(Object value, BTypedesc typedesc) {
-        BMap<BString, Object> typeAnnotations = ((AnnotatableType) typedesc.getDescribingType()).getAnnotations();
+    private void validateTypeAnnotations(Object value, Type type) {
+        BMap<BString, Object> typeAnnotations = ((AnnotatableType) type).getAnnotations();
         Object fieldValue = getFieldValue(value);
         super.validateAnnotations(typeAnnotations, fieldValue);
     }

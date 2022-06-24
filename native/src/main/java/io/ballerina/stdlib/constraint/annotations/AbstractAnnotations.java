@@ -18,9 +18,9 @@
 
 package io.ballerina.stdlib.constraint.annotations;
 
+import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.Constants;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
@@ -53,7 +53,7 @@ public abstract class AbstractAnnotations {
         this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraints);
     }
 
-    public abstract void validate(Object value, BTypedesc typedesc);
+    public abstract void validate(Object value, Type type);
 
     public Set<String> getFailedConstraints() {
         return failedConstraints;

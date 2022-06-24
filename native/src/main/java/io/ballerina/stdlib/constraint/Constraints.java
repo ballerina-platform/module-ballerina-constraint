@@ -18,7 +18,9 @@
 
 package io.ballerina.stdlib.constraint;
 
-import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.types.RecordType;
+import io.ballerina.runtime.api.types.ReferenceType;
+import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
@@ -32,24 +34,29 @@ import java.util.Set;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
-        AbstractAnnotations annotations = getAnnotationImpl(value);
         try {
-            annotations.validate(value, typedesc);
+            Type type = typedesc.getDescribingType();
+            AbstractAnnotations annotations = getAnnotationImpl(type);
+            if (annotations == null) {
+                return ErrorUtils.buildInvalidTypeError();
+            }
+            annotations.validate(value, type);
+            Set<String> failedConstraints = annotations.getFailedConstraints();
+            if (!failedConstraints.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraints);
+            }
+            return null;
         } catch (Exception e) {
             return ErrorUtils.buildUnexpectedError();
         }
-        Set<String> failedConstraints = annotations.getFailedConstraints();
-        if (!failedConstraints.isEmpty()) {
-            return ErrorUtils.buildValidationError(failedConstraints);
-        }
-        return null;
     }
 
-    private static AbstractAnnotations getAnnotationImpl(Object value) {
-        if (value instanceof BMap) {
+    private static AbstractAnnotations getAnnotationImpl(Type type) {
+        if (type instanceof RecordType) {
             return new RecordFieldAnnotations();
-        } else {
+        } else if (type instanceof ReferenceType) {
             return new TypeAnnotations();
         }
+        return null;
     }
 }
