@@ -23,6 +23,7 @@ import io.ballerina.runtime.api.types.Field;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
@@ -30,28 +31,24 @@ import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.Constants;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Extern functions for validating constraints on record fields.
  */
 public class RecordFieldAnnotations extends AbstractAnnotations {
 
+    private final Set<String> failedConstraints;
+
+    public RecordFieldAnnotations(Set<String> failedConstraints) {
+        super(failedConstraints);
+        this.failedConstraints = failedConstraints;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void validate(Object value, Type type) {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
-        validateRecordAnnotations(record, type);
-        for (BString key : record.getKeys()) {
-            if (record.get(key) instanceof BMap) {
-                record = ((BMap<BString, Object>) record.get(key));
-                type = record.getTypedesc().getDescribingType();
-                validate(record, type);
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void validateRecordAnnotations(BMap<BString, Object> record, Type type) {
         BMap<BString, Object> recordAnnotations = ((AnnotatableType) type).getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
@@ -61,13 +58,22 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 super.validateAnnotations(recordFieldAnnotations, fieldValue);
             }
         }
+        validateReferredTypeAnnotations(record, type);
+    }
+
+    private void validateReferredTypeAnnotations(BMap<BString, Object> record, Type type) {
         for (Field recordField : ((RecordType) type).getFields().values()) {
             Type fieldType = recordField.getFieldType();
+            Type referredType = TypeUtils.getReferredType(fieldType);
             if (fieldType instanceof AnnotatableType) {
                 String fieldName = recordField.getFieldName();
-                BMap<BString, Object> typeAnnotations = ((AnnotatableType) fieldType).getAnnotations();
-                Object fieldValue = getFieldValue(record, fieldName);
-                super.validateAnnotations(typeAnnotations, fieldValue);
+                Object fieldValue = record.get(StringUtils.fromString(fieldName));
+                if (referredType instanceof RecordType) {
+                    validate(fieldValue, referredType);
+                } else {
+                    TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                    typeAnnotations.validate(fieldValue, fieldType);
+                }
             }
         }
     }

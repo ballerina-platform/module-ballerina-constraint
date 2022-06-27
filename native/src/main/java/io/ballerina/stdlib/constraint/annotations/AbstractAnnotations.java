@@ -28,7 +28,6 @@ import io.ballerina.stdlib.constraint.validators.IntConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.NumberConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.StringConstraintValidator;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,15 +36,13 @@ import java.util.Set;
  */
 public abstract class AbstractAnnotations {
 
-    private final Set<String> failedConstraints;
-    final IntConstraintValidator intConstraintValidator;
-    final FloatConstraintValidator floatConstraintValidator;
-    final NumberConstraintValidator numberConstraintValidator;
-    final StringConstraintValidator stringConstraintValidator;
-    final ArrayConstraintValidator arrayConstraintValidator;
+    private final IntConstraintValidator intConstraintValidator;
+    private final FloatConstraintValidator floatConstraintValidator;
+    private final NumberConstraintValidator numberConstraintValidator;
+    private final StringConstraintValidator stringConstraintValidator;
+    private final ArrayConstraintValidator arrayConstraintValidator;
 
-    public AbstractAnnotations() {
-        this.failedConstraints = new HashSet<>();
+    public AbstractAnnotations(Set<String> failedConstraints) {
         this.intConstraintValidator = new IntConstraintValidator(failedConstraints);
         this.floatConstraintValidator = new FloatConstraintValidator(failedConstraints);
         this.numberConstraintValidator = new NumberConstraintValidator(failedConstraints);
@@ -54,10 +51,6 @@ public abstract class AbstractAnnotations {
     }
 
     public abstract void validate(Object value, Type type);
-
-    public Set<String> getFailedConstraints() {
-        return failedConstraints;
-    }
 
     @SuppressWarnings("unchecked")
     public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue) {

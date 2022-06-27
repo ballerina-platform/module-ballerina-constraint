@@ -19,13 +19,13 @@
 package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.types.RecordType;
-import io.ballerina.runtime.api.types.ReferenceType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,29 +34,25 @@ import java.util.Set;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
+        HashSet<String> failedConstraints = new HashSet<>();
         try {
             Type type = typedesc.getDescribingType();
-            AbstractAnnotations annotations = getAnnotationImpl(type);
-            if (annotations == null) {
-                return ErrorUtils.buildInvalidTypeError();
-            }
+            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
             annotations.validate(value, type);
-            Set<String> failedConstraints = annotations.getFailedConstraints();
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
             return null;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError();
         }
     }
 
-    private static AbstractAnnotations getAnnotationImpl(Type type) {
+    private static AbstractAnnotations getAnnotationImpl(Type type, Set<String> failedConstraints) {
         if (type instanceof RecordType) {
-            return new RecordFieldAnnotations();
-        } else if (type instanceof ReferenceType) {
-            return new TypeAnnotations();
+            return new RecordFieldAnnotations(failedConstraints);
+        } else {
+            return new TypeAnnotations(failedConstraints);
         }
-        return null;
     }
 }

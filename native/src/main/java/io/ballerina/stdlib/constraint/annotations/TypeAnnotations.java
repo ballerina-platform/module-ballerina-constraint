@@ -19,26 +19,59 @@
 package io.ballerina.stdlib.constraint.annotations;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.ArrayType;
+import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
+import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+
+import java.util.Set;
 
 /**
  * Extern functions for validating constraints on types.
  */
 public class TypeAnnotations extends AbstractAnnotations {
 
-    @Override
-    public void validate(Object value, Type type) {
-        validateTypeAnnotations(value, type);
+    private final Set<String> failedConstraints;
+
+    public TypeAnnotations(Set<String> failedConstraints) {
+        super(failedConstraints);
+        this.failedConstraints = failedConstraints;
     }
 
-    private void validateTypeAnnotations(Object value, Type type) {
+    @Override
+    public void validate(Object value, Type type) {
         BMap<BString, Object> typeAnnotations = ((AnnotatableType) type).getAnnotations();
         Object fieldValue = getFieldValue(value);
         super.validateAnnotations(typeAnnotations, fieldValue);
+        validateReferredTypeAnnotations(value, type);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateReferredTypeAnnotations(Object value, Type type) {
+        Type referredType = TypeUtils.getReferredType(type);
+        if (referredType instanceof ArrayType) {
+            Type elementType = ((ArrayType) referredType).getElementType();
+            if (elementType instanceof RecordType) {
+                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
+                for (int i = 0; i < ((BArray) value).getLength(); i++) {
+                    BMap<BString, Object> map = (BMap<BString, Object>) ((BArray) value).getRefValue(i);
+                    recordFieldAnnotations.validate(map, elementType);
+                }
+            } else {
+                // TODO: Validate constraints if element type is a type
+                // for (int i = 0; i < ((BArray) value).getLength(); i++) {
+                //    Object refValue = ((BArray) value).getRefValue(i);
+                //    validate(refValue, elementType);
+                // }
+            }
+        } else {
+            // TODO: Validate constraints if referred type is a type
+            // validate(value, referredType);
+        }
     }
 
     private Object getFieldValue(Object value) {

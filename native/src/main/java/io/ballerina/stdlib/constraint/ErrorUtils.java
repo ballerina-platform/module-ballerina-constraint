@@ -30,16 +30,11 @@ import java.util.Set;
 public class ErrorUtils {
 
     private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found!";
-    private static final String INVALID_TYPE_ERROR_MESSAGE = "Invalid typedesc found!";
     private static final String VALIDATION_ERROR_MESSAGE_PREFIX = "Validation failed for ";
     private static final String VALIDATION_ERROR_MESSAGE_SUFFIX = " constraint(s).";
 
     static BError buildUnexpectedError() {
         return createError(UNEXPECTED_ERROR_MESSAGE);
-    }
-
-    static BError buildInvalidTypeError() {
-        return createError(INVALID_TYPE_ERROR_MESSAGE);
     }
 
     static BError buildValidationError(Set<String> failedConstraints) {
