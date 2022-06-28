@@ -18,31 +18,15 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
-import java.util.ArrayList;
-
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_LENGTH;
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MAX_LENGTH;
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_LENGTH;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_ARRAY;
 
 /**
  * The class to represent the `@constraint:Array` annotation tag.
  */
-public class AnnotationTagArray implements AnnotationTag {
+public class AnnotationTagArray extends AbstractLengthConstraints {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {
         return fieldType.endsWith(SYMBOL_ARRAY);
-    }
-
-    @Override
-    public boolean haveCompatibleConstraints(ArrayList<String> constraints) {
-        return !(constraints.contains(CONSTRAINT_LENGTH) && constraints.contains(CONSTRAINT_MIN_LENGTH) ||
-                constraints.contains(CONSTRAINT_LENGTH) && constraints.contains(CONSTRAINT_MAX_LENGTH));
-    }
-
-    @Override
-    public boolean isValidConstraintValue(double constraintValue) {
-        return constraintValue > 0;
     }
 }

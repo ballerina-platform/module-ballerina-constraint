@@ -18,12 +18,6 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
-import java.util.ArrayList;
-
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MAX_VALUE;
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE;
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_VALUE;
-import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE;
 import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_DECIMAL;
 import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_FLOAT;
 import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
@@ -31,23 +25,12 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
 /**
  * The class to represent the `@constraint:Number` annotation tag.
  */
-public class AnnotationTagNumber implements AnnotationTag {
+public class AnnotationTagNumber extends AbstractValueConstraints {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {
         return fieldType.equals(TYPE_INT) ||
                 fieldType.equals(TYPE_FLOAT) ||
                 fieldType.equals(TYPE_DECIMAL);
-    }
-
-    @Override
-    public boolean haveCompatibleConstraints(ArrayList<String> constraints) {
-        return !(constraints.contains(CONSTRAINT_MIN_VALUE) && constraints.contains(CONSTRAINT_MIN_VALUE_EXCLUSIVE) ||
-                constraints.contains(CONSTRAINT_MAX_VALUE) && constraints.contains(CONSTRAINT_MAX_VALUE_EXCLUSIVE));
-    }
-
-    @Override
-    public boolean isValidConstraintValue(double constraintValue) {
-        return true;
     }
 }
