@@ -62,15 +62,9 @@ public class TypeAnnotations extends AbstractAnnotations {
                     recordFieldAnnotations.validate(map, elementType);
                 }
             } else {
-                // TODO: Validate constraints if element type is a type
-                // for (int i = 0; i < ((BArray) value).getLength(); i++) {
-                //    Object refValue = ((BArray) value).getRefValue(i);
-                //    validate(refValue, elementType);
-                // }
+                // TODO: Validate elements of a reference type
+                //  https://github.com/ballerina-platform/ballerina-lang/issues/36747
             }
-        } else {
-            // TODO: Validate constraints if referred type is a type
-            // validate(value, referredType);
         }
     }
 

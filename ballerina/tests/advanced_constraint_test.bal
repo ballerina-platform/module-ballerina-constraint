@@ -214,7 +214,7 @@ isolated function testNestedRecordFailure4() {
     }
 }
 
-// Testing multiple types of annotations on nested types
+// Testing annotations on nested types
 
 @Int {
     minValue: 0
@@ -223,15 +223,17 @@ type PositiveInt int;
 
 type CustomInt PositiveInt;
 
+type CustomIntMap map<CustomInt>;
+
 @Array {
     maxLength: 10
 }
-type CustomIntArray CustomInt[];
+type CustomIntMapArray CustomIntMap[];
 
 @test:Config {}
 isolated function testNestedTypeSuccess() {
-    CustomIntArray arr = [1, 2, 3, 4, 5];
-    CustomIntArray|error validation = validate(arr);
+    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": 5}];
+    CustomIntMapArray|error validation = validate(arr);
     if validation is error {
         test:assertFail("Unexpected error found.");
     }
@@ -239,8 +241,9 @@ isolated function testNestedTypeSuccess() {
 
 @test:Config {}
 isolated function testNestedTypeFailure1() {
-    CustomIntArray arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-    CustomIntArray|error validation = validate(arr);
+    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": 5},
+                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": 10},{"x": 11}];
+    CustomIntMapArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {
@@ -248,10 +251,13 @@ isolated function testNestedTypeFailure1() {
     }
 }
 
+// TODO: Following test cases are disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/36747
+
 @test:Config {enable: false}
 isolated function testNestedTypeFailure2() {
-    CustomIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, 10];
-    CustomIntArray|error validation = validate(arr);
+    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": -5},
+                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": 10}];
+    CustomIntMapArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -261,8 +267,9 @@ isolated function testNestedTypeFailure2() {
 
 @test:Config {enable: false}
 isolated function testNestedTypeFailure3() {
-    CustomIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, -10, 11];
-    CustomIntArray|error validation = validate(arr);
+    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": -5},
+                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": -10},{"x": 11}];
+    CustomIntMapArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength','minValue' constraint(s).");
     } else {
@@ -285,10 +292,12 @@ type Teacher record {|
     Age age;
 |};
 
+type TeacherType Teacher;
+
 @Array {
     minLength: 2
 }
-type TeacherArray Teacher[];
+type TeacherArray TeacherType[];
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeSuccess() {
