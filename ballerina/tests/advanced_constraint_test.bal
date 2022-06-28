@@ -459,7 +459,7 @@ isolated function testInvalidTypeDescForRecord() {
     ValidRecord rec = {value: "Alice"};
     InvalidRecord|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Unexpected error found!");
+        test:assertEquals(validation.message(), "Unexpected error found due to typedesc and value mismatch.");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -480,7 +480,7 @@ isolated function testInvalidTypeDescForType() {
     ValidType typ = "Alice";
     InvalidType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Unexpected error found!");
+        test:assertEquals(validation.message(), "Unexpected error found due to typedesc and value mismatch.");
     } else {
         test:assertFail("Expected error not found.");
     }

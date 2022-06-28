@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class ErrorUtils {
 
-    private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found!";
+    private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found due to typedesc and value mismatch.";
     private static final String VALIDATION_ERROR_MESSAGE_PREFIX = "Validation failed for ";
     private static final String VALIDATION_ERROR_MESSAGE_SUFFIX = " constraint(s).";
 
@@ -47,8 +47,8 @@ public class ErrorUtils {
         return createError(errorMsg.toString());
     }
 
-    private static BError createError(String errMsg) {
-        return ErrorCreator.createDistinctError(Constants.CONSTRAINT_ERROR, ModuleUtils.getModule(),
-                StringUtils.fromString(errMsg));
+    private static BError createError(String errMessage) {
+        return ErrorCreator.createError(ModuleUtils.getModule(), Constants.CONSTRAINT_ERROR,
+                StringUtils.fromString(errMessage), null, null);
     }
 }
