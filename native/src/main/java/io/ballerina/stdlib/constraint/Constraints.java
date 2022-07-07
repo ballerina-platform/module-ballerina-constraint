@@ -18,6 +18,7 @@
 
 package io.ballerina.stdlib.constraint;
 
+import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.values.BTypedesc;
@@ -37,8 +38,10 @@ public class Constraints {
         HashSet<String> failedConstraints = new HashSet<>();
         try {
             Type type = typedesc.getDescribingType();
-            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-            annotations.validate(value, type);
+            if (type instanceof AnnotatableType) {
+                AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
+                annotations.validate(value, (AnnotatableType) type);
+            }
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }

@@ -49,9 +49,9 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void validate(Object value, Type type) {
+    public void validate(Object value, AnnotatableType type) {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
-        BMap<BString, Object> recordAnnotations = ((AnnotatableType) type).getAnnotations();
+        BMap<BString, Object> recordAnnotations = type.getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
                 String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);
@@ -62,42 +62,7 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 }
             }
         }
-        validateReferredTypeAnnotations(record, (ReferenceType) type);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void validateReferredTypeAnnotations(BMap<BString, Object> record, ReferenceType type) {
-        for (Field recordField : ((RecordType) type).getFields().values()) {
-            Type fieldType = recordField.getFieldType();
-            String fieldName = recordField.getFieldName();
-            Object fieldValue = record.get(StringUtils.fromString(fieldName));
-            if (fieldType instanceof ReferenceType && !(fieldType instanceof UnionType)) {
-                if (fieldValue != null) { // This can be null due to optional fields
-                    if (fieldType instanceof RecordType) {
-                        validate(fieldValue, fieldType);
-                    } else if (fieldType instanceof ArrayType) {
-                        Type elementType = ((ArrayType) fieldType).getElementType();
-                        BArray elementValue = (BArray) fieldValue;
-                        if (elementType instanceof AnnotatableType) {
-                            if (elementType instanceof RecordType) {
-                                for (int i = 0; i < elementValue.getLength(); i++) {
-                                    BMap<BString, Object> map = (BMap<BString, Object>) elementValue.getRefValue(i);
-                                    validate(map, elementType);
-                                }
-                            } else {
-                                TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
-                                for (int i = 0; i < elementValue.getLength(); i++) {
-                                    typeAnnotations.validate(elementValue.getRefValue(i), elementType);
-                                }
-                            }
-                        }
-                    } else {
-                        TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
-                        typeAnnotations.validate(fieldValue, fieldType);
-                    }
-                }
-            }
-        }
+        validateReferredType(record, (RecordType) type);
     }
 
     private Object getFieldValue(BMap<BString, Object> record, String fieldName) {
@@ -110,5 +75,43 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
             return ((BArray) obj).getLength();
         }
         return obj;
+    }
+
+    private void validateReferredType(BMap<BString, Object> record, RecordType type) {
+        for (Field recordField : type.getFields().values()) {
+            Type fieldType = recordField.getFieldType();
+            String fieldName = recordField.getFieldName();
+            Object fieldValue = record.get(StringUtils.fromString(fieldName));
+            if (fieldType instanceof ReferenceType && !(fieldType instanceof UnionType)) {
+                if (fieldValue != null) { // This can be null due to optional fields
+                    if (fieldType instanceof RecordType) {
+                        validate(fieldValue, (AnnotatableType) fieldType);
+                    } else if (fieldType instanceof ArrayType) {
+                        validateArrayType((ArrayType) fieldType, (BArray) fieldValue);
+                    } else {
+                        TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                        typeAnnotations.validate(fieldValue, (AnnotatableType) fieldType);
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateArrayType(ArrayType fieldType, BArray fieldValue) {
+        Type elementType = fieldType.getElementType();
+        if (elementType instanceof AnnotatableType) {
+            if (elementType instanceof RecordType) {
+                for (int i = 0; i < fieldValue.getLength(); i++) {
+                    BMap<BString, Object> map = (BMap<BString, Object>) fieldValue.getRefValue(i);
+                    validate(map, (AnnotatableType) elementType);
+                }
+            } else {
+                TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                for (int i = 0; i < fieldValue.getLength(); i++) {
+                    typeAnnotations.validate(fieldValue.getRefValue(i), (AnnotatableType) elementType);
+                }
+            }
+        }
     }
 }

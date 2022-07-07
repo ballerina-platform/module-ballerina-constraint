@@ -18,7 +18,7 @@
 
 package io.ballerina.stdlib.constraint.annotations;
 
-import io.ballerina.runtime.api.types.Type;
+import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.Constants;
@@ -50,7 +50,7 @@ public abstract class AbstractAnnotations {
         this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraints);
     }
 
-    public abstract void validate(Object value, Type type);
+    public abstract void validate(Object value, AnnotatableType type);
 
     @SuppressWarnings("unchecked")
     public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue) {

@@ -43,39 +43,12 @@ public class TypeAnnotations extends AbstractAnnotations {
     }
 
     @Override
-    public void validate(Object value, Type type) {
-        BMap<BString, Object> typeAnnotations = ((AnnotatableType) type).getAnnotations();
+    public void validate(Object value, AnnotatableType type) {
+        BMap<BString, Object> typeAnnotations = type.getAnnotations();
         Object fieldValue = getFieldValue(value);
         super.validateAnnotations(typeAnnotations, fieldValue);
-        validateReferredTypeAnnotations(value, (ReferenceType) type);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void validateReferredTypeAnnotations(Object value, ReferenceType type) {
-        Type referredType = type.getReferredType();
-        if (referredType instanceof ReferenceType) {
-            if (referredType instanceof RecordType) {
-                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
-                recordFieldAnnotations.validate(value, referredType);
-            } else if (referredType instanceof ArrayType) {
-                Type elementType = ((ArrayType) referredType).getElementType();
-                if (elementType instanceof ReferenceType && elementType instanceof AnnotatableType) {
-                    if (elementType instanceof RecordType) {
-                        RecordFieldAnnotations recordFieldAnnotations =
-                                new RecordFieldAnnotations(this.failedConstraints);
-                        for (int i = 0; i < ((BArray) value).getLength(); i++) {
-                            BMap<BString, Object> map = (BMap<BString, Object>) ((BArray) value).getRefValue(i);
-                            recordFieldAnnotations.validate(map, elementType);
-                        }
-                    } else {
-                        for (int i = 0; i < ((BArray) value).getLength(); i++) {
-                            validate(((BArray) value).getRefValue(i), elementType);
-                        }
-                    }
-                }
-            } else {
-                validate(value, referredType);
-            }
+        if (type instanceof ReferenceType) {
+            validateReferredType(value, (ReferenceType) type);
         }
     }
 
@@ -88,5 +61,37 @@ public class TypeAnnotations extends AbstractAnnotations {
             return ((BArray) value).getLength();
         }
         return value;
+    }
+
+    private void validateReferredType(Object value, ReferenceType type) {
+        Type referredType = type.getReferredType();
+        if (referredType instanceof ReferenceType) {
+            if (referredType instanceof RecordType) {
+                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
+                recordFieldAnnotations.validate(value, (AnnotatableType) referredType);
+            } else if (referredType instanceof ArrayType) {
+                validateArrayType((ArrayType) referredType, (BArray) value);
+            } else {
+                validate(value, (AnnotatableType) referredType);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateArrayType(ArrayType referredType, BArray value) {
+        Type elementType = referredType.getElementType();
+        if (elementType instanceof ReferenceType && elementType instanceof AnnotatableType) {
+            if (elementType instanceof RecordType) {
+                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
+                for (int i = 0; i < value.getLength(); i++) {
+                    BMap<BString, Object> map = (BMap<BString, Object>) value.getRefValue(i);
+                    recordFieldAnnotations.validate(map, (AnnotatableType) elementType);
+                }
+            } else {
+                for (int i = 0; i < value.getLength(); i++) {
+                    validate(value.getRefValue(i), (AnnotatableType) elementType);
+                }
+            }
+        }
     }
 }
