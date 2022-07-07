@@ -151,7 +151,10 @@ type Bar record {|
         minLength: 5
     }
     string value;
-    Baz baz;
+    @Array {
+        minLength: 2
+    }
+    Baz[] baz;
 |};
 
 type Baz record {|
@@ -163,7 +166,7 @@ type Baz record {|
 
 @test:Config {}
 isolated function testNestedRecordSuccess() {
-    Foo foo = {value: "Alice", bar: {value: "Steve", baz: {value: 50}}};
+    Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -172,7 +175,7 @@ isolated function testNestedRecordSuccess() {
 
 @test:Config {}
 isolated function testNestedRecordFailure1() {
-    Foo foo = {value: "Bob", bar: {value: "Steve", baz: {value: 50}}};
+    Foo foo = {value: "Bob", bar: {value: "Steve", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
@@ -183,7 +186,7 @@ isolated function testNestedRecordFailure1() {
 
 @test:Config {}
 isolated function testNestedRecordFailure2() {
-    Foo foo = {value: "Alice", bar: {value: "Bob", baz: {value: 50}}};
+    Foo foo = {value: "Alice", bar: {value: "Bob", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
@@ -194,7 +197,18 @@ isolated function testNestedRecordFailure2() {
 
 @test:Config {}
 isolated function testNestedRecordFailure3() {
-    Foo foo = {value: "Alice", bar: {value: "Steve", baz: {value: 120}}};
+    Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}]}};
+    Foo|error validation = validate(foo);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNestedRecordFailure4() {
+    Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}, {value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
@@ -204,8 +218,8 @@ isolated function testNestedRecordFailure3() {
 }
 
 @test:Config {}
-isolated function testNestedRecordFailure4() {
-    Foo foo = {value: "Eve", bar: {value: "Bob", baz: {value: 120}}};
+isolated function testNestedRecordFailure5() {
+    Foo foo = {value: "Eve", bar: {value: "Bob", baz: [{value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxValue','minLength','length' constraint(s).");
@@ -221,19 +235,15 @@ isolated function testNestedRecordFailure4() {
 }
 type PositiveInt int;
 
-type CustomInt PositiveInt;
-
-type CustomIntMap map<CustomInt>;
-
 @Array {
     maxLength: 10
 }
-type CustomIntMapArray CustomIntMap[];
+type PositiveIntArray PositiveInt[];
 
 @test:Config {}
 isolated function testNestedTypeSuccess() {
-    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": 5}];
-    CustomIntMapArray|error validation = validate(arr);
+    PositiveIntArray arr = [1, 2, 3, 4, 5];
+    PositiveIntArray|error validation = validate(arr);
     if validation is error {
         test:assertFail("Unexpected error found.");
     }
@@ -241,9 +251,8 @@ isolated function testNestedTypeSuccess() {
 
 @test:Config {}
 isolated function testNestedTypeFailure1() {
-    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": 5},
-                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": 10},{"x": 11}];
-    CustomIntMapArray|error validation = validate(arr);
+    PositiveIntArray arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    PositiveIntArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
     } else {
@@ -251,13 +260,10 @@ isolated function testNestedTypeFailure1() {
     }
 }
 
-// TODO: Following test cases are disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/36747
-
-@test:Config {enable: false}
+@test:Config {}
 isolated function testNestedTypeFailure2() {
-    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": -5},
-                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": 10}];
-    CustomIntMapArray|error validation = validate(arr);
+    PositiveIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, -10];
+    PositiveIntArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
     } else {
@@ -265,19 +271,23 @@ isolated function testNestedTypeFailure2() {
     }
 }
 
-@test:Config {enable: false}
+@test:Config {}
 isolated function testNestedTypeFailure3() {
-    CustomIntMapArray arr = [{"x": 1},{"x": 2},{"x": 3},{"x": 4},{"x": -5},
-                            {"x": 6},{"x": 7},{"x": 8},{"x": 9},{"x": -10},{"x": 11}];
-    CustomIntMapArray|error validation = validate(arr);
+    PositiveIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, -10, 11];
+    PositiveIntArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength','minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for 'minValue','maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
 }
 
 // Testing annotations on types and records recursively
+
+@String {
+    length: 3
+}
+type QualificationType string;
 
 @Int {
     minValue: 18
@@ -290,18 +300,20 @@ type Teacher record {|
     }
     string name;
     Age age;
+    @Array {
+        minLength: 1
+    }
+    QualificationType[] qualifications;
 |};
-
-type TeacherType Teacher;
 
 @Array {
     minLength: 2
 }
-type TeacherArray TeacherType[];
+type TeacherArray Teacher[];
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeSuccess() {
-    TeacherArray arr = [{name: "Alice", age: 20}, {name: "Peter", age: 30}];
+    TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: ["BSc", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -310,7 +322,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeSuccess() {
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeFailure1() {
-    TeacherArray arr = [{name: "Alice", age: 20}];
+    TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSC"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
@@ -321,7 +333,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure1() {
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeFailure2() {
-    TeacherArray arr = [{name: "Alice", age: 20}, {name: "Bob", age: 30}];
+    TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Bob", age: 30, qualifications: ["BSc", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
@@ -332,7 +344,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure2() {
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeFailure3() {
-    TeacherArray arr = [{name: "Alice", age: 15}, {name: "Peter", age: 30}];
+    TeacherArray arr = [{name: "Alice", age: 15, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: ["BSc", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
@@ -343,10 +355,10 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure3() {
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeFailure4() {
-    TeacherArray arr = [{name: "Alice", age: 15}, {name: "Peter", age: 16}];
+    TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: []}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -354,10 +366,21 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure4() {
 
 @test:Config {}
 isolated function testRecursiveAnnotationsOnRecordAndTypeFailure5() {
-    TeacherArray arr = [{name: "Alice", age: 15}, {name: "Bob", age: 16}];
+    TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: ["Bachelors", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue','length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testRecursiveAnnotationsOnRecordAndTypeFailure6() {
+    TeacherArray arr = [{name: "Alice", age: 15, qualifications: ["Bachelors"]}, {name: "Bob", age: 16, qualifications: []}];
+    TeacherArray|error validation = validate(arr);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue','minLength','length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -372,17 +395,15 @@ type Qualification record {|
     string name;
 |};
 
-@Array {
-    minLength: 2
-}
-type QualificationArray Qualification[];
-
 type Employee record {
     @String {
         maxLength: 3
     }
     string username;
-    QualificationArray qualifications;
+    @Array {
+        minLength: 2
+    }
+    Qualification[] qualifications;
 };
 
 @test:Config {}

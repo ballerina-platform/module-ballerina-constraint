@@ -21,8 +21,8 @@ package io.ballerina.stdlib.constraint.annotations;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.RecordType;
+import io.ballerina.runtime.api.types.ReferenceType;
 import io.ballerina.runtime.api.types.Type;
-import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
@@ -47,23 +47,34 @@ public class TypeAnnotations extends AbstractAnnotations {
         BMap<BString, Object> typeAnnotations = ((AnnotatableType) type).getAnnotations();
         Object fieldValue = getFieldValue(value);
         super.validateAnnotations(typeAnnotations, fieldValue);
-        validateReferredTypeAnnotations(value, type);
+        validateReferredTypeAnnotations(value, (ReferenceType) type);
     }
 
     @SuppressWarnings("unchecked")
-    private void validateReferredTypeAnnotations(Object value, Type type) {
-        Type referredType = TypeUtils.getReferredType(type);
-        if (referredType instanceof ArrayType) {
-            Type elementType = ((ArrayType) referredType).getElementType();
-            if (elementType instanceof RecordType) {
+    private void validateReferredTypeAnnotations(Object value, ReferenceType type) {
+        Type referredType = type.getReferredType();
+        if (referredType instanceof ReferenceType) {
+            if (referredType instanceof RecordType) {
                 RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
-                for (int i = 0; i < ((BArray) value).getLength(); i++) {
-                    BMap<BString, Object> map = (BMap<BString, Object>) ((BArray) value).getRefValue(i);
-                    recordFieldAnnotations.validate(map, elementType);
+                recordFieldAnnotations.validate(value, referredType);
+            } else if (referredType instanceof ArrayType) {
+                Type elementType = ((ArrayType) referredType).getElementType();
+                if (elementType instanceof ReferenceType && elementType instanceof AnnotatableType) {
+                    if (elementType instanceof RecordType) {
+                        RecordFieldAnnotations recordFieldAnnotations =
+                                new RecordFieldAnnotations(this.failedConstraints);
+                        for (int i = 0; i < ((BArray) value).getLength(); i++) {
+                            BMap<BString, Object> map = (BMap<BString, Object>) ((BArray) value).getRefValue(i);
+                            recordFieldAnnotations.validate(map, elementType);
+                        }
+                    } else {
+                        for (int i = 0; i < ((BArray) value).getLength(); i++) {
+                            validate(((BArray) value).getRefValue(i), elementType);
+                        }
+                    }
                 }
             } else {
-                // TODO: Validate elements of a reference type
-                //  https://github.com/ballerina-platform/ballerina-lang/issues/36747
+                validate(value, referredType);
             }
         }
     }

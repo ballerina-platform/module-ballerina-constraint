@@ -19,11 +19,13 @@
 package io.ballerina.stdlib.constraint.annotations;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.Field;
 import io.ballerina.runtime.api.types.RecordType;
+import io.ballerina.runtime.api.types.ReferenceType;
 import io.ballerina.runtime.api.types.Type;
+import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.StringUtils;
-import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
@@ -55,24 +57,44 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
-                super.validateAnnotations(recordFieldAnnotations, fieldValue);
+                if (fieldValue != null) { // This can be null due to optional fields
+                    super.validateAnnotations(recordFieldAnnotations, fieldValue);
+                }
             }
         }
-        validateReferredTypeAnnotations(record, type);
+        validateReferredTypeAnnotations(record, (ReferenceType) type);
     }
 
-    private void validateReferredTypeAnnotations(BMap<BString, Object> record, Type type) {
+    @SuppressWarnings("unchecked")
+    private void validateReferredTypeAnnotations(BMap<BString, Object> record, ReferenceType type) {
         for (Field recordField : ((RecordType) type).getFields().values()) {
             Type fieldType = recordField.getFieldType();
-            Type referredType = TypeUtils.getReferredType(fieldType);
-            if (fieldType instanceof AnnotatableType) {
-                String fieldName = recordField.getFieldName();
-                Object fieldValue = record.get(StringUtils.fromString(fieldName));
-                if (referredType instanceof RecordType) {
-                    validate(fieldValue, referredType);
-                } else {
-                    TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
-                    typeAnnotations.validate(fieldValue, fieldType);
+            String fieldName = recordField.getFieldName();
+            Object fieldValue = record.get(StringUtils.fromString(fieldName));
+            if (fieldType instanceof ReferenceType && !(fieldType instanceof UnionType)) {
+                if (fieldValue != null) { // This can be null due to optional fields
+                    if (fieldType instanceof RecordType) {
+                        validate(fieldValue, fieldType);
+                    } else if (fieldType instanceof ArrayType) {
+                        Type elementType = ((ArrayType) fieldType).getElementType();
+                        BArray elementValue = (BArray) fieldValue;
+                        if (elementType instanceof AnnotatableType) {
+                            if (elementType instanceof RecordType) {
+                                for (int i = 0; i < elementValue.getLength(); i++) {
+                                    BMap<BString, Object> map = (BMap<BString, Object>) elementValue.getRefValue(i);
+                                    validate(map, elementType);
+                                }
+                            } else {
+                                TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                                for (int i = 0; i < elementValue.getLength(); i++) {
+                                    typeAnnotations.validate(elementValue.getRefValue(i), elementType);
+                                }
+                            }
+                        }
+                    } else {
+                        TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                        typeAnnotations.validate(fieldValue, fieldType);
+                    }
                 }
             }
         }
