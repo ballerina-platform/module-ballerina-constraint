@@ -23,8 +23,6 @@ import io.ballerina.runtime.api.Module;
 
 /**
  * Utility functions relevant to module operations.
- *
- * @since 2.0.0
  */
 public class ModuleUtils {
 
