@@ -26,6 +26,8 @@ isolated function testNoNumberConstraintsOnTypeAsRecordField() {
     NoNumberConstraintsOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, rec);
     }
 }
 

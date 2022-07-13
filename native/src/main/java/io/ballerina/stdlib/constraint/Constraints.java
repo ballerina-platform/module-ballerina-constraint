@@ -45,7 +45,7 @@ public class Constraints {
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
-            return null;
+            return value;
         } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError();
         }

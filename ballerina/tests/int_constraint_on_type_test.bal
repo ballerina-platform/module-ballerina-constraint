@@ -24,6 +24,8 @@ isolated function testNoIntConstraintsOnType() {
     NoIntConstraintsOnType|error validation = validate(typ);
     if validation is error {
         test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, typ);
     }
 }
 

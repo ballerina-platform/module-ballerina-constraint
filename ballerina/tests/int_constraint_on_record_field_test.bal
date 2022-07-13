@@ -26,6 +26,8 @@ isolated function testNoIntConstraintsOnRecordField() {
     NoIntConstraintsOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, rec);
     }
 }
 
