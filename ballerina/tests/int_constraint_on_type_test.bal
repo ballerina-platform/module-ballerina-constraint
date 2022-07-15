@@ -57,7 +57,7 @@ isolated function testIntConstraintMinValueOnTypeFailure() {
     IntConstraintMinValueOnType typ = 16;
     IntConstraintMinValueOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -91,7 +91,7 @@ isolated function testIntConstraintMaxValueOnTypeFailure() {
     IntConstraintMaxValueOnType typ = 120;
     IntConstraintMaxValueOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -116,7 +116,7 @@ isolated function testIntConstraintMinValueExclusiveOnTypeFailure1() {
     IntConstraintMinValueExclusiveOnType typ = 18;
     IntConstraintMinValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -127,7 +127,7 @@ isolated function testIntConstraintMinValueExclusiveOnTypeFailure2() {
     IntConstraintMinValueExclusiveOnType typ = 16;
     IntConstraintMinValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -152,7 +152,7 @@ isolated function testIntConstraintMaxValueExclusiveOnTypeFailure1() {
     IntConstraintMaxValueExclusiveOnType typ = 100;
     IntConstraintMaxValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -163,7 +163,7 @@ isolated function testIntConstraintMaxValueExclusiveOnTypeFailure2() {
     IntConstraintMaxValueExclusiveOnType typ = 120;
     IntConstraintMaxValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -207,7 +207,7 @@ isolated function testIntConstraintOnTypeFailure1() {
     IntConstraintOnType typ = 16;
     IntConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -218,7 +218,7 @@ isolated function testIntConstraintOnTypeFailure2() {
     IntConstraintOnType typ = 120;
     IntConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
