@@ -21,21 +21,21 @@ package io.ballerina.stdlib.constraint.validators;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Extern functions for validating array constraints `@constraint:Array` of Ballerina.
  */
 public class ArrayConstraintValidator extends AbstractLengthValidator {
 
-    private final Set<String> failedConstraints;
+    private final List<String> failedConstraints;
 
-    public ArrayConstraintValidator(Set<String> failedConstraints) {
+    public ArrayConstraintValidator(List<String> failedConstraints) {
         this.failedConstraints = failedConstraints;
     }
 
-    public void validate(BMap<BString, Object> constraints, Long fieldValue) {
-        super.validate(constraints, fieldValue, failedConstraints);
+    public void validate(BMap<BString, Object> constraints, Long fieldValue, String path) {
+        super.validate(constraints, fieldValue, failedConstraints, path);
     }
 
     @Override

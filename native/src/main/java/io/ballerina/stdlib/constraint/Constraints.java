@@ -26,8 +26,8 @@ import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extern functions for validating constraints.
@@ -35,12 +35,12 @@ import java.util.Set;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
-        HashSet<String> failedConstraints = new HashSet<>();
+        List<String> failedConstraints = new ArrayList<>();
         try {
             Type type = typedesc.getDescribingType();
             if (type instanceof AnnotatableType) {
                 AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-                annotations.validate(value, (AnnotatableType) type);
+                annotations.validate(value, (AnnotatableType) type, Constants.SYMBOL_DOLLAR_SIGN);
             }
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
@@ -51,7 +51,7 @@ public class Constraints {
         }
     }
 
-    private static AbstractAnnotations getAnnotationImpl(Type type, Set<String> failedConstraints) {
+    private static AbstractAnnotations getAnnotationImpl(Type type, List<String> failedConstraints) {
         if (type instanceof RecordType) {
             return new RecordFieldAnnotations(failedConstraints);
         } else {
