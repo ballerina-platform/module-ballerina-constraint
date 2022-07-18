@@ -69,7 +69,7 @@ isolated function testNumberConstraintMinValueOnRecordFieldFailure1() {
     NumberConstraintMinValueOnRecordField rec = {intValue: 19, floatValue: 20.5, decimalValue: 16.5d};
     NumberConstraintMinValueOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.decimalValue=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.decimalValue:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

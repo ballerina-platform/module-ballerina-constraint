@@ -34,22 +34,22 @@ public abstract class AbstractValueValidator {
         switch (constraint.getKey().getValue()) {
             case Constants.CONSTRAINT_MIN_VALUE:
                 if (!validateMinValue(fieldValue, constraintValue)) {
-                    failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MIN_VALUE);
+                    failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MIN_VALUE);
                 }
                 break;
             case Constants.CONSTRAINT_MAX_VALUE:
                 if (!validateMaxValue(fieldValue, constraintValue)) {
-                    failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MAX_VALUE);
+                    failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MAX_VALUE);
                 }
                 break;
             case Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE:
                 if (!validateMinValueExclusive(fieldValue, constraintValue)) {
-                    failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE);
+                    failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE);
                 }
                 break;
             case Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE:
                 if (!validateMaxValueExclusive(fieldValue, constraintValue)) {
-                    failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE);
+                    failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE);
                 }
                 break;
             default:

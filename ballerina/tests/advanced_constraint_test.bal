@@ -44,7 +44,7 @@ isolated function testMultipleConstraintFailure1() {
     Person rec = {name: "John", age: 18};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.name=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -55,7 +55,7 @@ isolated function testMultipleConstraintFailure2() {
     Person rec = {name: "John Steve", age: 18};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.name=>maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.name:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -66,7 +66,7 @@ isolated function testMultipleConstraintFailure3() {
     Person rec = {name: "Steve", age: 16};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.age=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -77,7 +77,7 @@ isolated function testMultipleConstraintFailure4() {
     Person rec = {name: "John", age: 16};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.age=>minValue','$.name=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue','$.name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -119,7 +119,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure1() {
     Student rec = {name: "Steve", age: 16};
     Student|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.age=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -130,7 +130,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure2() {
     Student rec = {name: "Steve", age: 55};
     Student|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.age=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -178,7 +178,7 @@ isolated function testNestedRecordFailure1() {
     Foo foo = {value: "Bob", bar: {value: "Steve", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -189,7 +189,7 @@ isolated function testNestedRecordFailure2() {
     Foo foo = {value: "Alice", bar: {value: "Bob", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.bar.value=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -200,7 +200,7 @@ isolated function testNestedRecordFailure3() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -211,7 +211,7 @@ isolated function testNestedRecordFailure4() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}, {value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz[1].value=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz[1].value:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -222,7 +222,7 @@ isolated function testNestedRecordFailure5() {
     Foo foo = {value: "Eve", bar: {value: "Bob", baz: [{value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz=>minLength','$.bar.baz[0].value=>maxValue','$.bar.value=>minLength','$.value=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz:minLength','$.bar.baz[0].value:maxValue','$.bar.value=>minLength','$.value=>length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

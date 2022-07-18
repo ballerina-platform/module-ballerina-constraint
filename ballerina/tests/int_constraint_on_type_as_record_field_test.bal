@@ -58,7 +58,7 @@ isolated function testIntConstraintMinValueOnTypeAsRecordFieldFailure() {
     IntConstraintMinValueOnTypeAsRecordField rec = {value: 16};
     IntConstraintMinValueOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -91,7 +91,7 @@ isolated function testIntConstraintMaxValueOnTypeAsRecordFieldFailure() {
     IntConstraintMaxValueOnTypeAsRecordField rec = {value: 120};
     IntConstraintMaxValueOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

@@ -87,7 +87,7 @@ isolated function testNumberConstraintMinValueOnTypeFailure1() {
     NumberConstraintMinValueOnIntType typ = 18;
     NumberConstraintMinValueOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -98,7 +98,7 @@ isolated function testNumberConstraintMinValueOnTypeFailure2() {
     NumberConstraintMinValueOnFloatType typ = 16.5;
     NumberConstraintMinValueOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -109,7 +109,7 @@ isolated function testNumberConstraintMinValueOnTypeFailure3() {
     NumberConstraintMinValueOnDecimalType typ = 16.5d;
     NumberConstraintMinValueOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -173,7 +173,7 @@ isolated function testNumberConstraintMaxValueOnTypeFailure1() {
     NumberConstraintMaxValueOnIntType typ = 101;
     NumberConstraintMaxValueOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -184,7 +184,7 @@ isolated function testNumberConstraintMaxValueOnTypeFailure2() {
     NumberConstraintMaxValueOnFloatType typ = 101;
     NumberConstraintMaxValueOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -195,7 +195,7 @@ isolated function testNumberConstraintMaxValueOnTypeFailure3() {
     NumberConstraintMaxValueOnDecimalType typ = 101;
     NumberConstraintMaxValueOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -240,7 +240,7 @@ isolated function testNumberConstraintMinValueExclusiveOnTypeFailure1() {
     NumberConstraintMinValueExclusiveOnIntType typ = 18;
     NumberConstraintMinValueExclusiveOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -251,7 +251,7 @@ isolated function testNumberConstraintMinValueExclusiveOnTypeFailure2() {
     NumberConstraintMinValueExclusiveOnFloatType typ = 18.5;
     NumberConstraintMinValueExclusiveOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -262,7 +262,7 @@ isolated function testNumberConstraintMinValueExclusiveOnTypeFailure3() {
     NumberConstraintMinValueExclusiveOnDecimalType typ = 18.5d;
     NumberConstraintMinValueExclusiveOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -307,7 +307,7 @@ isolated function testNumberConstraintMaxValueExclusiveOnTypeFailure1() {
     NumberConstraintMaxValueExclusiveOnIntType typ = 101;
     NumberConstraintMaxValueExclusiveOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -318,7 +318,7 @@ isolated function testNumberConstraintMaxValueExclusiveOnTypeFailure2() {
     NumberConstraintMaxValueExclusiveOnFloatType typ = 100.5;
     NumberConstraintMaxValueExclusiveOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -329,7 +329,7 @@ isolated function testNumberConstraintMaxValueExclusiveOnTypeFailure3() {
     NumberConstraintMaxValueExclusiveOnDecimalType typ = 100.5d;
     NumberConstraintMaxValueExclusiveOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -415,7 +415,7 @@ isolated function testNumberConstraintOnTypeFailure1() {
     NumberConstraintOnIntType typ = 18;
     NumberConstraintOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -426,7 +426,7 @@ isolated function testNumberConstraintOnTypeFailure2() {
     NumberConstraintOnFloatType typ = 16.5;
     NumberConstraintOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -437,7 +437,7 @@ isolated function testNumberConstraintOnTypeFailure3() {
     NumberConstraintOnDecimalType typ = 16.5d;
     NumberConstraintOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -448,7 +448,7 @@ isolated function testNumberConstraintOnTypeFailure4() {
     NumberConstraintOnIntType typ = 101;
     NumberConstraintOnIntType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -459,7 +459,7 @@ isolated function testNumberConstraintOnTypeFailure5() {
     NumberConstraintOnFloatType typ = 101.5;
     NumberConstraintOnFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -470,7 +470,7 @@ isolated function testNumberConstraintOnTypeFailure6() {
     NumberConstraintOnDecimalType typ = 101.5d;
     NumberConstraintOnDecimalType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

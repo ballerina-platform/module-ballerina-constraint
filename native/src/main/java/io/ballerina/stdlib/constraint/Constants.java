@@ -32,7 +32,7 @@ public class Constants {
     public static final String SYMBOL_COMMA = ",";
     public static final String SYMBOL_OPEN_SQUARE_BRACKET = "[";
     public static final String SYMBOL_CLOSE_SQUARE_BRACKET = "]";
-    public static final String SYMBOL_ARROW = "=>";
+    public static final String SYMBOL_SEPERATOR = ":";
 
     public static final String ANNOTATION_TAG_INT = "Int";
     public static final String ANNOTATION_TAG_FLOAT = "Float";

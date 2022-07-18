@@ -37,17 +37,17 @@ public abstract class AbstractLengthValidator {
             switch (constraint.getKey().getValue()) {
                 case Constants.CONSTRAINT_LENGTH:
                     if (!validateLength(fieldValue, constraintValue)) {
-                        failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_LENGTH);
+                        failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_LENGTH);
                     }
                     break;
                 case Constants.CONSTRAINT_MIN_LENGTH:
                     if (!validateMinLength(fieldValue, constraintValue)) {
-                        failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MIN_LENGTH);
+                        failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MIN_LENGTH);
                     }
                     break;
                 case Constants.CONSTRAINT_MAX_LENGTH:
                     if (!validateMaxLength(fieldValue, constraintValue)) {
-                        failedConstraints.add(path + Constants.SYMBOL_ARROW + Constants.CONSTRAINT_MAX_LENGTH);
+                        failedConstraints.add(path + Constants.SYMBOL_SEPERATOR + Constants.CONSTRAINT_MAX_LENGTH);
                     }
                     break;
                 default:

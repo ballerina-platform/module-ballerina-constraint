@@ -52,7 +52,7 @@ isolated function testStringConstraintLengthOnRecordFieldFailure1() {
     StringConstraintLengthOnRecordField rec = {value: "s3cr3t1"};
     StringConstraintLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -63,7 +63,7 @@ isolated function testStringConstraintLengthOnRecordFieldFailure2() {
     StringConstraintLengthOnRecordField rec = {value: "s3cr3"};
     StringConstraintLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -99,7 +99,7 @@ isolated function testStringConstraintMinLengthOnRecordFieldFailure() {
     StringConstraintMinLengthOnRecordField rec = {value: "s3c"};
     StringConstraintMinLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -135,7 +135,7 @@ isolated function testStringConstraintMaxLengthOnRecordFieldFailure() {
     StringConstraintMaxLengthOnRecordField rec = {value: "s3cr3ts"};
     StringConstraintMaxLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

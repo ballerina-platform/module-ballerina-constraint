@@ -340,7 +340,7 @@ isolated function testSampleFailure1() returns error? {
     rec.customer.currency = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.customer.currency=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.customer.currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -352,7 +352,7 @@ isolated function testSampleFailure2() returns error? {
     rec.presentment_currency = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.presentment_currency=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.presentment_currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -364,7 +364,7 @@ isolated function testSampleFailure3() returns error? {
     rec.current_total_discounts_set.shop_money.currency_code = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.current_total_discounts_set.shop_money.currency_code=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.current_total_discounts_set.shop_money.currency_code:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -376,7 +376,7 @@ isolated function testSampleFailure4() returns error? {
     rec.fulfillments[0].line_items[0].price_set.shop_money.currency_code = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].price_set.shop_money.currency_code=>length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].price_set.shop_money.currency_code:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -388,7 +388,7 @@ isolated function testSampleFailure5() returns error? {
     rec.number = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.number=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.number:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
