@@ -11,3 +11,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - [Passing the typedesc as a param to the constraint() method returns () in success case ](https://github.com/ballerina-platform/ballerina-standard-library/issues/3107)
+- [Fix a bug in validation of AnnotatableType types as referred types](https://github.com/ballerina-platform/ballerina-standard-library/issues/3113)
