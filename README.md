@@ -2,10 +2,10 @@ Ballerina Constraint Library
 ===================
 
   [![Build](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/build-timestamped-master.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/build-timestamped-master.yml)
-  [![Trivy](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/trivy-scan.yml)  
+  [![Trivy](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerina-constraint/actions/workflows/trivy-scan.yml)
   [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerina-constraint.svg?label=Last%20Commit)](https://github.com/ballerina-platform/module-ballerina-constraint/commits/master)
   [![GitHub issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/constraint.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fconstraint)
-  [![codecov](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint/branch/master/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint) 
+  [![codecov](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint/branch/main/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerina-constraint) 
 
 This library provides features to validate the values that have been assigned to Ballerina types.
 
