@@ -506,3 +506,86 @@ isolated function testInvalidTypeDescForType() {
         test:assertFail("Expected error not found.");
     }
 }
+
+// Testing annotation validations with union type desc
+
+type Union1 record {|
+    @String {
+        length: 5
+    }
+    string name;
+|};
+
+type Union2 record {|
+    @Int {
+        minValue: 18
+    }
+    int age;
+|};
+
+@Float {
+    minValue: 5.2
+}
+type Union3 float;
+
+@test:Config {}
+isolated function testUnionTypeDescSuccess1() {
+    Union1|Union2|Union3 rec = {name: "Alice"};
+    Union1|Union2|Union3|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionTypeDescSuccess2() {
+    Union1|Union2|Union3 rec = {age: 20};
+    Union1|Union2|Union3|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionTypeDescSuccess3() {
+    Union1|Union2|Union3 typ = 6.5;
+    Union1|Union2|Union3|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionTypeDescFailure1() {
+    Union1|Union2|Union3 rec = {name: "Bob"};
+    Union1|Union2|Union3|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionTypeDescFailure2() {
+    Union1|Union2|Union3 rec = {age: 16};
+    Union1|Union2|Union3|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+// TODO: Following test cases are disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/37050
+
+@test:Config {enable: false}
+isolated function testUnionTypeDescFailure3() {
+    Union1|Union2|Union3 typ = 5.1;
+    Union1|Union2|Union3|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

@@ -18,15 +18,20 @@
 
 package io.ballerina.stdlib.constraint;
 
+import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
+import io.ballerina.runtime.api.types.UnionType;
+import io.ballerina.runtime.api.utils.TypeUtils;
+import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -41,6 +46,11 @@ public class Constraints {
             if (type instanceof AnnotatableType) {
                 AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
                 annotations.validate(value, (AnnotatableType) type);
+            } else if (type instanceof UnionType) {
+                Optional<Type> matchingType = getMatchingType(value, type);
+                if (matchingType.isPresent()) {
+                    return validate(value, ValueCreator.createTypedescValue(matchingType.get()));
+                }
             }
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
@@ -49,6 +59,23 @@ public class Constraints {
         } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError();
         }
+    }
+
+    private static Optional<Type> getMatchingType(Object value, Type type) {
+        Type valueType;
+        if (value instanceof BMap) {
+            valueType = ((BMap<?, ?>) value).getTypedesc().getDescribingType();
+        } else {
+            // TODO: This flow is not working as expected due to
+            //  https://github.com/ballerina-platform/ballerina-lang/issues/37050
+            valueType = TypeUtils.getType(value);
+        }
+        for (Type typ : ((UnionType) type).getMemberTypes()) {
+            if (typ.equals(valueType)) {
+                return Optional.of(typ);
+            }
+        }
+        return Optional.empty();
     }
 
     private static AbstractAnnotations getAnnotationImpl(Type type, Set<String> failedConstraints) {
