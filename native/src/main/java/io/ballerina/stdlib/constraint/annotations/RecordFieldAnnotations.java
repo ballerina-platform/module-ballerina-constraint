@@ -28,10 +28,14 @@ import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.stdlib.constraint.Constants;
 
 import java.util.List;
 import java.util.Map;
+
+import static io.ballerina.stdlib.constraint.Constants.PREFIX_RECORD_FILED;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_CLOSE_SQUARE_BRACKET;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOT;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKET;
 
 /**
  * Extern functions for validating constraints on record fields.
@@ -51,13 +55,12 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
         BMap<BString, Object> recordAnnotations = type.getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
-            if (entry.getKey().getValue().startsWith(Constants.PREFIX_RECORD_FILED)) {
-                String fieldName = entry.getKey().getValue().substring(Constants.PREFIX_RECORD_FILED.length() + 1);
+            if (entry.getKey().getValue().startsWith(PREFIX_RECORD_FILED)) {
+                String fieldName = entry.getKey().getValue().substring(PREFIX_RECORD_FILED.length() + 1);
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
                 if (fieldValue != null) { // This can be null due to optional fields
-                    super.validateAnnotations(recordFieldAnnotations, fieldValue,
-                            path + Constants.SYMBOL_DOT + fieldName);
+                    super.validateAnnotations(recordFieldAnnotations, fieldValue, path + SYMBOL_DOT + fieldName);
                 }
             }
         }
@@ -84,16 +87,14 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
             if (fieldValue != null) { // This can be null due to optional fields
                 if (fieldType instanceof AnnotatableType) {
                     if (fieldType instanceof RecordType) {
-                        validate(fieldValue, (AnnotatableType) fieldType,
-                                path + Constants.SYMBOL_DOT + fieldName);
+                        validate(fieldValue, (AnnotatableType) fieldType, path + SYMBOL_DOT + fieldName);
                     } else {
                         TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
                         typeAnnotations.validate(fieldValue, (AnnotatableType) fieldType,
-                                path + Constants.SYMBOL_DOT + fieldName);
+                                path + SYMBOL_DOT + fieldName);
                     }
                 } else if (fieldType instanceof ArrayType) {
-                    validateArrayType((ArrayType) fieldType, (BArray) fieldValue,
-                            path + Constants.SYMBOL_DOT + fieldName);
+                    validateArrayType((ArrayType) fieldType, (BArray) fieldValue, path + SYMBOL_DOT + fieldName);
                 }
             }
         }
@@ -107,13 +108,13 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 for (int i = 0; i < fieldValue.getLength(); i++) {
                     BMap<BString, Object> map = (BMap<BString, Object>) fieldValue.getRefValue(i);
                     validate(map, (AnnotatableType) elementType,
-                            path + Constants.SYMBOL_OPEN_SQUARE_BRACKET + i + Constants.SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
                 }
             } else {
                 TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
                 for (int i = 0; i < fieldValue.getLength(); i++) {
                     typeAnnotations.validate(fieldValue.getRefValue(i), (AnnotatableType) elementType,
-                            path + Constants.SYMBOL_OPEN_SQUARE_BRACKET + i + Constants.SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
                 }
             }
         }

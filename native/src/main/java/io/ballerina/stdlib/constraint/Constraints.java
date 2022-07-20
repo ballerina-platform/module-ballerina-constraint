@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOLLAR_SIGN;
+
 /**
  * Extern functions for validating constraints.
  */
@@ -45,7 +47,7 @@ public class Constraints {
             Type type = typedesc.getDescribingType();
             if (type instanceof AnnotatableType) {
                 AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-                annotations.validate(value, (AnnotatableType) type, Constants.SYMBOL_DOLLAR_SIGN);
+                annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
             } else if (type instanceof UnionType) {
                 Optional<Type> matchingType = getMatchingType(value, type);
                 if (matchingType.isPresent()) {

@@ -27,9 +27,11 @@ import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.stdlib.constraint.Constants;
 
 import java.util.List;
+
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_CLOSE_SQUARE_BRACKET;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKET;
 
 /**
  * Extern functions for validating constraints on types.
@@ -87,12 +89,12 @@ public class TypeAnnotations extends AbstractAnnotations {
                 for (int i = 0; i < value.getLength(); i++) {
                     BMap<BString, Object> map = (BMap<BString, Object>) value.getRefValue(i);
                     recordFieldAnnotations.validate(map, (AnnotatableType) elementType,
-                            path + Constants.SYMBOL_OPEN_SQUARE_BRACKET + i + Constants.SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
                 }
             } else {
                 for (int i = 0; i < value.getLength(); i++) {
                     validate(value.getRefValue(i), (AnnotatableType) elementType,
-                            path + Constants.SYMBOL_OPEN_SQUARE_BRACKET + i + Constants.SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
                 }
             }
         }
