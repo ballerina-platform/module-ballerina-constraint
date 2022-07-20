@@ -181,7 +181,7 @@ isolated function testStringConstraintOnRecordFieldFailure1() {
     StringConstraintOnRecordField rec = {value: "s3crt"};
     StringConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -192,7 +192,7 @@ isolated function testStringConstraintOnRecordFieldFailure2() {
     StringConstraintOnRecordField rec = {value: "s3cr3ts3cr3ts3cr3t"};
     StringConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

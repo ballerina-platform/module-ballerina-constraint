@@ -262,7 +262,7 @@ isolated function testArrayConstraintOnRecordFieldFailure4() {
     ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.value=>maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

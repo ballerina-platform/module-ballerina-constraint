@@ -400,7 +400,7 @@ isolated function testSampleFailure6() returns error? {
     rec.order_number = 1000;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.order_number=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.order_number:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -412,7 +412,7 @@ isolated function testSampleFailure7() returns error? {
     rec.customer.orders_count = 0;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.customer.orders_count=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.customer.orders_count:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -424,7 +424,7 @@ isolated function testSampleFailure8() returns error? {
     rec.fulfillments[0].line_items[0].quantity = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].quantity=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].quantity:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -436,7 +436,7 @@ isolated function testSampleFailure9() returns error? {
     rec.fulfillments[0].line_items[0].grams = 0;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].grams=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].grams:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -448,7 +448,7 @@ isolated function testSampleFailure10() returns error? {
     rec.fulfillments[0].line_items[0].fulfillable_quantity = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].fulfillable_quantity=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].fulfillable_quantity:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -470,16 +470,16 @@ isolated function testSampleFailure11() returns error? {
     Order|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for " +
-        "'$.current_total_discounts_set.shop_money.currency_code=>length'," +
-        "'$.customer.currency=>length'," +
-        "'$.customer.orders_count=>minValueExclusive'," +
-        "'$.fulfillments[0].line_items[0].fulfillable_quantity=>minValue'," +
-        "'$.fulfillments[0].line_items[0].grams=>minValueExclusive'," +
-        "'$.fulfillments[0].line_items[0].price_set.shop_money.currency_code=>length'," +
-        "'$.fulfillments[0].line_items[0].quantity=>minValue'," +
-        "'$.number=>minValue'," +
-        "'$.order_number=>minValue'," +
-        "'$.presentment_currency=>length' constraint(s).");
+        "'$.current_total_discounts_set.shop_money.currency_code:length'," +
+        "'$.customer.currency:length'," +
+        "'$.customer.orders_count:minValueExclusive'," +
+        "'$.fulfillments[0].line_items[0].fulfillable_quantity:minValue'," +
+        "'$.fulfillments[0].line_items[0].grams:minValueExclusive'," +
+        "'$.fulfillments[0].line_items[0].price_set.shop_money.currency_code:length'," +
+        "'$.fulfillments[0].line_items[0].quantity:minValue'," +
+        "'$.number:minValue'," +
+        "'$.order_number:minValue'," +
+        "'$.presentment_currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

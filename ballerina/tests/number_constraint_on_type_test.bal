@@ -551,7 +551,7 @@ isolated function testNumberConstraintOnUnionTypeFailure1() {
     NumberConstraintOnUnionIntFloatType typ = 16;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -562,7 +562,7 @@ isolated function testNumberConstraintOnUnionTypeFailure2() {
     NumberConstraintOnUnionIntDecimalType typ = 120;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -573,7 +573,7 @@ isolated function testNumberConstraintOnUnionTypeFailure3() {
     NumberConstraintOnUnionFloatDecimalType typ = 16.5;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -584,7 +584,7 @@ isolated function testNumberConstraintOnUnionTypeFailure4() {
     NumberConstraintOnUnionIntFloatDecimalType typ = 120;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -595,7 +595,7 @@ isolated function testNumberConstraintOnUnionTypeFailure5() {
     NumberConstraintOnUnionIntFloatType typ = 16.5;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -606,7 +606,7 @@ isolated function testNumberConstraintOnUnionTypeFailure6() {
     NumberConstraintOnUnionIntDecimalType typ = 120.5d;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -617,7 +617,7 @@ isolated function testNumberConstraintOnUnionTypeFailure7() {
     NumberConstraintOnUnionFloatDecimalType typ = 18.5d;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -628,7 +628,7 @@ isolated function testNumberConstraintOnUnionTypeFailure8() {
     NumberConstraintOnUnionIntFloatDecimalType typ = 100.5d;
     NumberConstraintOnUnionIntFloatType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$=>maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

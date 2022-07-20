@@ -66,15 +66,15 @@ public class TypeAnnotations extends AbstractAnnotations {
 
     private void validateReferredType(Object value, ReferenceType type, String path) {
         Type referredType = type.getReferredType();
-        if (referredType instanceof ReferenceType) {
+        if (referredType instanceof AnnotatableType) {
             if (referredType instanceof RecordType) {
                 RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
                 recordFieldAnnotations.validate(value, (AnnotatableType) referredType, path);
-            } else if (referredType instanceof ArrayType) {
-                validateArrayType((ArrayType) referredType, (BArray) value, path);
             } else {
                 validate(value, (AnnotatableType) referredType, path);
             }
+        } else if (referredType instanceof ArrayType) {
+            validateArrayType((ArrayType) referredType, (BArray) value, path);
         }
     }
 

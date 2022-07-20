@@ -22,9 +22,7 @@ import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.Field;
 import io.ballerina.runtime.api.types.RecordType;
-import io.ballerina.runtime.api.types.ReferenceType;
 import io.ballerina.runtime.api.types.Type;
-import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
@@ -83,18 +81,19 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
             Type fieldType = recordField.getFieldType();
             String fieldName = recordField.getFieldName();
             Object fieldValue = record.get(StringUtils.fromString(fieldName));
-            if (fieldType instanceof ReferenceType && !(fieldType instanceof UnionType)) {
-                if (fieldValue != null) { // This can be null due to optional fields
+            if (fieldValue != null) { // This can be null due to optional fields
+                if (fieldType instanceof AnnotatableType) {
                     if (fieldType instanceof RecordType) {
-                        validate(fieldValue, (AnnotatableType) fieldType, path);
-                    } else if (fieldType instanceof ArrayType) {
-                        validateArrayType((ArrayType) fieldType, (BArray) fieldValue,
+                        validate(fieldValue, (AnnotatableType) fieldType,
                                 path + Constants.SYMBOL_DOT + fieldName);
                     } else {
                         TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
                         typeAnnotations.validate(fieldValue, (AnnotatableType) fieldType,
                                 path + Constants.SYMBOL_DOT + fieldName);
                     }
+                } else if (fieldType instanceof ArrayType) {
+                    validateArrayType((ArrayType) fieldType, (BArray) fieldValue,
+                            path + Constants.SYMBOL_DOT + fieldName);
                 }
             }
         }
