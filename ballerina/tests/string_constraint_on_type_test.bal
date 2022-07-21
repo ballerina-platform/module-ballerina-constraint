@@ -48,7 +48,7 @@ isolated function testStringConstraintLengthOnTypeFailure1() {
     StringConstraintLengthOnType typ = "s3cr3t1";
     StringConstraintLengthOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -59,7 +59,7 @@ isolated function testStringConstraintLengthOnTypeFailure2() {
     StringConstraintLengthOnType typ = "s3cr3";
     StringConstraintLengthOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -93,7 +93,7 @@ isolated function testStringConstraintMinLengthOnTypeFailure() {
     StringConstraintMinLengthOnType typ = "s3c";
     StringConstraintMinLengthOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -127,7 +127,7 @@ isolated function testStringConstraintMaxLengthOnTypeFailure() {
     StringConstraintMaxLengthOnType typ = "s3cr3ts";
     StringConstraintMaxLengthOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -171,7 +171,7 @@ isolated function testStringConstraintOnTypeFailure1() {
     StringConstraintOnType typ = "s3crt";
     StringConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -182,7 +182,7 @@ isolated function testStringConstraintOnTypeFailure2() {
     StringConstraintOnType typ = "s3cr3ts3cr3ts3cr3t";
     StringConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

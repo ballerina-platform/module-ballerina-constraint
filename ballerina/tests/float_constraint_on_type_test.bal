@@ -55,7 +55,7 @@ isolated function testFloatConstraintMinValueOnTypeFailure() {
     FloatConstraintMinValueOnType typ = 16.5;
     FloatConstraintMinValueOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -89,7 +89,7 @@ isolated function testFloatConstraintMaxValueOnTypeFailure() {
     FloatConstraintMaxValueOnType typ = 120.5;
     FloatConstraintMaxValueOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -114,7 +114,7 @@ isolated function testFloatConstraintMinValueExclusiveOnTypeFailure1() {
     FloatConstraintMinValueExclusiveOnType typ = 18.5;
     FloatConstraintMinValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -125,7 +125,7 @@ isolated function testFloatConstraintMinValueExclusiveOnTypeFailure2() {
     FloatConstraintMinValueExclusiveOnType typ = 16.5;
     FloatConstraintMinValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -152,7 +152,7 @@ isolated function testFloatConstraintMaxValueExclusiveOnTypeFailure1() {
     FloatConstraintMaxValueExclusiveOnType typ = 100.5;
     FloatConstraintMaxValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -163,7 +163,7 @@ isolated function testFloatConstraintMaxValueExclusiveOnTypeFailure2() {
     FloatConstraintMaxValueExclusiveOnType typ = 120.5;
     FloatConstraintMaxValueExclusiveOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -207,7 +207,7 @@ isolated function testFloatConstraintOnTypeFailure1() {
     FloatConstraintOnType typ = 16.5;
     FloatConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -218,7 +218,7 @@ isolated function testFloatConstraintOnTypeFailure2() {
     FloatConstraintOnType typ = 120.5;
     FloatConstraintOnType|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

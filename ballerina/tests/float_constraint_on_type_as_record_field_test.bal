@@ -58,7 +58,7 @@ isolated function testFloatConstraintMinValueOnTypeAsRecordFieldFailure() {
     FloatConstraintMinValueOnTypeAsRecordField rec = {value: 16.5};
     FloatConstraintMinValueOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -91,7 +91,7 @@ isolated function testFloatConstraintMaxValueOnTypeAsRecordFieldFailure() {
     FloatConstraintMaxValueOnTypeAsRecordField rec = {value: 120.5};
     FloatConstraintMaxValueOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -115,7 +115,7 @@ isolated function testFloatConstraintMinValueExclusiveOnTypeAsRecordFieldFailure
     FloatConstraintMinValueExclusiveOnTypeAsRecordField rec = {value: 18.5};
     FloatConstraintMinValueExclusiveOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -126,7 +126,7 @@ isolated function testFloatConstraintMinValueExclusiveOnTypeAsRecordFieldFailure
     FloatConstraintMinValueExclusiveOnTypeAsRecordField rec = {value: 16.5};
     FloatConstraintMinValueExclusiveOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -150,7 +150,7 @@ isolated function testFloatConstraintMaxValueExclusiveOnTypeAsRecordFieldFailure
     FloatConstraintMaxValueExclusiveOnTypeAsRecordField rec = {value: 100.5};
     FloatConstraintMaxValueExclusiveOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -161,7 +161,7 @@ isolated function testFloatConstraintMaxValueExclusiveOnTypeAsRecordFieldFailure
     FloatConstraintMaxValueExclusiveOnTypeAsRecordField rec = {value: 120.5};
     FloatConstraintMaxValueExclusiveOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -203,7 +203,7 @@ isolated function testFloatConstraintOnTypeAsRecordFieldFailure1() {
     FloatConstraintOnTypeAsRecordField rec = {value: 16.5};
     FloatConstraintOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -214,7 +214,7 @@ isolated function testFloatConstraintOnTypeAsRecordFieldFailure2() {
     FloatConstraintOnTypeAsRecordField rec = {value: 120.5};
     FloatConstraintOnTypeAsRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

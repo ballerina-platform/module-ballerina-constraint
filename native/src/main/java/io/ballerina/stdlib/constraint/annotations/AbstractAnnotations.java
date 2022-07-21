@@ -21,15 +21,21 @@ package io.ballerina.stdlib.constraint.annotations;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
-import io.ballerina.stdlib.constraint.Constants;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.IntConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.NumberConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.StringConstraintValidator;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_ARRAY;
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_FLOAT;
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_INT;
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_NUMBER;
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_STRING;
+import static io.ballerina.stdlib.constraint.Constants.PREFIX_ANNOTATION_RECORD;
 
 /**
  * The abstract class to represent the annotation attachment points.
@@ -42,7 +48,7 @@ public abstract class AbstractAnnotations {
     private final StringConstraintValidator stringConstraintValidator;
     private final ArrayConstraintValidator arrayConstraintValidator;
 
-    public AbstractAnnotations(Set<String> failedConstraints) {
+    public AbstractAnnotations(List<String> failedConstraints) {
         this.intConstraintValidator = new IntConstraintValidator(failedConstraints);
         this.floatConstraintValidator = new FloatConstraintValidator(failedConstraints);
         this.numberConstraintValidator = new NumberConstraintValidator(failedConstraints);
@@ -50,34 +56,34 @@ public abstract class AbstractAnnotations {
         this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraints);
     }
 
-    public abstract void validate(Object value, AnnotatableType type);
+    public abstract void validate(Object value, AnnotatableType type, String path);
 
     @SuppressWarnings("unchecked")
-    public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue) {
+    public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue, String path) {
         for (Map.Entry<BString, Object> annotationRecord : annotations.entrySet()) {
-            String annotationTag = annotationRecord.getKey().getValue().
-                    substring(Constants.PREFIX_ANNOTATION_RECORD.length());
+            String annotationTag = annotationRecord.getKey().getValue().substring(PREFIX_ANNOTATION_RECORD.length());
             BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
-            validateAnnotationTags(annotationTag, constraints, fieldValue);
+            validateAnnotationTags(annotationTag, constraints, fieldValue, path);
         }
     }
 
-    private void validateAnnotationTags(String annotationTag, BMap<BString, Object> constraints, Object fieldValue) {
+    private void validateAnnotationTags(String annotationTag, BMap<BString, Object> constraints, Object fieldValue,
+                                        String path) {
         switch (annotationTag) {
-            case Constants.ANNOTATION_TAG_INT:
-                this.intConstraintValidator.validate(constraints, (Number) fieldValue);
+            case ANNOTATION_TAG_INT:
+                this.intConstraintValidator.validate(constraints, (Number) fieldValue, path);
                 break;
-            case Constants.ANNOTATION_TAG_FLOAT:
-                this.floatConstraintValidator.validate(constraints, (Number) fieldValue);
+            case ANNOTATION_TAG_FLOAT:
+                this.floatConstraintValidator.validate(constraints, (Number) fieldValue, path);
                 break;
-            case Constants.ANNOTATION_TAG_NUMBER:
-                this.numberConstraintValidator.validate(constraints, (Number) fieldValue);
+            case ANNOTATION_TAG_NUMBER:
+                this.numberConstraintValidator.validate(constraints, (Number) fieldValue, path);
                 break;
-            case Constants.ANNOTATION_TAG_STRING:
-                this.stringConstraintValidator.validate(constraints, (String) fieldValue);
+            case ANNOTATION_TAG_STRING:
+                this.stringConstraintValidator.validate(constraints, (String) fieldValue, path);
                 break;
-            case Constants.ANNOTATION_TAG_ARRAY:
-                this.arrayConstraintValidator.validate(constraints, (Long) fieldValue);
+            case ANNOTATION_TAG_ARRAY:
+                this.arrayConstraintValidator.validate(constraints, (Long) fieldValue, path);
                 break;
             default:
                 break;

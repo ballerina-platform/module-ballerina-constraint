@@ -3,328 +3,326 @@ import ballerina/test;
 // Testing multiple types of annotations in a practical sample value
 
 final json & readonly SAMPLE_PAYLOAD = {
-    "order": {
-        "app_id": 488472577,
-        "buyer_accepts_marketing": false,
-        "created_at": "2022-06-28T15:28:38+05:30",
+    "app_id": 488472577,
+    "buyer_accepts_marketing": false,
+    "created_at": "2022-06-28T15:28:38+05:30",
+    "currency": "LKR",
+    "current_total_discounts": "0.00",
+    "current_total_discounts_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        }
+    },
+    "current_total_price": "2500.00",
+    "current_total_price_set": {
+        "shop_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        },
+        "presentment_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        }
+    },
+    "current_subtotal_price": "2500.00",
+    "current_subtotal_price_set": {
+        "shop_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        },
+        "presentment_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        }
+    },
+    "current_total_tax": "0.00",
+    "current_total_tax_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        }
+    },
+    "customer": {
+        "accepts_marketing": false,
+        "accepts_marketing_updated_at": "2022-06-02T14:33:08+05:30",
         "currency": "LKR",
-        "current_total_discounts": "0.00",
-        "current_total_discounts_set": {
-            "shop_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
+        "created_at": "2022-06-02T13:50:48+05:30",
+        "email": "roland.hewage@gmail.com",
+        "id": 6239032443131,
+        "last_order_id": 4797045473531,
+        "last_order_name": "#1101",
+        "orders_count": 90,
+        "state": "disabled",
+        "tags": "",
+        "tax_exempt": false,
+        "tax_exemptions": [
+
+        ],
+        "total_spent": "218215.41",
+        "updated_at": "2022-06-28T15:28:39+05:30",
+        "verified_email": true,
+        "admin_graphql_api_id": "gid://shopify/Customer/6239032443131"
+    },
+    "discount_applications": [
+
+    ],
+    "discount_codes": [
+
+    ],
+    "email": "roland.hewage@gmail.com",
+    "estimated_taxes": false,
+    "financial_status": "paid",
+    "fulfillments": [
+        {
+            "created_at": "2022-06-28T15:28:39+05:30",
+            "id": 4290265317627,
+            "line_items": [
+                {
+                    "id": 12244791755003,
+                    "variant_id": 43095501734139,
+                    "title": "Long sleeve t-shirt",
+                    "quantity": 1,
+                    "price": "2500.00",
+                    "price_set": {
+                        "shop_money": {
+                            "amount": "2500.00",
+                            "currency_code": "LKR"
+                        },
+                        "presentment_money": {
+                            "amount": "2500.00",
+                            "currency_code": "LKR"
+                        }
+                    },
+                    "grams": 180,
+                    "sku": "",
+                    "variant_title": "Medium / Black",
+                    "vendor": "zrhtwochak",
+                    "fulfillment_service": "manual",
+                    "product_id": 7721106571515,
+                    "requires_shipping": true,
+                    "taxable": false,
+                    "gift_card": false,
+                    "name": "Long sleeve t-shirt - Medium / Black",
+                    "variant_inventory_management": "shopify",
+                    "properties": [
+
+                    ],
+                    "product_exists": true,
+                    "fulfillable_quantity": 0,
+                    "total_discount": "0.00",
+                    "fulfillment_status": "fulfilled",
+                    "tax_lines": [
+
+                    ],
+                    "total_discount_set": {
+                        "shop_money": {
+                            "amount": "0.00",
+                            "currency_code": "LKR"
+                        },
+                        "presentment_money": {
+                            "amount": "0.00",
+                            "currency_code": "LKR"
+                        }
+                    },
+                    "discount_allocations": [
+
+                    ],
+                    "admin_graphql_api_id": "gid://shopify/LineItem/12244791755003",
+                    "duties": [
+
+                    ]
+                }
+            ],
+            "location_id": 69263819003,
+            "name": "#1101.1",
+            "order_id": 4797045473531,
+            "origin_address": {
+
             },
-            "presentment_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            }
-        },
-        "current_total_price": "2500.00",
-        "current_total_price_set": {
-            "shop_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
+            "receipt": {
+
             },
-            "presentment_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            }
-        },
-        "current_subtotal_price": "2500.00",
-        "current_subtotal_price_set": {
-            "shop_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            }
-        },
-        "current_total_tax": "0.00",
-        "current_total_tax_set": {
-            "shop_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            }
-        },
-        "customer": {
-            "accepts_marketing": false,
-            "accepts_marketing_updated_at": "2022-06-02T14:33:08+05:30",
-            "currency": "LKR",
-            "created_at": "2022-06-02T13:50:48+05:30",
-            "email": "roland.hewage@gmail.com",
-            "id": 6239032443131,
-            "last_order_id": 4797045473531,
-            "last_order_name": "#1101",
-            "orders_count": 90,
-            "state": "disabled",
-            "tags": "",
-            "tax_exempt": false,
-            "tax_exemptions": [
+            "service": "manual",
+            "status": "success",
+            "tracking_numbers": [
 
             ],
-            "total_spent": "218215.41",
+            "tracking_urls": [
+
+            ],
             "updated_at": "2022-06-28T15:28:39+05:30",
-            "verified_email": true,
-            "admin_graphql_api_id": "gid://shopify/Customer/6239032443131"
-        },
-        "discount_applications": [
-
-        ],
-        "discount_codes": [
-
-        ],
-        "email": "roland.hewage@gmail.com",
-        "estimated_taxes": false,
-        "financial_status": "paid",
-        "fulfillments": [
-            {
-                "created_at": "2022-06-28T15:28:39+05:30",
-                "id": 4290265317627,
-                "line_items": [
-                    {
-                        "id": 12244791755003,
-                        "variant_id": 43095501734139,
-                        "title": "Long sleeve t-shirt",
-                        "quantity": 1,
-                        "price": "2500.00",
-                        "price_set": {
-                            "shop_money": {
-                                "amount": "2500.00",
-                                "currency_code": "LKR"
-                            },
-                            "presentment_money": {
-                                "amount": "2500.00",
-                                "currency_code": "LKR"
-                            }
-                        },
-                        "grams": 180,
-                        "sku": "",
-                        "variant_title": "Medium / Black",
-                        "vendor": "zrhtwochak",
-                        "fulfillment_service": "manual",
-                        "product_id": 7721106571515,
-                        "requires_shipping": true,
-                        "taxable": false,
-                        "gift_card": false,
-                        "name": "Long sleeve t-shirt - Medium / Black",
-                        "variant_inventory_management": "shopify",
-                        "properties": [
-
-                        ],
-                        "product_exists": true,
-                        "fulfillable_quantity": 0,
-                        "total_discount": "0.00",
-                        "fulfillment_status": "fulfilled",
-                        "tax_lines": [
-
-                        ],
-                        "total_discount_set": {
-                            "shop_money": {
-                                "amount": "0.00",
-                                "currency_code": "LKR"
-                            },
-                            "presentment_money": {
-                                "amount": "0.00",
-                                "currency_code": "LKR"
-                            }
-                        },
-                        "discount_allocations": [
-
-                        ],
-                        "admin_graphql_api_id": "gid://shopify/LineItem/12244791755003",
-                        "duties": [
-
-                        ]
-                    }
-                ],
-                "location_id": 69263819003,
-                "name": "#1101.1",
-                "order_id": 4797045473531,
-                "origin_address": {
-
+            "admin_graphql_api_id": "gid://shopify/Fulfillment/4290265317627"
+        }
+    ],
+    "fulfillment_status": "fulfilled",
+    "gateway": "",
+    "id": 4797045473531,
+    "line_items": [
+        {
+            "id": 12244791755003,
+            "variant_id": 43095501734139,
+            "title": "Long sleeve t-shirt",
+            "quantity": 1,
+            "price": "2500.00",
+            "price_set": {
+                "shop_money": {
+                    "amount": "2500.00",
+                    "currency_code": "LKR"
                 },
-                "receipt": {
+                "presentment_money": {
+                    "amount": "2500.00",
+                    "currency_code": "LKR"
+                }
+            },
+            "grams": 180,
+            "sku": "",
+            "variant_title": "Medium / Black",
+            "vendor": "zrhtwochak",
+            "fulfillment_service": "manual",
+            "product_id": 7721106571515,
+            "requires_shipping": true,
+            "taxable": false,
+            "gift_card": false,
+            "name": "Long sleeve t-shirt - Medium / Black",
+            "variant_inventory_management": "shopify",
+            "properties": [
 
+            ],
+            "product_exists": true,
+            "fulfillable_quantity": 0,
+            "total_discount": "0.00",
+            "fulfillment_status": "fulfilled",
+            "tax_lines": [
+
+            ],
+            "total_discount_set": {
+                "shop_money": {
+                    "amount": "0.00",
+                    "currency_code": "LKR"
                 },
-                "service": "manual",
-                "status": "success",
-                "tracking_numbers": [
-
-                ],
-                "tracking_urls": [
-
-                ],
-                "updated_at": "2022-06-28T15:28:39+05:30",
-                "admin_graphql_api_id": "gid://shopify/Fulfillment/4290265317627"
-            }
-        ],
-        "fulfillment_status": "fulfilled",
-        "gateway": "",
-        "id": 4797045473531,
-        "line_items": [
-            {
-                "id": 12244791755003,
-                "variant_id": 43095501734139,
-                "title": "Long sleeve t-shirt",
-                "quantity": 1,
-                "price": "2500.00",
-                "price_set": {
-                    "shop_money": {
-                        "amount": "2500.00",
-                        "currency_code": "LKR"
-                    },
-                    "presentment_money": {
-                        "amount": "2500.00",
-                        "currency_code": "LKR"
-                    }
-                },
-                "grams": 180,
-                "sku": "",
-                "variant_title": "Medium / Black",
-                "vendor": "zrhtwochak",
-                "fulfillment_service": "manual",
-                "product_id": 7721106571515,
-                "requires_shipping": true,
-                "taxable": false,
-                "gift_card": false,
-                "name": "Long sleeve t-shirt - Medium / Black",
-                "variant_inventory_management": "shopify",
-                "properties": [
-
-                ],
-                "product_exists": true,
-                "fulfillable_quantity": 0,
-                "total_discount": "0.00",
-                "fulfillment_status": "fulfilled",
-                "tax_lines": [
-
-                ],
-                "total_discount_set": {
-                    "shop_money": {
-                        "amount": "0.00",
-                        "currency_code": "LKR"
-                    },
-                    "presentment_money": {
-                        "amount": "0.00",
-                        "currency_code": "LKR"
-                    }
-                },
-                "discount_allocations": [
-
-                ],
-                "admin_graphql_api_id": "gid://shopify/LineItem/12244791755003",
-                "duties": [
-
-                ]
-            }
-        ],
-        "name": "#1101",
-        "note_attributes": [
-
-        ],
-        "number": 101,
-        "order_number": 1101,
-        "payment_gateway_names": [
-
-        ],
-        "presentment_currency": "LKR",
-        "processed_at": "2022-06-28T15:28:38+05:30",
-        "processing_method": "",
-        "refunds": [
-
-        ],
-        "shipping_lines": [
-
-        ],
-        "source_name": "488472577",
-        "subtotal_price": "2500.00",
-        "subtotal_price_set": {
-            "shop_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
+                "presentment_money": {
+                    "amount": "0.00",
+                    "currency_code": "LKR"
+                }
             },
-            "presentment_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            }
-        },
-        "tags": "",
-        "tax_lines": [
+            "discount_allocations": [
 
-        ],
-        "taxes_included": false,
-        "test": false,
-        "token": "03dd268fd532d709a2ae7285fee54e85",
-        "total_discounts": "0.00",
-        "total_discounts_set": {
-            "shop_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            }
+            ],
+            "admin_graphql_api_id": "gid://shopify/LineItem/12244791755003",
+            "duties": [
+
+            ]
+        }
+    ],
+    "name": "#1101",
+    "note_attributes": [
+
+    ],
+    "number": 101,
+    "order_number": 1101,
+    "payment_gateway_names": [
+
+    ],
+    "presentment_currency": "LKR",
+    "processed_at": "2022-06-28T15:28:38+05:30",
+    "processing_method": "",
+    "refunds": [
+
+    ],
+    "shipping_lines": [
+
+    ],
+    "source_name": "488472577",
+    "subtotal_price": "2500.00",
+    "subtotal_price_set": {
+        "shop_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
         },
-        "total_line_items_price": "2500.00",
-        "total_line_items_price_set": {
-            "shop_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            }
+        "presentment_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        }
+    },
+    "tags": "",
+    "tax_lines": [
+
+    ],
+    "taxes_included": false,
+    "test": false,
+    "token": "03dd268fd532d709a2ae7285fee54e85",
+    "total_discounts": "0.00",
+    "total_discounts_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
         },
-        "total_outstanding": "2500.00",
-        "total_price": "2500.00",
-        "total_price_set": {
-            "shop_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "2500.00",
-                "currency_code": "LKR"
-            }
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        }
+    },
+    "total_line_items_price": "2500.00",
+    "total_line_items_price_set": {
+        "shop_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
         },
-        "total_shipping_price_set": {
-            "shop_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            }
+        "presentment_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        }
+    },
+    "total_outstanding": "2500.00",
+    "total_price": "2500.00",
+    "total_price_set": {
+        "shop_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
         },
-        "total_tax": "0.00",
-        "total_tax_set": {
-            "shop_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            },
-            "presentment_money": {
-                "amount": "0.00",
-                "currency_code": "LKR"
-            }
+        "presentment_money": {
+            "amount": "2500.00",
+            "currency_code": "LKR"
+        }
+    },
+    "total_shipping_price_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
         },
-        "total_tip_received": "0.00",
-        "total_weight": 0d,
-        "updated_at": "2022-06-28T15:28:38+05:30",
-        "order_status_url": "https://zrhtwochak.myshopify.com/64625017083/orders/03dd268fd532d709a2ae7285fee54e85/authenticatekey=704bed3322a51f1f7414cf4c7340ec25",
-        "total_price_usd": "6.96",
-        "confirmed": true,
-        "contact_email": "roland.hewage@gmail.com",
-        "admin_graphql_api_id": "gid://shopify/Order/4797045473531"
-    }
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        }
+    },
+    "total_tax": "0.00",
+    "total_tax_set": {
+        "shop_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        },
+        "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "LKR"
+        }
+    },
+    "total_tip_received": "0.00",
+    "total_weight": 0d,
+    "updated_at": "2022-06-28T15:28:38+05:30",
+    "order_status_url": "https://zrhtwochak.myshopify.com/64625017083/orders/03dd268fd532d709a2ae7285fee54e85/authenticatekey=704bed3322a51f1f7414cf4c7340ec25",
+    "total_price_usd": "6.96",
+    "confirmed": true,
+    "contact_email": "roland.hewage@gmail.com",
+    "admin_graphql_api_id": "gid://shopify/Order/4797045473531"
 };
 
 @test:Config {}
@@ -342,7 +340,7 @@ isolated function testSampleFailure1() returns error? {
     rec.customer.currency = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.customer.currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -354,7 +352,7 @@ isolated function testSampleFailure2() returns error? {
     rec.presentment_currency = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.presentment_currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -366,7 +364,7 @@ isolated function testSampleFailure3() returns error? {
     rec.current_total_discounts_set.shop_money.currency_code = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.current_total_discounts_set.shop_money.currency_code:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -378,7 +376,7 @@ isolated function testSampleFailure4() returns error? {
     rec.fulfillments[0].line_items[0].price_set.shop_money.currency_code = "INVALID";
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].price_set.shop_money.currency_code:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -390,7 +388,7 @@ isolated function testSampleFailure5() returns error? {
     rec.number = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.number:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -402,7 +400,7 @@ isolated function testSampleFailure6() returns error? {
     rec.order_number = 1000;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.order_number:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -414,7 +412,7 @@ isolated function testSampleFailure7() returns error? {
     rec.customer.orders_count = 0;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.customer.orders_count:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -426,7 +424,7 @@ isolated function testSampleFailure8() returns error? {
     rec.fulfillments[0].line_items[0].quantity = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].quantity:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -438,7 +436,7 @@ isolated function testSampleFailure9() returns error? {
     rec.fulfillments[0].line_items[0].grams = 0;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].grams:minValueExclusive' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -450,7 +448,7 @@ isolated function testSampleFailure10() returns error? {
     rec.fulfillments[0].line_items[0].fulfillable_quantity = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.fulfillments[0].line_items[0].fulfillable_quantity:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -471,7 +469,17 @@ isolated function testSampleFailure11() returns error? {
     rec.fulfillments[0].line_items[0].fulfillable_quantity = -1;
     Order|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue','length','minValueExclusive' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for " +
+        "'$.current_total_discounts_set.shop_money.currency_code:length'," +
+        "'$.customer.currency:length'," +
+        "'$.customer.orders_count:minValueExclusive'," +
+        "'$.fulfillments[0].line_items[0].fulfillable_quantity:minValue'," +
+        "'$.fulfillments[0].line_items[0].grams:minValueExclusive'," +
+        "'$.fulfillments[0].line_items[0].price_set.shop_money.currency_code:length'," +
+        "'$.fulfillments[0].line_items[0].quantity:minValue'," +
+        "'$.number:minValue'," +
+        "'$.order_number:minValue'," +
+        "'$.presentment_currency:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

@@ -44,7 +44,7 @@ isolated function testMultipleConstraintFailure1() {
     Person rec = {name: "John", age: 18};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -55,7 +55,7 @@ isolated function testMultipleConstraintFailure2() {
     Person rec = {name: "John Steve", age: 18};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.name:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -66,7 +66,7 @@ isolated function testMultipleConstraintFailure3() {
     Person rec = {name: "Steve", age: 16};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -77,7 +77,7 @@ isolated function testMultipleConstraintFailure4() {
     Person rec = {name: "John", age: 16};
     Person|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue','minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue','$.name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -119,7 +119,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure1() {
     Student rec = {name: "Steve", age: 16};
     Student|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -130,7 +130,7 @@ isolated function testMultipleConstraintOnSingleFieldFailure2() {
     Student rec = {name: "Steve", age: 55};
     Student|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -178,7 +178,7 @@ isolated function testNestedRecordFailure1() {
     Foo foo = {value: "Bob", bar: {value: "Steve", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -189,7 +189,7 @@ isolated function testNestedRecordFailure2() {
     Foo foo = {value: "Alice", bar: {value: "Bob", baz: [{value: 50}, {value: 75}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -200,7 +200,7 @@ isolated function testNestedRecordFailure3() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -211,7 +211,7 @@ isolated function testNestedRecordFailure4() {
     Foo foo = {value: "Alice", bar: {value: "Steve", baz: [{value: 50}, {value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz[1].value:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -222,7 +222,7 @@ isolated function testNestedRecordFailure5() {
     Foo foo = {value: "Eve", bar: {value: "Bob", baz: [{value: 125}]}};
     Foo|error validation = validate(foo);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxValue','minLength','length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.bar.baz:minLength','$.bar.baz[0].value:maxValue','$.bar.value:minLength','$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -254,7 +254,7 @@ isolated function testNestedTypeFailure1() {
     PositiveIntArray arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
     PositiveIntArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -265,7 +265,7 @@ isolated function testNestedTypeFailure2() {
     PositiveIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, -10];
     PositiveIntArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[4]:minValue','$[9]:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -276,7 +276,7 @@ isolated function testNestedTypeFailure3() {
     PositiveIntArray arr = [1, 2, 3, 4, -5, 6, 7, 8, 9, -10, 11];
     PositiveIntArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue','maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength','$[4]:minValue','$[9]:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -325,7 +325,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure1() {
     TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSC"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -336,7 +336,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure2() {
     TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Bob", age: 30, qualifications: ["BSc", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[1].name:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -347,7 +347,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure3() {
     TeacherArray arr = [{name: "Alice", age: 15, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: ["BSc", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[0].age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -358,7 +358,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure4() {
     TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: []}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[1].qualifications:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -369,7 +369,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure5() {
     TeacherArray arr = [{name: "Alice", age: 20, qualifications: ["BSc"]}, {name: "Peter", age: 30, qualifications: ["Bachelors", "MSc"]}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[1].qualifications[0]:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -380,7 +380,7 @@ isolated function testRecursiveAnnotationsOnRecordAndTypeFailure6() {
     TeacherArray arr = [{name: "Alice", age: 15, qualifications: ["Bachelors"]}, {name: "Bob", age: 16, qualifications: []}];
     TeacherArray|error validation = validate(arr);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue','minLength','length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$[0].age:minValue','$[0].qualifications[0]:length','$[1].age:minValue','$[1].name:length','$[1].qualifications:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -420,7 +420,7 @@ isolated function testRecursiveAnnotationsOnTypeAndRecordFailure1() {
     Employee rec = {username: "Alice", qualifications: [{name: "BSc"}, {name: "MSc"}]};
     Employee|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.username:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -431,7 +431,7 @@ isolated function testRecursiveAnnotationsOnTypeAndRecordFailure2() {
     Employee rec = {username: "Bob", qualifications: [{name: "BSc"}]};
     Employee|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.qualifications:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -442,7 +442,7 @@ isolated function testRecursiveAnnotationsOnTypeAndRecordFailure3() {
     Employee rec = {username: "Bob", qualifications: [{name: "Bachelors"}, {name: "Masters"}]};
     Employee|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.qualifications[0].name:length','$.qualifications[1].name:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -453,7 +453,7 @@ isolated function testRecursiveAnnotationsOnTypeAndRecordFailure4() {
     Employee rec = {username: "Alice", qualifications: [{name: "Bachelors"}]};
     Employee|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength','length','maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.qualifications:minLength','$.qualifications[0].name:length','$.username:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -560,7 +560,7 @@ isolated function testUnionTypeDescFailure1() {
     Union1|Union2|Union3 rec = {name: "Bob"};
     Union1|Union2|Union3|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.name:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -571,7 +571,7 @@ isolated function testUnionTypeDescFailure2() {
     Union1|Union2|Union3 rec = {age: 16};
     Union1|Union2|Union3|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -584,7 +584,7 @@ isolated function testUnionTypeDescFailure3() {
     Union1|Union2|Union3 typ = 5.1;
     Union1|Union2|Union3|error validation = validate(typ);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minValue' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$:minValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

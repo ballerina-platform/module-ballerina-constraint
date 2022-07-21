@@ -22,7 +22,12 @@ import io.ballerina.runtime.api.creators.ErrorCreator;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BError;
 
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
+
+import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_ERROR;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_COMMA;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SINGLE_QUOTE;
 
 /**
  * Utility functions related to errors.
@@ -37,10 +42,11 @@ public class ErrorUtils {
         return createError(UNEXPECTED_ERROR_MESSAGE);
     }
 
-    static BError buildValidationError(Set<String> failedConstraints) {
+    static BError buildValidationError(List<String> failedConstraints) {
+        Collections.sort(failedConstraints);
         StringBuilder errorMsg = new StringBuilder(VALIDATION_ERROR_MESSAGE_PREFIX);
         for (String constraint : failedConstraints) {
-            errorMsg.append("'").append(constraint).append("',");
+            errorMsg.append(SYMBOL_SINGLE_QUOTE).append(constraint).append(SYMBOL_SINGLE_QUOTE + SYMBOL_COMMA);
         }
         errorMsg.deleteCharAt(errorMsg.length() - 1);
         errorMsg.append(VALIDATION_ERROR_MESSAGE_SUFFIX);
@@ -48,7 +54,7 @@ public class ErrorUtils {
     }
 
     private static BError createError(String errMessage) {
-        return ErrorCreator.createError(ModuleUtils.getModule(), Constants.CONSTRAINT_ERROR,
+        return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
                 StringUtils.fromString(errMessage), null, null);
     }
 }

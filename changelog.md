@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Implement Ballerina Constraint Package - Phase 1](https://github.com/ballerina-platform/ballerina-standard-library/issues/2861)
 - [Publish the constraint native API](https://github.com/ballerina-platform/ballerina-standard-library/issues/3109)
 - [Add support for constraint validation on union typedesc](https://github.com/ballerina-platform/ballerina-standard-library/issues/3130)
+- [Improve constraint error message as JsonPath expression](https://github.com/ballerina-platform/ballerina-standard-library/issues/3143)
 
 ### Fixed
 - [Passing the typedesc as a param to the constraint() method returns () in success case ](https://github.com/ballerina-platform/ballerina-standard-library/issues/3107)

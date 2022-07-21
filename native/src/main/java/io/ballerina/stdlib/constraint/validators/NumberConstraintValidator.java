@@ -23,24 +23,24 @@ import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Extern functions for validating number constraints `@constraint:Number` of Ballerina.
  */
 public class NumberConstraintValidator extends AbstractValueValidator {
 
-    private final Set<String> failedConstraints;
+    private final List<String> failedConstraints;
 
-    public NumberConstraintValidator(Set<String> failedConstraints) {
+    public NumberConstraintValidator(List<String> failedConstraints) {
         this.failedConstraints = failedConstraints;
     }
 
-    public void validate(BMap<BString, Object> constraints, Number fieldValue) {
+    public void validate(BMap<BString, Object> constraints, Number fieldValue, String path) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             BigDecimal constraintValue = ((BDecimal) constraint.getValue()).value();
-            super.validate(constraint, fieldValue, constraintValue, failedConstraints);
+            super.validate(constraint, fieldValue, constraintValue, failedConstraints, path);
         }
     }
 

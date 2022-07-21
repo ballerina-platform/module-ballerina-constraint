@@ -52,7 +52,7 @@ isolated function testArrayConstraintLengthOnRecordFieldFailure1() {
     ArrayConstraintLengthOnRecordField rec = {value: [(), true, 123]};
     ArrayConstraintLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -63,7 +63,7 @@ isolated function testArrayConstraintLengthOnRecordFieldFailure2() {
     ArrayConstraintLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
     ArrayConstraintLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'length' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -99,7 +99,7 @@ isolated function testArrayConstraintMinLengthOnRecordFieldFailure() {
     ArrayConstraintMinLengthOnRecordField rec = {value: [(), true, 123]};
     ArrayConstraintMinLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -135,7 +135,7 @@ isolated function testArrayConstraintMaxLengthOnRecordFieldFailure() {
     ArrayConstraintMaxLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
     ArrayConstraintMaxLengthOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -181,7 +181,7 @@ isolated function testArrayConstraintOnRecordFieldFailure1() {
     ArrayConstraintOnRecordField rec = {value: [(), true, 123]};
     ArrayConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -192,7 +192,7 @@ isolated function testArrayConstraintOnRecordFieldFailure2() {
     ArrayConstraintOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", (), true, 123, 123.45, 123.45d, "s3cr3t", (), true, 123, 123.45, 123.45d, "s3cr3t"]};
     ArrayConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -229,7 +229,7 @@ isolated function testArrayConstraintOnUnionRecordFieldFailure1() {
     ArrayConstraintOnUnionRecordField rec = {value: [1, 2, 3]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -240,7 +240,7 @@ isolated function testArrayConstraintOnUnionRecordFieldFailure2() {
     ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c"]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'minLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -251,7 +251,7 @@ isolated function testArrayConstraintOnRecordFieldFailure3() {
     ArrayConstraintOnUnionRecordField rec = {value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -262,7 +262,7 @@ isolated function testArrayConstraintOnRecordFieldFailure4() {
     ArrayConstraintOnUnionRecordField rec = {value: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"]};
     ArrayConstraintOnUnionRecordField|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for 'maxLength' constraint(s).");
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
