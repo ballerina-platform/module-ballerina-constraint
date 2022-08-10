@@ -1,6 +1,6 @@
 # Specification: Ballerina Constraint Library
 
-_Owners_: @TharmiganK @shafreenAnfar      
+_Owners_: @TharmiganK @shafreenAnfar @chamil321  
 _Reviewers_: @shafreenAnfar @chamil321  
 _Created_: 2022/08/09  
 _Updated_: 2022/08/09   
@@ -40,7 +40,7 @@ validates the constraints in Ballerina types.
 
 ## 2. Constraint annotations
 The Constraint library provides different annotations for different basic types e.g. `@constraint:String` for strings, 
-`@constraint:Array` for arrays etc. Each of these will define a separate associated record type.
+`@constraint:Array` for arrays etc. Each of these is defined as a separate associated record type.
 
 ```ballerina
 // Annotation
@@ -208,7 +208,7 @@ All the supported constraints on array types are illustrated in the following ta
 | minLength         |                           v.length() >= c                            |
 | maxLength         |                           v.length() <= c                            |
 
-When defining constraints on array types, if the `length` constraint is present then `minLength` or `maxLength` is
+When defining constraints on array types, if the `length` constraint is present then `minLength` or `maxLength` are
 not allowed.
 
 Example :
