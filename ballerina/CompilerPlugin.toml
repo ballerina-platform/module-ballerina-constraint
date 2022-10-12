@@ -3,4 +3,4 @@ id = "constraint-compiler-plugin"
 class = "io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPlugin"
 
 [[dependency]]
-path = "../compiler-plugin/build/libs/constraint-compiler-plugin-1.0.0.jar"
+path = "../compiler-plugin/build/libs/constraint-compiler-plugin-1.0.1-SNAPSHOT.jar"

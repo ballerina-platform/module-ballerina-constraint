@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- [API docs updated](https://github.com/ballerina-platform/ballerina-standard-library/issues/3463)
+
+## [1.0.0] - 2022-09-08
+
 ### Added
 - [Implement Ballerina Constraint Package - Phase 1](https://github.com/ballerina-platform/ballerina-standard-library/issues/2861)
 - [Publish the constraint native API](https://github.com/ballerina-platform/ballerina-standard-library/issues/3109)
