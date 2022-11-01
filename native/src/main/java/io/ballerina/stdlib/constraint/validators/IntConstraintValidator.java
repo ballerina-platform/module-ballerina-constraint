@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
 /**
  * Extern functions for validating int constraints `@constraint:Int` of Ballerina.
  */
-public class IntConstraintValidator extends AbstractValueValidator {
+public class IntConstraintValidator implements ValueValidator {
 
     private final List<String> failedConstraints;
 
@@ -37,28 +38,27 @@ public class IntConstraintValidator extends AbstractValueValidator {
 
     public void validate(BMap<BString, Object> constraints, Number fieldValue, String path) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            Long constraintValue = (Long) constraint.getValue();
-            super.validate(constraint, fieldValue, constraintValue, failedConstraints, path);
+            validate(constraint, fieldValue, failedConstraints, path);
         }
     }
 
     @Override
-    boolean validateMinValue(Number fieldValue, Number constraintValue) {
-        return fieldValue.longValue() >= constraintValue.longValue();
+    public boolean validateMinValue(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).longValue() >= (Long) constraintValue;
     }
 
     @Override
-    boolean validateMaxValue(Number fieldValue, Number constraintValue) {
-        return fieldValue.longValue() <= constraintValue.longValue();
+    public boolean validateMaxValue(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).longValue() <= (Long) constraintValue;
     }
 
     @Override
-    boolean validateMinValueExclusive(Number fieldValue, Number constraintValue) {
-        return fieldValue.longValue() > constraintValue.longValue();
+    public boolean validateMinValueExclusive(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).longValue() > (Long) constraintValue;
     }
 
     @Override
-    boolean validateMaxValueExclusive(Number fieldValue, Number constraintValue) {
-        return fieldValue.longValue() < constraintValue.longValue();
+    public boolean validateMaxValueExclusive(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).longValue() < (Long) constraintValue;
     }
 }

@@ -20,13 +20,15 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.validators.interfaces.LengthValidator;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Extern functions for validating array constraints `@constraint:Array` of Ballerina.
  */
-public class ArrayConstraintValidator extends AbstractLengthValidator {
+public class ArrayConstraintValidator implements LengthValidator {
 
     private final List<String> failedConstraints;
 
@@ -35,21 +37,23 @@ public class ArrayConstraintValidator extends AbstractLengthValidator {
     }
 
     public void validate(BMap<BString, Object> constraints, Long fieldValue, String path) {
-        super.validate(constraints, fieldValue, failedConstraints, path);
+        for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
+            validate(constraint, fieldValue, failedConstraints, path);
+        }
     }
 
     @Override
-    boolean validateLength(Object fieldValue, long constraintValue) {
+    public boolean validateLength(Object fieldValue, long constraintValue) {
         return (Long) fieldValue == constraintValue;
     }
 
     @Override
-    boolean validateMinLength(Object fieldValue, long constraintValue) {
+    public boolean validateMinLength(Object fieldValue, long constraintValue) {
         return (Long) fieldValue >= constraintValue;
     }
 
     @Override
-    boolean validateMaxLength(Object fieldValue, long constraintValue) {
+    public boolean validateMaxLength(Object fieldValue, long constraintValue) {
         return (Long) fieldValue <= constraintValue;
     }
 }
