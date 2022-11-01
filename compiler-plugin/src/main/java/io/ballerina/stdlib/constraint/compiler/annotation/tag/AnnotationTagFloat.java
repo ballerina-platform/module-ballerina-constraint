@@ -23,7 +23,7 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_FLOAT;
 /**
  * The class to represent the `@constraint:Float` annotation tag.
  */
-public class AnnotationTagFloat extends AbstractValueConstraints {
+public class AnnotationTagFloat implements ValueConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {

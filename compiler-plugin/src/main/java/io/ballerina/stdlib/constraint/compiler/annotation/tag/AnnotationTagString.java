@@ -23,7 +23,7 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_STRING;
 /**
  * The class to represent the `@constraint:String` annotation tag.
  */
-public class AnnotationTagString extends AbstractLengthConstraints {
+public class AnnotationTagString implements LengthConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {

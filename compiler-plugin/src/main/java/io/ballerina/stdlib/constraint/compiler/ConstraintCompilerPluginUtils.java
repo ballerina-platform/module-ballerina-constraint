@@ -122,7 +122,8 @@ public class ConstraintCompilerPluginUtils {
                     String constraintValue = valueExpr.get().toString().trim()
                             .replaceAll(SYMBOL_NEW_LINE, "")
                             .replaceAll(SYMBOL_DECIMAL, "");
-                    if (!matrix.isAnnotationConstraintsValid(annotationTag, Double.parseDouble(constraintValue))) {
+                    String constraintField = node.fieldName().toString().trim();
+                    if (!matrix.isAnnotationConstraintsValid(annotationTag, constraintField, constraintValue)) {
                         reportConstraintsInvalidity(ctx, annotationTag, fieldType, annotationNode.location());
                     }
                 }

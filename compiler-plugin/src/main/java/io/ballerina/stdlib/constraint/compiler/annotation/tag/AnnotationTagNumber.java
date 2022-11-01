@@ -25,12 +25,10 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
 /**
  * The class to represent the `@constraint:Number` annotation tag.
  */
-public class AnnotationTagNumber extends AbstractValueConstraints {
+public class AnnotationTagNumber implements ValueConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {
-        return fieldType.equals(TYPE_INT) ||
-                fieldType.equals(TYPE_FLOAT) ||
-                fieldType.equals(TYPE_DECIMAL);
+        return fieldType.equals(TYPE_INT) || fieldType.equals(TYPE_FLOAT) || fieldType.equals(TYPE_DECIMAL);
     }
 }
