@@ -16,6 +16,31 @@
 
 import ballerina/constraint;
 
+string:RegExp regExp = re `[0-9]*`;
+
+@constraint:String {
+    length: 10,
+    pattern: regExp
+}
+type PhoneNumber string;
+
+@constraint:String {
+    pattern:  re `^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$`
+}
+type MailAddress string;
+
+type User record {|
+    string name;
+    int age;
+    @constraint:String {
+        pattern: re `([0-9]{9}[v|V]|[0-9]{12})`
+    }
+    string nic;
+    string address;
+    PhoneNumber contactNumber;
+    MailAddress email;
+|};
+
 type Foo record {
     @constraint:String {
         length: 10
