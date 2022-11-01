@@ -19,5 +19,6 @@ module io.ballerina.stdlib.constraint {
     requires io.ballerina.runtime;
     requires java.naming;
     requires org.slf4j;
+    requires io.ballerina.lang.regexp;
     exports io.ballerina.stdlib.constraint;
 }

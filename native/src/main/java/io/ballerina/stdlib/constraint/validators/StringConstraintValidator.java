@@ -21,6 +21,7 @@ package io.ballerina.stdlib.constraint.validators;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.validators.interfaces.LengthValidator;
+import io.ballerina.stdlib.constraint.validators.interfaces.PatternValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Map;
 /**
  * Extern functions for validating string constraints `@constraint:String` of Ballerina.
  */
-public class StringConstraintValidator implements LengthValidator {
+public class StringConstraintValidator implements LengthValidator, PatternValidator {
 
     private final List<String> failedConstraints;
 
@@ -40,6 +41,13 @@ public class StringConstraintValidator implements LengthValidator {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             validate(constraint, fieldValue, failedConstraints, path);
         }
+    }
+
+    @Override
+    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
+                         String path) {
+        LengthValidator.super.validate(constraint, fieldValue, failedConstraints, path);
+        PatternValidator.super.validate(constraint, fieldValue, failedConstraints, path);
     }
 
     @Override
