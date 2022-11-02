@@ -134,14 +134,60 @@ isolated function testStringConstraintMaxLengthOnTypeFailure() {
 }
 
 @String {
+    pattern: re `[0-9]{9}[v|V]|[0-9]{12}`
+}
+type StringConstraintPatternOnType string;
+
+@test:Config {}
+function testStringConstraintPatternOnTypeSuccess1() {
+    StringConstraintPatternOnType typ = "964537342V";
+    StringConstraintPatternOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testStringConstraintPatternOnTypeSuccess2() {
+    StringConstraintPatternOnType typ = "199645370342";
+    StringConstraintPatternOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testStringConstraintPatternOnTypeFailure1() {
+    StringConstraintPatternOnType typ = "19964537034234";
+    StringConstraintPatternOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testStringConstraintPatternOnTypeFailure2() {
+    StringConstraintPatternOnType typ = "199645345A";
+    StringConstraintPatternOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@String {
     minLength: 6,
-    maxLength: 12
+    maxLength: 12,
+    pattern: re `[a-z0-9](_?[a-z0-9])+`
 }
 type StringConstraintOnType string;
 
 @test:Config {}
 isolated function testStringConstraintOnTypeSuccess1() {
-    StringConstraintOnType typ = "b@!s3cr3t";
+    StringConstraintOnType typ = "6a1_s3cr3t";
     StringConstraintOnType|error validation = validate(typ);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -183,6 +229,28 @@ isolated function testStringConstraintOnTypeFailure2() {
     StringConstraintOnType|error validation = validate(typ);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testStringConstraintOnTypeFailure3() {
+    StringConstraintOnType typ = "_6a1_u5er";
+    StringConstraintOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testStringConstraintOnTypeFailure4() {
+    StringConstraintOnType typ = "_6a1_s3cr3t_u5er";
+    StringConstraintOnType|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength','$:pattern' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

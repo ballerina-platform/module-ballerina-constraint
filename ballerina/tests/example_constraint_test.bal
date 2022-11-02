@@ -232,6 +232,7 @@ final json & readonly SAMPLE_PAYLOAD = {
     "payment_gateway_names": [
 
     ],
+    "phone": "+94123456789",
     "presentment_currency": "LKR",
     "processed_at": "2022-06-28T15:28:38+05:30",
     "processing_method": "",
@@ -485,6 +486,20 @@ isolated function testSampleFailure11() returns error? {
     }
 }
 
+@test:Config {}
+function testSampleFailure12() returns error? {
+    Order rec = check SAMPLE_PAYLOAD.cloneWithType();
+    rec.phone = "1234abcd90";
+    rec.email = "invalid_email?address@";
+    rec.customer.email = "This is a invalid email";
+    Order|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.customer.email:pattern','$.email:pattern','$.phone:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
 public type Order record {
     int app_id?;
     CustomerAddress billing_address?;
@@ -514,6 +529,7 @@ public type Order record {
     string customer_locale?;
     DiscountApplication[] discount_applications?;
     DiscountCode[] discount_codes?;
+    @String {pattern: re `([a-zA-Z0-9._%\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6})*`}
     string email?;
     boolean estimated_taxes?;
     string financial_status?;
@@ -535,6 +551,7 @@ public type Order record {
     string payment_details?;
     PaymentTerms payment_terms?;
     string[] payment_gateway_names?;
+    @String {pattern: re `([0-9]{10})|(\+[0-9]{11})`}
     string phone?;
     @String {length: 3}
     string presentment_currency?;
@@ -629,6 +646,7 @@ public type Customer record {
     string currency?;
     string created_at?;
     string first_name?;
+    @String {pattern: re `([a-zA-Z0-9._%\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6})*`}
     string email?;
     Address default_address?;
     int id?;
@@ -641,6 +659,7 @@ public type Customer record {
     string note?;
     @Int {minValueExclusive: 0}
     int orders_count?;
+    @String {pattern: re `([0-9]{10})|(\+[0-9]{11})`}
     string phone?;
     SmsMarketingConsent sms_marketing_consent?;
     string state?;
