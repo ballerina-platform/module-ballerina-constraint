@@ -53,7 +53,7 @@ public class ErrorUtils {
         return createError(errorMsg.toString());
     }
 
-    private static BError createError(String errMessage) {
+    static BError createError(String errMessage) {
         return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
                 StringUtils.fromString(errMessage), null, null);
     }

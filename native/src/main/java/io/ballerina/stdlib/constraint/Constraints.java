@@ -58,6 +58,8 @@ public class Constraints {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
             return value;
+        } catch (InternalValidationException e) {
+            return ErrorUtils.createError(e.getMessage());
         } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError();
         }

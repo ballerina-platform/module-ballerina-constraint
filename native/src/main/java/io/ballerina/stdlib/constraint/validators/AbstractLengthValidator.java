@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.InternalValidationException;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,9 @@ public abstract class AbstractLengthValidator {
                          String path) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             long constraintValue = (long) constraint.getValue();
-            switch (constraint.getKey().getValue()) {
+            String constraintFiled = constraint.getKey().getValue();
+            checkLengthConstraintValue(constraintFiled, constraintValue, path);
+            switch (constraintFiled) {
                 case CONSTRAINT_LENGTH:
                     if (!validateLength(fieldValue, constraintValue)) {
                         failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
@@ -57,6 +60,14 @@ public abstract class AbstractLengthValidator {
                 default:
                     break;
             }
+        }
+    }
+
+    static void checkLengthConstraintValue(String constraintField, long constraintValue, String path) {
+        if (constraintValue <= 0) {
+            throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
+                                                  constraintField + " constraint. Length constraints should be " +
+                                                  "positive");
         }
     }
 
