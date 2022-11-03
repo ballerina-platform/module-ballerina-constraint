@@ -507,6 +507,66 @@ isolated function testInvalidTypeDescForType() {
     }
 }
 
+// Testing annotation validations by passing invalid length constraint values
+
+int a = -5;
+int b = 0;
+
+@String {
+    length: a
+}
+type StringA string;
+
+@test:Config {}
+function testInvalidLengthConstraintOnStringType() {
+    StringA stringA = "s3cr3t";
+    StringA|error validation = validate(stringA);
+    if validation is error {
+        test:assertEquals(validation.message(), "invalid value found for $:length constraint. Length constraints should be positive");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@String {
+    maxLength: b
+}
+type StringB string;
+
+type RecordB record {
+    StringB stringB;
+};
+
+@test:Config {}
+function testInvalidLengthConstraintOnStringTypeAsRecordField() {
+    RecordB recordB = {stringB: "s3cr3t"};
+    RecordB|error validation = validate(recordB);
+    if validation is error {
+        test:assertEquals(validation.message(), "invalid value found for $.stringB:maxLength constraint. Length constraints should be positive");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+type RecordA record {
+    @Array {
+        minLength: a
+    }
+    string[] arrayA;
+};
+
+@test:Config {}
+function testInvalidLengthConstraintOnArrayRecordField() {
+    RecordA recordA = {arrayA: ["s3cr3t"]};
+    RecordA|error validation = validate(recordA);
+    if validation is error {
+        test:assertEquals(validation.message(), "invalid value found for $.arrayA:minLength constraint. Length constraints should be positive");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+
 // Testing annotation validations with union type desc
 
 type Union1 record {|
