@@ -39,9 +39,9 @@ public abstract class AbstractLengthValidator {
                          String path) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
             long constraintValue = (long) constraint.getValue();
-            String constraintFiled = constraint.getKey().getValue();
-            checkLengthConstraintValue(constraintFiled, constraintValue, path);
-            switch (constraintFiled) {
+            String constraintField = constraint.getKey().getValue();
+            checkLengthConstraintValue(constraintField, constraintValue, path);
+            switch (constraintField) {
                 case CONSTRAINT_LENGTH:
                     if (!validateLength(fieldValue, constraintValue)) {
                         failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
