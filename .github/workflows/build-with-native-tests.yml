@@ -1,0 +1,38 @@
+name: Build with Native Tests
+
+on:
+    workflow_dispatch:
+        lang_tag:
+            description: Branch/Release Tag(v2201.1.0) of the distribution
+            required: true
+            default: master
+
+jobs:
+    ubuntu-build-with-native-tests:
+        name: Build with Native Tests on Ubuntu
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+                uses: actions/checkout@v2
+            - name: Set up GraalVM
+                uses: graalvm/setup-graalvm@v1
+                    with:
+                        version: 'latest'
+                        java-version: '11'
+                        components: 'native-image'
+                        github-token: ${{ secrets.GITHUB_TOKEN }}
+                run: |
+                    echo "GRAALVM_HOME: $GRAALVM_HOME"
+                    echo "JAVA_HOME: $JAVA_HOME"
+                    java --version
+                    gu --version
+                    native-image --version
+            - name: Build ballerina-lang
+              run: |
+                  git clone https://github.com/ballerina-platform/ballerina-lang.git
+                  cd ballerina-lang
+                  git checkout ${{ github.event.inputs.lang_tag }}
+                  VERSION=$((grep -w "version" | cut -d= -f2) < gradle.properties)
+                  echo "::set-output name=version::$VERSION"
+                  ./gradlew clean build -x check publishToMavenLocal --stacktrace --scan
