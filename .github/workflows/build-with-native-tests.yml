@@ -2,10 +2,11 @@ name: Build with Native Tests
 
 on:
     workflow_dispatch:
-        lang_tag:
-            description: Branch/Release Tag(v2201.1.0) of the Ballerina Lang
-            required: true
-            default: master
+        inputs:
+            lang_tag:
+                description: Branch/Release Tag(v2201.1.0) of the Ballerina Lang
+                required: true
+                default: master
 
 jobs:
     ubuntu-build-with-native-tests:
