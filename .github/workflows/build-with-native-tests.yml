@@ -14,27 +14,27 @@ jobs:
 
         steps:
             - name: Checkout Repository
-                uses: actions/checkout@v2
+              uses: actions/checkout@v2
 
             - name: Set up GraalVM
-                uses: graalvm/setup-graalvm@v1
-                    with:
-                        version: 'latest'
-                        java-version: '11'
-                        components: 'native-image'
-                        github-token: ${{ secrets.GITHUB_TOKEN }}
-                run: |
-                    echo "GRAALVM_HOME: $GRAALVM_HOME"
-                    echo "JAVA_HOME: $JAVA_HOME"
-                    java --version
-                    gu --version
-                    native-image --version
+              uses: graalvm/setup-graalvm@v1
+              with:
+                version: 'latest'
+                java-version: '11'
+                components: 'native-image'
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                echo "GRAALVM_HOME: $GRAALVM_HOME"
+                echo "JAVA_HOME: $JAVA_HOME"
+                java --version
+                gu --version
+                native-image --version
 
             - name: Build ballerina-lang
               run: |
-                  git clone https://github.com/ballerina-platform/ballerina-lang.git
-                  cd ballerina-lang
-                  git checkout ${{ github.event.inputs.lang_tag }}
-                  VERSION=$((grep -w "version" | cut -d= -f2) < gradle.properties)
-                  echo "::set-output name=version::$VERSION"
-                  ./gradlew clean build -x check publishToMavenLocal --stacktrace --scan
+                git clone https://github.com/ballerina-platform/ballerina-lang.git
+                cd ballerina-lang
+                git checkout ${{ github.event.inputs.lang_tag }}
+                VERSION=$((grep -w "version" | cut -d= -f2) < gradle.properties)
+                echo "::set-output name=version::$VERSION"
+                ./gradlew clean build -x check publishToMavenLocal --stacktrace --scan
