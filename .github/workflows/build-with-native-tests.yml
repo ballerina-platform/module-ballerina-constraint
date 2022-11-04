@@ -14,9 +14,6 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v2
-
             - name: Set up GraalVM
               uses: graalvm/setup-graalvm@v1
               with:
@@ -33,11 +30,30 @@ jobs:
                 gu --version
                 native-image --version
 
-            - name: Build ballerina-lang
+            - name: Build Ballerina Lang
               run: |
                 git clone https://github.com/ballerina-platform/ballerina-lang.git
                 cd ballerina-lang
                 git checkout ${{ github.event.inputs.lang_tag }}
-                VERSION=$((grep -w "version" | cut -d= -f2) < gradle.properties)
-                echo "::set-output name=version::$VERSION"
+                startTime=$(TZ="Asia/Kolkata" date +'%Y%m%d-%H%M00')
+                latestCommit=$(git log -n 1 --pretty=format:"%h")
+                VERSION=$((grep -w 'version' | cut -d= -f2) < gradle.properties | rev | cut --complement -d- -f1 | rev)
+                UPDATED_VERSION=$VERSION-$startTime-$latestCommit
+                sed -i "s/version=\(.*\)/version=$UPDATED_VERSION/g" gradle.properties
                 ./gradlew clean build -x check publishToMavenLocal --stacktrace --scan
+
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Change Ballerina Lang version
+              run: |
+                echo "BALLERINA_LANG_VERSION: $UPDATED_VERSION"
+                sed -i "s/version=\(.*\)/version=$UPDATED_VERSION/g" gradle.properties
+
+            - name: Build with Gradle
+              env:
+                  packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+                  packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
+              run: ./gradlew clean build -PbalNativeTest
+              
+
