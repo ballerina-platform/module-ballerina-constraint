@@ -3,15 +3,6 @@ name: Build with bal test native
 on:
     workflow_dispatch:
         inputs:
-            build_envs:
-                description: Test Environments
-                type: choice
-                required: true
-                options:
-                    - Ubuntu
-                    - Windows
-                    - Ubuntu and Windows
-                default: Ubuntu and Windows
             lang_tag:
                 description: Branch/Release Tag of the Ballerina Lang
                 required: true
@@ -32,7 +23,6 @@ jobs:
         name: Run StdLib Workflow
         uses: ballerina-platform/ballerina-standard-library/.github/workflows/build-with-bal-test-native-template.yml@main
         with:
-            build_envs: ${{ inputs.build_envs }}
             lang_tag: ${{ inputs.lang_tag }}
             lang_version: ${{ inputs.lang_version }}
             native_image_options: ${{ inputs.native_image_options }}
