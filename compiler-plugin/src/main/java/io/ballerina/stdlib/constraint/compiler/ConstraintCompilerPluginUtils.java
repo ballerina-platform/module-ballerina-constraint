@@ -19,6 +19,7 @@
 package io.ballerina.stdlib.constraint.compiler;
 
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
+import io.ballerina.compiler.syntax.tree.BasicLiteralNode;
 import io.ballerina.compiler.syntax.tree.ExpressionNode;
 import io.ballerina.compiler.syntax.tree.MappingConstructorExpressionNode;
 import io.ballerina.compiler.syntax.tree.MappingFieldNode;
@@ -26,6 +27,7 @@ import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.NodeLocation;
 import io.ballerina.compiler.syntax.tree.SeparatedNodeList;
 import io.ballerina.compiler.syntax.tree.SpecificFieldNode;
+import io.ballerina.compiler.syntax.tree.UnaryExpressionNode;
 import io.ballerina.compiler.syntax.tree.UnionTypeDescriptorNode;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.DiagnosticFactory;
@@ -118,7 +120,8 @@ public class ConstraintCompilerPluginUtils {
             for (MappingFieldNode constraint : constraints) {
                 SpecificFieldNode node = (SpecificFieldNode) constraint;
                 Optional<ExpressionNode> valueExpr = node.valueExpr();
-                if (valueExpr.isPresent()) {
+                if (valueExpr.isPresent() && (valueExpr.get() instanceof BasicLiteralNode ||
+                                                valueExpr.get() instanceof UnaryExpressionNode)) {
                     String constraintValue = valueExpr.get().toString().trim()
                             .replaceAll(SYMBOL_NEW_LINE, "")
                             .replaceAll(SYMBOL_DECIMAL, "");
