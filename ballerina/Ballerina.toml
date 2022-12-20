@@ -1,16 +1,16 @@
 [package]
 org = "ballerina"
 name = "constraint"
-version = "1.0.1"
+version = "1.1.0"
 authors = ["Ballerina"]
 keywords = ["constraint", "validation"]
 repository = "https://github.com/ballerina-platform/module-ballerina-constraint"
 icon = "icon.png"
 license = ["Apache-2.0"]
-distribution = "2201.2.0"
+distribution = "2201.4.0"
 
 [[platform.java11.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "constraint-native"
-version = "1.0.1"
-path = "../native/build/libs/constraint-native-1.0.1.jar"
+version = "1.1.0"
+path = "../native/build/libs/constraint-native-1.1.0-SNAPSHOT.jar"

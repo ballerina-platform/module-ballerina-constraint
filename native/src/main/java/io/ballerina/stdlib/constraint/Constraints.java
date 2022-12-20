@@ -75,7 +75,7 @@ public class Constraints {
             valueType = TypeUtils.getType(value);
         }
         for (Type typ : ((UnionType) type).getMemberTypes()) {
-            if (typ.equals(valueType)) {
+            if (TypeUtils.getReferredType(typ).equals(valueType)) {
                 return Optional.of(typ);
             }
         }
@@ -88,5 +88,8 @@ public class Constraints {
         } else {
             return new TypeAnnotations(failedConstraints);
         }
+    }
+
+    private Constraints() {
     }
 }
