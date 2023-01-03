@@ -32,7 +32,7 @@ import io.ballerina.runtime.api.values.BString;
 import java.util.List;
 import java.util.Map;
 
-import static io.ballerina.stdlib.constraint.Constants.PREFIX_RECORD_FILED;
+import static io.ballerina.stdlib.constraint.Constants.PREFIX_RECORD_FIELD;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_CLOSE_SQUARE_BRACKET;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOT;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKET;
@@ -55,8 +55,8 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
         BMap<BString, Object> recordAnnotations = type.getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
-            if (entry.getKey().getValue().startsWith(PREFIX_RECORD_FILED)) {
-                String fieldName = entry.getKey().getValue().substring(PREFIX_RECORD_FILED.length() + 1);
+            if (entry.getKey().getValue().startsWith(PREFIX_RECORD_FIELD)) {
+                String fieldName = entry.getKey().getValue().substring(PREFIX_RECORD_FIELD.length() + 1);
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
                 if (fieldValue != null) { // This can be null due to optional fields
