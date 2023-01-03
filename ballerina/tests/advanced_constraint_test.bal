@@ -649,3 +649,50 @@ isolated function testUnionTypeDescFailure3() {
         test:assertFail("Expected error not found.");
     }
 }
+
+type ColumnRecord record {|
+    string name;
+|};
+
+annotation ColumnRecord Column on field;
+
+type OrderNew record {|
+    @String {length: 4}
+    string id;
+    @Column {name: "product_id"}
+    string productId;
+    @Column {name: "user_id"}
+    @String {length: 6}
+    string userId;
+    int quantity;
+|};
+
+@test:Config {}
+function testCustomAnnotationSuccess() {
+    OrderNew rec = {
+        id: "1000",
+        productId: "23",
+        userId: "EM1020",
+        quantity: 5
+    };
+    OrderNew|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testCustomAnnotationFailure() {
+    OrderNew rec = {
+        id: "1000",
+        productId: "23",
+        userId: "EM10201",
+        quantity: 5
+    };
+    OrderNew|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.userId:length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
