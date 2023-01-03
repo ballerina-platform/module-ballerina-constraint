@@ -30,12 +30,13 @@ import io.ballerina.stdlib.constraint.validators.StringConstraintValidator;
 import java.util.List;
 import java.util.Map;
 
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_RECORD_REGEX;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_ARRAY;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_FLOAT;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_NUMBER;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_STRING;
-import static io.ballerina.stdlib.constraint.Constants.PREFIX_ANNOTATION_RECORD;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
 
 /**
  * The abstract class to represent the annotation attachment points.
@@ -61,10 +62,16 @@ public abstract class AbstractAnnotations {
     @SuppressWarnings("unchecked")
     public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue, String path) {
         for (Map.Entry<BString, Object> annotationRecord : annotations.entrySet()) {
-            String annotationTag = annotationRecord.getKey().getValue().substring(PREFIX_ANNOTATION_RECORD.length());
-            BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
-            validateAnnotationTags(annotationTag, constraints, fieldValue, path);
+            if (fromConstraintModule(annotationRecord)) {
+                String annotationTag = annotationRecord.getKey().getValue().split(SYMBOL_SEPARATOR, 3)[2];
+                BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
+                validateAnnotationTags(annotationTag, constraints, fieldValue, path);
+            }
         }
+    }
+
+    public static boolean fromConstraintModule(Map.Entry<BString, Object> annotationRecord) {
+        return annotationRecord.getKey().getValue().matches(ANNOTATION_RECORD_REGEX);
     }
 
     private void validateAnnotationTags(String annotationTag, BMap<BString, Object> constraints, Object fieldValue,
