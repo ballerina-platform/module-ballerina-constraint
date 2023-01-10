@@ -74,3 +74,19 @@ type AccountInterest decimal;
     maxLength: 10
 }
 type AccountLast10Transactions float[];
+
+int a = 5;
+
+function getA() returns int {
+    return a;
+}
+
+@constraint:String {
+     length: a
+}
+type StringA string;
+
+@constraint:Int {
+    minValue: getA()
+}
+type IntA int;

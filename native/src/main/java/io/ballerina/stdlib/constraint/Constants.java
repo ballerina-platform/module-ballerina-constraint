@@ -23,8 +23,8 @@ package io.ballerina.stdlib.constraint;
  */
 public class Constants {
 
-    public static final String PREFIX_RECORD_FILED = "$field$";
-    public static final String PREFIX_ANNOTATION_RECORD = "ballerina/constraint:1:";
+    public static final String PREFIX_RECORD_FIELD = "$field$";
+    public static final String ANNOTATION_RECORD_REGEX = "^ballerina/constraint:[0-9]+:.+";
 
     public static final String SYMBOL_DOLLAR_SIGN = "$";
     public static final String SYMBOL_DOT = ".";
