@@ -38,19 +38,19 @@ public interface LengthValidator {
                           String path) {
         switch (constraint.getKey().getValue()) {
             case CONSTRAINT_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
+                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue(), path);
                 if (!validateLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
                 }
                 break;
             case CONSTRAINT_MIN_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
+                checkLengthConstraintValue(CONSTRAINT_MIN_LENGTH, (long) constraint.getValue(), path);
                 if (!validateMinLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_LENGTH);
                 }
                 break;
             case CONSTRAINT_MAX_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
+                checkLengthConstraintValue(CONSTRAINT_MAX_LENGTH, (long) constraint.getValue(), path);
                 if (!validateMaxLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_LENGTH);
                 }
@@ -60,10 +60,11 @@ public interface LengthValidator {
         }
     }
 
-    static void checkLengthConstraintValue(String constraintField, long constraintValue) {
+    static void checkLengthConstraintValue(String constraintField, long constraintValue, String path) {
         if (constraintValue <= 0) {
-            throw new InternalValidationException("invalid value found for " + constraintField + " constraint. Length" +
-                                                          " constraints should be positive");
+            throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
+                                                  constraintField + " constraint. Length constraints should be " +
+                                                  "positive");
         }
     }
 
