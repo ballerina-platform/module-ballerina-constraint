@@ -19,6 +19,7 @@
 package io.ballerina.stdlib.constraint.validators.interfaces;
 
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.InternalValidationException;
 
 import java.util.List;
 import java.util.Map;
@@ -37,22 +38,32 @@ public interface LengthValidator {
                           String path) {
         switch (constraint.getKey().getValue()) {
             case CONSTRAINT_LENGTH:
+                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
                 if (!validateLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
                 }
                 break;
             case CONSTRAINT_MIN_LENGTH:
+                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
                 if (!validateMinLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_LENGTH);
                 }
                 break;
             case CONSTRAINT_MAX_LENGTH:
+                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue());
                 if (!validateMaxLength(fieldValue, (long) constraint.getValue())) {
                     failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_LENGTH);
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+    static void checkLengthConstraintValue(String constraintField, long constraintValue) {
+        if (constraintValue <= 0) {
+            throw new InternalValidationException("invalid value found for " + constraintField + " constraint. Length" +
+                                                          " constraints should be positive");
         }
     }
 
