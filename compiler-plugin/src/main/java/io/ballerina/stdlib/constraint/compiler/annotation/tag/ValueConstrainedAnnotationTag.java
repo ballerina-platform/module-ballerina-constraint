@@ -26,18 +26,13 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_V
 import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE;
 
 /**
- * The abstract class to represent the value constraints of the annotation tags.
+ * The interface to represent the value constraints of the annotation tags.
  */
-public abstract class AbstractValueConstraints implements AnnotationTag {
+public interface ValueConstrainedAnnotationTag extends AnnotationTag {
 
     @Override
-    public boolean haveCompatibleConstraints(ArrayList<String> constraints) {
+    default boolean haveCompatibleConstraints(ArrayList<String> constraints) {
         return !(constraints.contains(CONSTRAINT_MIN_VALUE) && constraints.contains(CONSTRAINT_MIN_VALUE_EXCLUSIVE) ||
                 constraints.contains(CONSTRAINT_MAX_VALUE) && constraints.contains(CONSTRAINT_MAX_VALUE_EXCLUSIVE));
-    }
-
-    @Override
-    public boolean isValidConstraintValue(double constraintValue) {
-        return true;
     }
 }

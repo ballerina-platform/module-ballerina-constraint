@@ -29,5 +29,4 @@ public interface AnnotationTag {
 
     boolean haveCompatibleConstraints(ArrayList<String> constraints);
 
-    boolean isValidConstraintValue(double constraintValue);
 }

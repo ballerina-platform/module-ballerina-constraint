@@ -21,15 +21,15 @@ package io.ballerina.stdlib.constraint.validators;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Extern functions for validating number constraints `@constraint:Number` of Ballerina.
  */
-public class NumberConstraintValidator extends AbstractValueValidator {
+public class NumberConstraintValidator implements ValueValidator {
 
     private final List<String> failedConstraints;
 
@@ -39,28 +39,27 @@ public class NumberConstraintValidator extends AbstractValueValidator {
 
     public void validate(BMap<BString, Object> constraints, Number fieldValue, String path) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            BigDecimal constraintValue = ((BDecimal) constraint.getValue()).value();
-            super.validate(constraint, fieldValue, constraintValue, failedConstraints, path);
+            validate(constraint, fieldValue, failedConstraints, path);
         }
     }
 
     @Override
-    boolean validateMinValue(Number fieldValue, Number constraintValue) {
-        return fieldValue.doubleValue() >= constraintValue.doubleValue();
+    public boolean validateMinValue(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).doubleValue() >= ((BDecimal) constraintValue).value().doubleValue();
     }
 
     @Override
-    boolean validateMaxValue(Number fieldValue, Number constraintValue) {
-        return fieldValue.doubleValue() <= constraintValue.doubleValue();
+    public boolean validateMaxValue(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).doubleValue() <= ((BDecimal) constraintValue).value().doubleValue();
     }
 
     @Override
-    boolean validateMinValueExclusive(Number fieldValue, Number constraintValue) {
-        return fieldValue.doubleValue() > constraintValue.doubleValue();
+    public boolean validateMinValueExclusive(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).doubleValue() > ((BDecimal) constraintValue).value().doubleValue();
     }
 
     @Override
-    boolean validateMaxValueExclusive(Number fieldValue, Number constraintValue) {
-        return fieldValue.doubleValue() < constraintValue.doubleValue();
+    public boolean validateMaxValueExclusive(Object fieldValue, Object constraintValue) {
+        return ((Number) fieldValue).doubleValue() < ((BDecimal) constraintValue).value().doubleValue();
     }
 }

@@ -23,7 +23,7 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
 /**
  * The class to represent the `@constraint:Int` annotation tag.
  */
-public class AnnotationTagInt extends AbstractValueConstraints {
+public class AnnotationTagInt implements ValueConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {

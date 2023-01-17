@@ -75,10 +75,12 @@ public type NumberConstraints record {|
 # + length - The number of characters of the constrained `string` type
 # + minLength - The inclusive lower bound of the number of characters of the constrained `string` type
 # + maxLength - The inclusive upper bound of the number of characters of the constrained `string` type
+# + pattern - The regular expression to be matched with the constrained `string` type
 public type StringConstraints record {|
     int length?;
     int minLength?;
     int maxLength?;
+    string:RegExp pattern?;
 |};
 
 # Represents the constraints associated with `anydata[]` type.

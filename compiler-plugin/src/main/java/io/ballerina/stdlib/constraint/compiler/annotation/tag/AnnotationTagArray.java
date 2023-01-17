@@ -23,7 +23,7 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_ARRAY;
 /**
  * The class to represent the `@constraint:Array` annotation tag.
  */
-public class AnnotationTagArray extends AbstractLengthConstraints {
+public class AnnotationTagArray implements LengthConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(String fieldType) {

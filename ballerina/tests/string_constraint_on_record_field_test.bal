@@ -141,17 +141,45 @@ isolated function testStringConstraintMaxLengthOnRecordFieldFailure() {
     }
 }
 
+type StringConstraintPatternOnRecordField record {
+    @String {
+        pattern: re `[0-9]{9}[v|V]|[0-9]{12}`
+    }
+    string value;
+};
+
+@test:Config {}
+function StringConstraintPatternOnRecordFieldSuccess() {
+    StringConstraintPatternOnRecordField typ = {value: "964537342v"};
+    StringConstraintPatternOnRecordField|error validation = validate(typ);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function StringConstraintPatternOnRecordFieldFailure() {
+    StringConstraintPatternOnRecordField typ = {value: "9b4s37342v"};
+    StringConstraintPatternOnRecordField|error validation = validate(typ);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.value:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
 type StringConstraintOnRecordField record {
     @String {
         minLength: 6,
-        maxLength: 12
+        maxLength: 12,
+        pattern: re `[a-z0-9](_?[a-z0-9])+`
     }
     string value;
 };
 
 @test:Config {}
 isolated function testStringConstraintOnRecordFieldSuccess1() {
-    StringConstraintOnRecordField rec = {value: "b@!s3cr3t"};
+    StringConstraintOnRecordField rec = {value: "6a1_s3cr3t"};
     StringConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -193,6 +221,28 @@ isolated function testStringConstraintOnRecordFieldFailure2() {
     StringConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testStringConstraintOnRecordFieldFailure3() {
+    StringConstraintOnRecordField rec = {value: "_6a1_u5er"};
+    StringConstraintOnRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.value:pattern' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testStringConstraintOnRecordFieldFailure4() {
+    StringConstraintOnRecordField rec = {value: "_6a1_s3cr3t_u5er"};
+    StringConstraintOnRecordField|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength','$.value:pattern' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }

@@ -25,18 +25,18 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MAX_L
 import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_MIN_LENGTH;
 
 /**
- * The abstract class to represent the length constraints of the annotation tags.
+ * The interface to represent the length constraints of the annotation tags.
  */
-public abstract class AbstractLengthConstraints implements AnnotationTag {
+public interface LengthConstrainedAnnotationTag extends AnnotationTag {
 
     @Override
-    public boolean haveCompatibleConstraints(ArrayList<String> constraints) {
+    default boolean haveCompatibleConstraints(ArrayList<String> constraints) {
         return !(constraints.contains(CONSTRAINT_LENGTH) && constraints.contains(CONSTRAINT_MIN_LENGTH) ||
                 constraints.contains(CONSTRAINT_LENGTH) && constraints.contains(CONSTRAINT_MAX_LENGTH));
     }
 
-    @Override
-    public boolean isValidConstraintValue(double constraintValue) {
-        return constraintValue > 0;
+    default boolean isValidConstraintValue(String constraintField, String constraintValue) {
+        return !CONSTRAINT_LENGTH.equals(constraintField) && !CONSTRAINT_MIN_LENGTH.equals(constraintField) &&
+                !CONSTRAINT_MAX_LENGTH.equals(constraintField) || Double.parseDouble(constraintValue) > 0;
     }
 }

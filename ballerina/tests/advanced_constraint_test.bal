@@ -28,11 +28,24 @@ type Person record {
         minValue: 18
     }
     int age;
+    @String {
+        pattern: re `([a-zA-Z0-9._%\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6})*`
+    }
+    string email?;
 };
 
 @test:Config {}
-isolated function testMultipleConstraintSuccess() {
+isolated function testMultipleConstraintSuccess1() {
     Person rec = {name: "Steve", age: 18};
+    Person|error validation = validate(rec);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testMultipleConstraintSuccess2() {
+    Person rec = {name: "James", age: 18, email: "james@wso2.com"};
     Person|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -78,6 +91,17 @@ isolated function testMultipleConstraintFailure4() {
     Person|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$.age:minValue','$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testMultipleConstraintFailure5() {
+    Person rec = {name: "Joe", age: 16, email: "#invalid?mail&address"};
+    Person|error validation = validate(rec);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.age:minValue','$.email:pattern','$.name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
