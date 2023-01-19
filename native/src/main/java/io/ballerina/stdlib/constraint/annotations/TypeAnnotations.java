@@ -21,6 +21,7 @@ package io.ballerina.stdlib.constraint.annotations;
 import io.ballerina.runtime.api.TypeTags;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
+import io.ballerina.runtime.api.types.IntersectionType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.utils.TypeUtils;
@@ -69,6 +70,12 @@ public class TypeAnnotations extends AbstractAnnotations {
 
     private void validateReferredType(Object value, Type type, String path) {
         Type referredType = TypeUtils.getReferredType(type);
+        if (referredType.isReadOnly() && referredType instanceof IntersectionType) {
+            List<Type> constituentTypes = ((IntersectionType) referredType).getConstituentTypes();
+            if (constituentTypes.size() == 2) {
+                referredType = constituentTypes.get(0);
+            }
+        }
         if (referredType instanceof AnnotatableType) {
             if (referredType instanceof RecordType) {
                 RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
