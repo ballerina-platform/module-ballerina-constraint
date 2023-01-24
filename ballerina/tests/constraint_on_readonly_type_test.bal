@@ -20,8 +20,20 @@ function testReadOnlyAlbumWithoutConstraints() {
         test:assertFail("Unexpected error found.");
     }
 
-    ReadOnlyAlbumWithoutConstraints|error validation2 = validate(album);
+    readonly & Album|error validation2 = validate(album);
     if validation2 is error {
+        test:assertFail("Unexpected error found.");
+    }
+
+    do {
+        readonly & Album album1 = check album.cloneWithType();
+        album1 = check validate(album1);
+    } on fail error err {
+        test:assertFail("Unexpected error found.");
+    }
+
+    ReadOnlyAlbumWithoutConstraints|error validation3 = validate(album);
+    if validation3 is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -54,8 +66,20 @@ function testReadOnlyAlbumWithConstraintsSuccess() {
         test:assertFail("Unexpected error found.");
     }
 
-    ReadOnlyAlbumWithConstraints|error validation2 = validate(album);
+    readonly & AlbumWithConstraint|error validation2 = validate(album);
     if validation2 is error {
+        test:assertFail("Unexpected error found.");
+    }
+
+    do {
+        readonly & AlbumWithConstraint album1 = check album.cloneWithType();
+        album1 = check validate(album1);
+    } on fail {
+        test:assertFail("Unexpected error found.");
+    }
+
+    ReadOnlyAlbumWithConstraints|error validation3 = validate(album);
+    if validation3 is error {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -70,9 +94,24 @@ function testReadOnlyAlbumWithConstraintsFailure() {
         test:assertFail("Expected error not found.");
     }
 
-    ReadOnlyAlbumWithConstraints|error validation2 = validate(album);
+    readonly & AlbumWithConstraint|error validation2 = validate(album);
     if validation2 is error {
         test:assertEquals(validation2.message(), "Validation failed for '$.title:maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    do {
+        readonly & AlbumWithConstraint album1 = check album.cloneWithType();
+        album1 = check validate(album1);
+        test:assertFail("Expected error not found.");
+    } on fail error err {
+        test:assertEquals(err.message(), "Validation failed for '$.title:maxLength' constraint(s).");
+    }
+
+    ReadOnlyAlbumWithConstraints|error validation3 = validate(album);
+    if validation3 is error {
+        test:assertEquals(validation3.message(), "Validation failed for '$.title:maxLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -227,8 +266,20 @@ function testReadOnlyArtistSuccess() {
             {title: "Jeru2", artist: "Gerry Mulligan"}
         ]
     };
-    ReadOnlyArtist|error validation = validate(artist);
-    if validation is error {
+    ReadOnlyArtist|error validation1 = validate(artist);
+    if validation1 is error {
+        test:assertFail("Unexpected error found.");
+    }
+
+    readonly & Artist|error validation2 = validate(artist);
+    if validation2 is error {
+        test:assertFail("Unexpected error found.");
+    }
+
+    do {
+        readonly & Artist artist1 = check artist.cloneWithType();
+        artist1 = check validate(artist1);
+    } on fail {
         test:assertFail("Unexpected error found.");
     }
 }
@@ -243,11 +294,26 @@ function testReadOnlyArtistFailure1() {
             {title: "Jeru2", artist: "Gerry Mulligan"}
         ]
     };
-    ReadOnlyArtist|error validation = validate(artist);
-    if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.rating:maxValue' constraint(s).");
+    ReadOnlyArtist|error validation1 = validate(artist);
+    if validation1 is error {
+        test:assertEquals(validation1.message(), "Validation failed for '$.rating:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
+    }
+
+    readonly & Artist|error validation2 = validate(artist);
+    if validation2 is error {
+        test:assertEquals(validation2.message(), "Validation failed for '$.rating:maxValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    do {
+        readonly & Artist artist1 = check artist.cloneWithType();
+        artist1 = check validate(artist1);
+        test:assertFail("Expected error not found.");
+    } on fail error err {
+        test:assertEquals(err.message(), "Validation failed for '$.rating:maxValue' constraint(s).");
     }
 }
 
@@ -261,10 +327,25 @@ function testReadOnlyArtistFailure2() {
             {title: "Blue Train", artist: "John Coltrane"}
         ]
     };
-    ReadOnlyArtist|error validation = validate(artist);
-    if validation is error {
-        test:assertEquals(validation.message(), "Validation failed for '$.albums[1].title:maxLength','$.rating:maxValue' constraint(s).");
+    ReadOnlyArtist|error validation1 = validate(artist);
+    if validation1 is error {
+        test:assertEquals(validation1.message(), "Validation failed for '$.albums[1].title:maxLength','$.rating:maxValue' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
+    }
+
+    readonly & Artist|error validation2 = validate(artist);
+    if validation2 is error {
+        test:assertEquals(validation2.message(), "Validation failed for '$.albums[1].title:maxLength','$.rating:maxValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    do {
+        readonly & Artist artist1 = check artist.cloneWithType();
+        artist1 = check validate(artist1);
+        test:assertFail("Expected error not found.");
+    } on fail error err {
+        test:assertEquals(err.message(), "Validation failed for '$.albums[1].title:maxLength','$.rating:maxValue' constraint(s).");
     }
 }
