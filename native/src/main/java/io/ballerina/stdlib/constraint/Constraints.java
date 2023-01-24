@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.IntersectionType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.types.UnionType;
@@ -45,6 +46,9 @@ public class Constraints {
         List<String> failedConstraints = new ArrayList<>();
         try {
             Type type = typedesc.getDescribingType();
+            if (type.isReadOnly()) {
+                type = getTypeFromReadOnly(type);
+            }
             if (type instanceof AnnotatableType) {
                 AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
                 annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
@@ -63,6 +67,25 @@ public class Constraints {
         } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError();
         }
+    }
+
+    private static Type getTypeFromReadOnly(Type type) {
+        IntersectionType intersectionType = null;
+        if (type instanceof RecordType) {
+            Optional<IntersectionType> optionalIntersectionType = ((RecordType) type).getIntersectionType();
+            if (optionalIntersectionType.isPresent()) {
+                intersectionType = optionalIntersectionType.get();
+            }
+        } else if (type instanceof IntersectionType) {
+            intersectionType = (IntersectionType) type;
+        }
+        if (intersectionType != null) {
+            List<Type> constituentTypes = intersectionType.getConstituentTypes();
+            if (constituentTypes.size() == 2) {
+                type = TypeUtils.getReferredType(constituentTypes.get(0));
+            }
+        }
+        return type;
     }
 
     private static Optional<Type> getMatchingType(Object value, Type type) {
