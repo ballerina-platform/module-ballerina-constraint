@@ -73,7 +73,7 @@ public class TypeAnnotations extends AbstractAnnotations {
         if (referredType.isReadOnly() && referredType instanceof IntersectionType) {
             List<Type> constituentTypes = ((IntersectionType) referredType).getConstituentTypes();
             if (constituentTypes.size() == 2) {
-                referredType = constituentTypes.get(0);
+                referredType = TypeUtils.getReferredType(constituentTypes.get(0));
             }
         }
         if (referredType instanceof AnnotatableType) {
