@@ -25,9 +25,11 @@ import io.ballerina.runtime.api.values.BError;
 import java.util.Collections;
 import java.util.List;
 
-import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_ERROR;
+import static io.ballerina.stdlib.constraint.Constants.GENERIC_ERROR;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_COMMA;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SINGLE_QUOTE;
+import static io.ballerina.stdlib.constraint.Constants.TYPE_CONVERSION_ERROR;
+import static io.ballerina.stdlib.constraint.Constants.VALIDATION_ERROR;
 
 /**
  * Utility functions related to errors.
@@ -35,14 +37,16 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SINGLE_QUOTE;
 public class ErrorUtils {
 
     private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found due to typedesc and value mismatch.";
+    private static final String TYPE_CONVERSION_ERROR_MESSAGE = "Type conversion failed due to typedesc and value " +
+            "mismatch.";
     private static final String VALIDATION_ERROR_MESSAGE_PREFIX = "Validation failed for ";
     private static final String VALIDATION_ERROR_MESSAGE_SUFFIX = " constraint(s).";
 
     static BError buildUnexpectedError(RuntimeException e) {
         if (e instanceof BError) {
-            return createError(UNEXPECTED_ERROR_MESSAGE, (BError) e);
+            return createError(UNEXPECTED_ERROR_MESSAGE, (BError) e, GENERIC_ERROR);
         }
-        return createError(UNEXPECTED_ERROR_MESSAGE);
+        return createGenericError(UNEXPECTED_ERROR_MESSAGE);
     }
 
     static BError buildValidationError(List<String> failedConstraints) {
@@ -53,16 +57,25 @@ public class ErrorUtils {
         }
         errorMsg.deleteCharAt(errorMsg.length() - 1);
         errorMsg.append(VALIDATION_ERROR_MESSAGE_SUFFIX);
-        return createError(errorMsg.toString());
+        return createError(errorMsg.toString(), VALIDATION_ERROR);
     }
 
-    static BError createError(String errMessage) {
-        return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
-                StringUtils.fromString(errMessage), null, null);
+    static BError buildTypeConversionError(BError err) {
+        return createError(TYPE_CONVERSION_ERROR_MESSAGE, err, TYPE_CONVERSION_ERROR);
     }
 
-    static BError createError(String errMessage, BError err) {
-        return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
+    static BError createGenericError(String errMessage) {
+        return ErrorCreator.createError(ModuleUtils.getModule(), GENERIC_ERROR,
+                                        StringUtils.fromString(errMessage), null, null);
+    }
+
+    static BError createError(String errMessage, String errorType) {
+        return ErrorCreator.createError(ModuleUtils.getModule(), errorType,
+                                        StringUtils.fromString(errMessage), null, null);
+    }
+
+    static BError createError(String errMessage, BError err, String errorType) {
+        return ErrorCreator.createError(ModuleUtils.getModule(), errorType,
                                         StringUtils.fromString(errMessage), err, null);
     }
 }

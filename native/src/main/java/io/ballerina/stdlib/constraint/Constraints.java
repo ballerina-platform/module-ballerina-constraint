@@ -18,7 +18,6 @@
 
 package io.ballerina.stdlib.constraint;
 
-import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.IntersectionType;
 import io.ballerina.runtime.api.types.RecordType;
@@ -45,31 +44,39 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOLLAR_SIGN;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
-        List<String> failedConstraints = new ArrayList<>();
         try {
             Type type = typedesc.getDescribingType();
             value = cloneWithTargetType(value, type);
-            if (type.isReadOnly()) {
-                type = getTypeFromReadOnly(type);
+            if (value instanceof BError) {
+                return ErrorUtils.buildTypeConversionError((BError) value);
             }
-            if (type instanceof AnnotatableType) {
-                AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-                annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
-            } else if (type instanceof UnionType) {
-                Optional<Type> matchingType = getMatchingType(value, type);
-                if (matchingType.isPresent()) {
-                    return validate(value, ValueCreator.createTypedescValue(matchingType.get()));
-                }
-            }
+            List<String> failedConstraints = validateAfterTypeConversion(value, type);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
             return value;
         } catch (InternalValidationException e) {
-            return ErrorUtils.createError(e.getMessage());
+            return ErrorUtils.createGenericError(e.getMessage());
         } catch (RuntimeException e) {
             return ErrorUtils.buildUnexpectedError(e);
         }
+    }
+
+    private static List<String> validateAfterTypeConversion(Object value, Type type) {
+        List<String> failedConstraints = new ArrayList<>();
+        if (type.isReadOnly()) {
+            type = getTypeFromReadOnly(type);
+        }
+        if (type instanceof AnnotatableType) {
+            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
+            annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
+        } else if (type instanceof UnionType) {
+            Optional<Type> matchingType = getMatchingType(value, type);
+            if (matchingType.isPresent()) {
+                return validateAfterTypeConversion(value, matchingType.get());
+            }
+        }
+        return failedConstraints;
     }
 
     private static Type getTypeFromReadOnly(Type type) {
@@ -119,9 +126,6 @@ public class Constraints {
     private static Object cloneWithTargetType(Object value, Type targetType) {
         if (!TypeUtils.isSameType(TypeUtils.getType(value), targetType)) {
             value = CloneWithType.convert(targetType, value);
-            if (value instanceof BError) {
-                throw (BError) value;
-            }
         }
         return value;
     }
