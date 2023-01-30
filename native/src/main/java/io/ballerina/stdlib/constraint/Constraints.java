@@ -24,11 +24,13 @@ import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.TypeUtils;
+import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
+import org.ballerinalang.langlib.value.CloneWithType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class Constraints {
         List<String> failedConstraints = new ArrayList<>();
         try {
             Type type = typedesc.getDescribingType();
+            value = cloneWithTargetType(value, type);
             if (type instanceof AnnotatableType) {
                 AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
                 annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
@@ -61,7 +64,7 @@ public class Constraints {
         } catch (InternalValidationException e) {
             return ErrorUtils.createError(e.getMessage());
         } catch (RuntimeException e) {
-            return ErrorUtils.buildUnexpectedError();
+            return ErrorUtils.buildUnexpectedError(e);
         }
     }
 
@@ -88,5 +91,15 @@ public class Constraints {
         } else {
             return new TypeAnnotations(failedConstraints);
         }
+    }
+
+    private static Object cloneWithTargetType(Object value, Type targetType) {
+        if (!TypeUtils.isSameType(TypeUtils.getType(value), targetType)) {
+            value = CloneWithType.convert(targetType, value);
+            if (value instanceof BError) {
+                throw (BError) value;
+            }
+        }
+        return value;
     }
 }

@@ -38,7 +38,10 @@ public class ErrorUtils {
     private static final String VALIDATION_ERROR_MESSAGE_PREFIX = "Validation failed for ";
     private static final String VALIDATION_ERROR_MESSAGE_SUFFIX = " constraint(s).";
 
-    static BError buildUnexpectedError() {
+    static BError buildUnexpectedError(RuntimeException e) {
+        if (e instanceof BError) {
+            return createError(UNEXPECTED_ERROR_MESSAGE, (BError) e);
+        }
         return createError(UNEXPECTED_ERROR_MESSAGE);
     }
 
@@ -56,5 +59,10 @@ public class ErrorUtils {
     static BError createError(String errMessage) {
         return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
                 StringUtils.fromString(errMessage), null, null);
+    }
+
+    static BError createError(String errMessage, BError err) {
+        return ErrorCreator.createError(ModuleUtils.getModule(), CONSTRAINT_ERROR,
+                                        StringUtils.fromString(errMessage), err, null);
     }
 }

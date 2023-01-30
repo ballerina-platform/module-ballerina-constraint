@@ -16,6 +16,7 @@
  */
 
 module io.ballerina.stdlib.constraint {
+    requires io.ballerina.lang.value;
     requires io.ballerina.runtime;
     requires java.naming;
     requires org.slf4j;
