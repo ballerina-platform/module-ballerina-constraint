@@ -55,7 +55,7 @@ function testValidationWithCloneWithTypeFailure1() {
     json rec = {"id": 1, "username": "Joy"};
     User|error validation = validate(rec);
     if validation is error {
-        test:assertEquals(validation.message(), "Unexpected error found due to typedesc and value mismatch.");
+        test:assertEquals(validation.message(), "Type conversion failed due to typedesc and value mismatch.");
     } else {
         test:assertFail("Expected error not found.");
     }
@@ -68,7 +68,7 @@ function testValidationWithCloneWithTypeFailure2() {
         User _ = check validate(rec);
         test:assertFail("Expected error not found.");
     } on fail error err {
-        test:assertEquals(err.message(), "Unexpected error found due to typedesc and value mismatch.");
+        test:assertEquals(err.message(), "Type conversion failed due to typedesc and value mismatch.");
     }
 }
 
