@@ -1,0 +1,84 @@
+name: Build Dependent Standard Libraries
+
+on:
+    workflow_dispatch:
+        inputs:
+            timestamped_version:
+                description: Module timestamped version
+                required: true
+            ballerina_modules:
+                description: Dependent Ballerina module list
+                required: false
+                default: "['http', 'websocket', 'graphql']"
+            ballerinax_modules:
+                description: Dependent Ballerina extended module list
+                required: false
+                default: "['rabbitmq', 'nats', 'kafka']"
+
+jobs:
+    build-ballerina-modules:
+        if: inputs.ballerina_modules != ''
+        name: Build Ballerina Module
+        continue-on-error: true
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                module: ${{ fromJson(inputs.ballerina_modules) }}
+        steps:
+            - name: Set up JDK 11
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'temurin'
+                  java-version: 11
+
+            - name: Checkout dependent Ballerina module
+              uses: actions/checkout@v3
+              with:
+                  repository: 'ballerina-platform/module-ballerina-${{ matrix.module }}'
+
+            - name: Change constraint module version
+              run: |
+                  CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
+                  sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
+
+            - name: Build with Gradle
+              env:
+                  packageUser: ${{ github.actor }}
+                  packagePAT: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  ./gradlew clean build
+    build-ballerinax-modules:
+        if: inputs.ballerinax_modules != ''
+        name: Build Ballerina Extended Module
+        continue-on-error: true
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                module: ${{ fromJson(inputs.ballerinax_modules) }}
+        steps:
+            - name: Set up JDK 11
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'temurin'
+                  java-version: 11
+
+            - name: Checkout dependent Ballerina extended module
+              uses: actions/checkout@v3
+              with:
+                  repository: 'ballerina-platform/module-ballerinax-${{ matrix.module }}'
+
+            - name: Change constraint module version
+              run: |
+                  CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
+                  sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
+
+            - name: Build with Gradle
+              env:
+                  packageUser: ${{ github.actor }}
+                  packagePAT: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  ./gradlew clean build
