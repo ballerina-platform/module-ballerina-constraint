@@ -94,7 +94,8 @@ public type ArrayConstraints record {|
     int maxLength?;
 |};
 
-# Validates the provided value against the configured annotations.
+# Validates the provided value against the configured annotations. Additionally, if the type of the value is different
+# from the expected return type then the value will be cloned with the contextually expected type before the validation.
 #
 # + value - The `anydata` type value to be constrained
 # + td - The type descriptor of the value to be constrained
