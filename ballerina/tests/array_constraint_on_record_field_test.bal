@@ -22,7 +22,9 @@ type NoArrayConstraintsOnRecordField record {
 
 @test:Config {}
 isolated function testNoArrayConstraintsOnRecordField() {
-    NoArrayConstraintsOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    NoArrayConstraintsOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}]};
     NoArrayConstraintsOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -60,7 +62,9 @@ isolated function testArrayConstraintLengthOnRecordFieldFailure1() {
 
 @test:Config {}
 isolated function testArrayConstraintLengthOnRecordFieldFailure2() {
-    ArrayConstraintLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}]};
     ArrayConstraintLengthOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$.value:length' constraint(s).");
@@ -87,7 +91,9 @@ isolated function testArrayConstraintMinLengthOnRecordFieldSuccess1() {
 
 @test:Config {}
 isolated function testArrayConstraintMinLengthOnRecordFieldSuccess2() {
-    ArrayConstraintMinLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintMinLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}]};
     ArrayConstraintMinLengthOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -132,7 +138,9 @@ isolated function testArrayConstraintMaxLengthOnRecordFieldSuccess2() {
 
 @test:Config {}
 isolated function testArrayConstraintMaxLengthOnRecordFieldFailure() {
-    ArrayConstraintMaxLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintMaxLengthOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}]};
     ArrayConstraintMaxLengthOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$.value:maxLength' constraint(s).");
@@ -151,7 +159,9 @@ type ArrayConstraintOnRecordField record {
 
 @test:Config {}
 isolated function testArrayConstraintOnRecordFieldSuccess1() {
-    ArrayConstraintOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]]};
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintOnRecordField rec = {value: [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}]};
     ArrayConstraintOnRecordField|error validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");

@@ -20,7 +20,9 @@ type NoArrayConstraintsOnType anydata[];
 
 @test:Config {}
 isolated function testNoArrayConstraintsOnType() {
-    NoArrayConstraintsOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]];
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    NoArrayConstraintsOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}];
     NoArrayConstraintsOnType|error validation = validate(typ);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -56,7 +58,9 @@ isolated function testArrayConstraintLengthOnTypeFailure1() {
 
 @test:Config {}
 isolated function testArrayConstraintLengthOnTypeFailure2() {
-    ArrayConstraintLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]];
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}];
     ArrayConstraintLengthOnType|error validation = validate(typ);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:length' constraint(s).");
@@ -81,7 +85,9 @@ isolated function testArrayConstraintMinLengthOnTypeSuccess1() {
 
 @test:Config {}
 isolated function testArrayConstraintMinLengthOnTypeSuccess2() {
-    ArrayConstraintMinLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]];
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintMinLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}];
     ArrayConstraintMinLengthOnType|error validation = validate(typ);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -124,7 +130,9 @@ isolated function testArrayConstraintMaxLengthOnTypeSuccess2() {
 
 @test:Config {}
 isolated function testArrayConstraintMaxLengthOnTypeFailure() {
-    ArrayConstraintMaxLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]];
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintMaxLengthOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}];
     ArrayConstraintMaxLengthOnType|error validation = validate(typ);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
@@ -141,7 +149,9 @@ type ArrayConstraintOnType anydata[];
 
 @test:Config {}
 isolated function testArrayConstraintOnTypeSuccess1() {
-    ArrayConstraintOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}, table key('key) [{'key: 1, value: "foo"}]];
+    // TODO : Add table - `table key('key) [{'key: 1, value: "foo"}]` after the fix of this issue: 
+    // https://github.com/ballerina-platform/ballerina-lang/issues/39383
+    ArrayConstraintOnType typ = [(), true, 123, 123.45, 123.45d, "s3cr3t", xml `<book>The Lost World</book>`, {foo: "bar"}];
     ArrayConstraintOnType|error validation = validate(typ);
     if validation is error {
         test:assertFail("Unexpected error found.");
