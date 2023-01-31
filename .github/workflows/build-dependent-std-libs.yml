@@ -6,12 +6,15 @@ on:
             timestamped_version:
                 description: Module timestamped version
                 required: true
+            target_branch:
+                description: Target branch of the dependent module
+                required: false
             ballerina_modules:
-                description: Dependent Ballerina module list
+                description: Dependent Ballerina modules
                 required: false
                 default: "['http', 'websocket', 'graphql']"
             ballerinax_modules:
-                description: Dependent Ballerina extended module list
+                description: Dependent Ballerina extended modules
                 required: false
                 default: "['rabbitmq', 'nats', 'kafka']"
 
@@ -34,6 +37,17 @@ jobs:
 
             - name: Checkout dependent Ballerina module
               uses: actions/checkout@v3
+              id: checkout
+              if: ${{ inputs.target_branch != '' }}
+              continue-on-error: true
+              with:
+                  repository: 'ballerina-platform/module-ballerina-${{ matrix.module }}'
+                  ref: ${{ inputs.target_branch }}
+
+            - name: Checkout default branch of dependent Ballerina module
+              uses: actions/checkout@v3
+              if: ${{ inputs.target_branch == '' || steps.checkout.outcome == 'failure' }}
+              continue-on-error: true
               with:
                   repository: 'ballerina-platform/module-ballerina-${{ matrix.module }}'
 
@@ -42,7 +56,6 @@ jobs:
                   CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
                   echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
                   sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
-
             - name: Build with Gradle
               env:
                   packageUser: ${{ github.actor }}
@@ -67,6 +80,17 @@ jobs:
 
             - name: Checkout dependent Ballerina extended module
               uses: actions/checkout@v3
+              id: checkout
+              if: ${{ inputs.target_branch != '' }}
+              continue-on-error: true
+              with:
+                  repository: 'ballerina-platform/module-ballerinax-${{ matrix.module }}'
+                  ref: ${{ inputs.target_branch }}
+
+            - name: Checkout default branch of dependent Ballerina module
+              uses: actions/checkout@v3
+              if: ${{ inputs.target_branch == '' || steps.checkout.outcome == 'failure' }}
+              continue-on-error: true
               with:
                   repository: 'ballerina-platform/module-ballerinax-${{ matrix.module }}'
 
@@ -75,7 +99,6 @@ jobs:
                   CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
                   echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
                   sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
-
             - name: Build with Gradle
               env:
                   packageUser: ${{ github.actor }}
