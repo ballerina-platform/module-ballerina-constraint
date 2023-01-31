@@ -44,7 +44,7 @@ jobs:
                   repository: 'ballerina-platform/module-ballerina-${{ matrix.module }}'
                   ref: ${{ inputs.target_branch }}
 
-            - name: Checkout default branch of dependent Ballerina module
+            - name: Checkout default branch
               uses: actions/checkout@v3
               if: ${{ inputs.target_branch == '' || steps.checkout.outcome == 'failure' }}
               continue-on-error: true
@@ -87,7 +87,7 @@ jobs:
                   repository: 'ballerina-platform/module-ballerinax-${{ matrix.module }}'
                   ref: ${{ inputs.target_branch }}
 
-            - name: Checkout default branch of dependent Ballerina module
+            - name: Checkout default branch
               uses: actions/checkout@v3
               if: ${{ inputs.target_branch == '' || steps.checkout.outcome == 'failure' }}
               continue-on-error: true
