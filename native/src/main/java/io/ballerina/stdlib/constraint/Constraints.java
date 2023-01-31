@@ -18,17 +18,18 @@
 
 package io.ballerina.stdlib.constraint;
 
-import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.TypeUtils;
+import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
+import org.ballerinalang.langlib.value.CloneWithType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,27 +43,36 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOLLAR_SIGN;
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
-        List<String> failedConstraints = new ArrayList<>();
         try {
             Type type = typedesc.getDescribingType();
-            if (type instanceof AnnotatableType) {
-                AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-                annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
-            } else if (type instanceof UnionType) {
-                Optional<Type> matchingType = getMatchingType(value, type);
-                if (matchingType.isPresent()) {
-                    return validate(value, ValueCreator.createTypedescValue(matchingType.get()));
-                }
+            value = cloneWithTargetType(value, type);
+            if (value instanceof BError) {
+                return ErrorUtils.buildTypeConversionError((BError) value);
             }
+            List<String> failedConstraints = validateAfterTypeConversion(value, type);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
             return value;
         } catch (InternalValidationException e) {
-            return ErrorUtils.createError(e.getMessage());
+            return ErrorUtils.createGenericError(e.getMessage());
         } catch (RuntimeException e) {
-            return ErrorUtils.buildUnexpectedError();
+            return ErrorUtils.buildUnexpectedError(e);
         }
+    }
+
+    private static List<String> validateAfterTypeConversion(Object value, Type type) {
+        List<String> failedConstraints = new ArrayList<>();
+        if (type instanceof AnnotatableType) {
+            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
+            annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
+        } else if (type instanceof UnionType) {
+            Optional<Type> matchingType = getMatchingType(value, type);
+            if (matchingType.isPresent()) {
+                return validateAfterTypeConversion(value, matchingType.get());
+            }
+        }
+        return failedConstraints;
     }
 
     private static Optional<Type> getMatchingType(Object value, Type type) {
@@ -88,5 +98,12 @@ public class Constraints {
         } else {
             return new TypeAnnotations(failedConstraints);
         }
+    }
+
+    private static Object cloneWithTargetType(Object value, Type targetType) {
+        if (!TypeUtils.isSameType(TypeUtils.getType(value), targetType)) {
+            value = CloneWithType.convert(targetType, value);
+        }
+        return value;
     }
 }

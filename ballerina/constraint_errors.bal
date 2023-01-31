@@ -14,5 +14,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Represents the error type of the module.
+# Represents the generic error type of the module.
 public type Error distinct error;
+
+# Represents the errors occurs during constraint validations.
+public type ValidationError distinct Error;
+
+# Represents the errors occurs during the type conversion.
+public type TypeConversionError distinct Error;
