@@ -49,5 +49,7 @@ public class Constants {
     public static final String CONSTRAINT_MAX_LENGTH = "maxLength";
     public static final String CONSTRAINT_PATTERN = "pattern";
 
-    static final String CONSTRAINT_ERROR = "Error";
+    static final String GENERIC_ERROR = "Error";
+    static final String VALIDATION_ERROR = "ValidationError";
+    static final String TYPE_CONVERSION_ERROR = "TypeConversionError";
 }
