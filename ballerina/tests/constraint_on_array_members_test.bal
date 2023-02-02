@@ -51,23 +51,24 @@ function testConstraintsOnArrayBasicMembersSuccess() {
 @test:Config {}
 function testConstraintsOnArrayBasicMembersFailure() {
     UserId[] ids = ["1234", "43", "9834", "3214"];
-    do {
-        ids = check validate(ids);
-        test:assertFail("Unexpected error found.");
-    } on fail error err {
-        test:assertEquals(err.message(), "Validation failed for '$[1]:length' constraint(s).");
-    }
 
-    UserIdArray|error validation1 = validate(ids);
+    UserId[]|error validation1 = validate(ids);
     if validation1 is error {
         test:assertEquals(validation1.message(), "Validation failed for '$[1]:length' constraint(s).");
     } else {
         test:assertFail("Unexpected error found.");
     }
 
-    UserIdArray|error validation2 = validate([...ids, "32"]);
+    UserIdArray|error validation2 = validate([...ids]);
     if validation2 is error {
-        test:assertEquals(validation2.message(), "Validation failed for '$:length','$[1]:length','$[4]:length' constraint(s).");
+        test:assertEquals(validation2.message(), "Validation failed for '$[1]:length' constraint(s).");
+    } else {
+        test:assertFail("Unexpected error found.");
+    }
+
+    UserIdArray|error validation3 = validate([...ids, "32"]);
+    if validation3 is error {
+        test:assertEquals(validation3.message(), "Validation failed for '$:length','$[1]:length','$[4]:length' constraint(s).");
     } else {
         test:assertFail("Unexpected error found.");
     }
@@ -133,23 +134,23 @@ function testConstraintsOnRecordArrayMemberFailure() {
         {id: 2, name: "a"}
     ];
 
-    do {
-        users = check validate(users);
-        test:assertFail("Unexpected error found.");
-    } on fail error err {
-        test:assertEquals(err.message(), "Validation failed for '$[1].name:minLength' constraint(s).");
-    }
-
-    Users|error validation1 = validate(users);
+    User[]|error validation1 = validate(users);
     if validation1 is error {
         test:assertEquals(validation1.message(), "Validation failed for '$[1].name:minLength' constraint(s).");
     } else {
         test:assertFail("Unexpected error found.");
     }
 
-    Users|error validation2 = validate([...users, {id: 3, name: "Joyce"}]);
+    Users|error validation2 = validate([...users]);
     if validation2 is error {
-        test:assertEquals(validation2.message(), "Validation failed for '$:maxLength','$[1].name:minLength' constraint(s).");
+        test:assertEquals(validation2.message(), "Validation failed for '$[1].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Unexpected error found.");
+    }
+
+    Users|error validation3 = validate([...users, {id: 3, name: "Joyce"}]);
+    if validation3 is error {
+        test:assertEquals(validation3.message(), "Validation failed for '$:maxLength','$[1].name:minLength' constraint(s).");
     } else {
         test:assertFail("Unexpected error found.");
     }
