@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - [Fix unexpected errors due to custom annotations](https://github.com/ballerina-platform/ballerina-standard-library/issues/3817)
 - [Ensure value type after constraint validation](https://github.com/ballerina-platform/ballerina-standard-library/issues/3976)
+- [Fix constraint validation on array members](https://github.com/ballerina-platform/ballerina-standard-library/issues/3974)
 
 ### Added
 - [Add `@pattern` constraint on string types](https://github.com/ballerina-platform/ballerina-standard-library/issues/3179)
