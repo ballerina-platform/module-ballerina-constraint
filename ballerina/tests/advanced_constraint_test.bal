@@ -661,9 +661,7 @@ isolated function testUnionTypeDescFailure2() {
     }
 }
 
-// TODO: Following test cases are disabled due to https://github.com/ballerina-platform/ballerina-lang/issues/37050
-
-@test:Config {enable: false}
+@test:Config {}
 isolated function testUnionTypeDescFailure3() {
     Union1|Union2|Union3 typ = 5.1;
     Union1|Union2|Union3|error validation = validate(typ);
