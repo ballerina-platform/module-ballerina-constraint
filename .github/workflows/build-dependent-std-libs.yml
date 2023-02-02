@@ -5,14 +5,16 @@ on:
         inputs:
             timestamped_version:
                 description: Module timestamped version
-                required: true
+                required: false
+                default: ''
             target_branch:
                 description: Target branch of the dependent module
                 required: false
+                default: ''
             ballerina_modules:
                 description: Dependent Ballerina modules
                 required: false
-                default: "['http', 'websocket', 'graphql']"
+                default: "['cache', 'http', 'grpc', 'websocket', 'graphql']"
             ballerinax_modules:
                 description: Dependent Ballerina extended modules
                 required: false
@@ -22,7 +24,6 @@ jobs:
     build-ballerina-modules:
         if: inputs.ballerina_modules != ''
         name: Build Ballerina Module
-        continue-on-error: true
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -34,6 +35,28 @@ jobs:
               with:
                   distribution: 'temurin'
                   java-version: 11
+
+            - name: Checkout module
+              uses: actions/checkout@v3
+              if: ${{ inputs.timestamped_version == '' }}
+
+            - name: Change to Timestamped Version
+              if: ${{ inputs.timestamped_version == '' }}
+              run: |
+                  startTime=$(TZ="Asia/Kolkata" date +'%Y%m%d-%H%M00')
+                  latestCommit=$(git log -n 1 --pretty=format:"%h")
+                  VERSION=$((grep -w 'version' | cut -d= -f2) < gradle.properties | rev | cut --complement -d- -f1 | rev)
+                  updatedVersion=$VERSION-$startTime-$latestCommit
+                  echo TIME_STAMPED_VERSION=$updatedVersion
+                  echo TIME_STAMPED_VERSION=$updatedVersion >> $GITHUB_ENV
+                  sed -i "s/version=\(.*\)/version=$updatedVersion/g" gradle.properties
+
+            - name: Build Timestamped version
+              if: ${{ inputs.timestamped_version == '' }}
+              env:
+                  packageUser: ${{ github.actor }}
+                  packagePAT: ${{ secrets.GITHUB_TOKEN }}
+              run: ./gradlew clean build publishToMavenLocal -x test
 
             - name: Checkout dependent Ballerina module
               uses: actions/checkout@v3
@@ -53,7 +76,11 @@ jobs:
 
             - name: Change constraint module version
               run: |
-                  CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  if ${{ inputs.timestamped_version != ''}}; then
+                      CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  else
+                      CONSTRAINT_VERSION=${{ env.TIME_STAMPED_VERSION }}
+                  fi
                   echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
                   sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
             - name: Build with Gradle
@@ -65,7 +92,6 @@ jobs:
     build-ballerinax-modules:
         if: inputs.ballerinax_modules != ''
         name: Build Ballerina Extended Module
-        continue-on-error: true
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -77,6 +103,28 @@ jobs:
               with:
                   distribution: 'temurin'
                   java-version: 11
+
+            - name: Checkout module
+              uses: actions/checkout@v3
+              if: ${{ inputs.timestamped_version == '' }}
+
+            - name: Change to Timestamped Version
+              if: ${{ inputs.timestamped_version == '' }}
+              run: |
+                  startTime=$(TZ="Asia/Kolkata" date +'%Y%m%d-%H%M00')
+                  latestCommit=$(git log -n 1 --pretty=format:"%h")
+                  VERSION=$((grep -w 'version' | cut -d= -f2) < gradle.properties | rev | cut --complement -d- -f1 | rev)
+                  updatedVersion=$VERSION-$startTime-$latestCommit
+                  echo TIME_STAMPED_VERSION=$updatedVersion
+                  echo TIME_STAMPED_VERSION=$updatedVersion >> $GITHUB_ENV
+                  sed -i "s/version=\(.*\)/version=$updatedVersion/g" gradle.properties
+
+            - name: Build Timestamped version
+              if: ${{ inputs.timestamped_version == '' }}
+              env:
+                  packageUser: ${{ github.actor }}
+                  packagePAT: ${{ secrets.GITHUB_TOKEN }}
+              run: ./gradlew clean build publishToMavenLocal -x test
 
             - name: Checkout dependent Ballerina extended module
               uses: actions/checkout@v3
@@ -96,7 +144,11 @@ jobs:
 
             - name: Change constraint module version
               run: |
-                  CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  if ${{ inputs.timestamped_version != ''}}; then
+                      CONSTRAINT_VERSION=${{ inputs.timestamped_version }}
+                  else
+                      CONSTRAINT_VERSION=${{ env.TIME_STAMPED_VERSION }}
+                  fi
                   echo CONSTRAINTVERSION=$CONSTRAINT_VERSION
                   sed -i "s/stdlibConstraintVersion=\(.*\)/stdlibConstraintVersion=$CONSTRAINT_VERSION/g" gradle.properties
             - name: Build with Gradle
