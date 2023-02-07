@@ -19,11 +19,13 @@
 package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
+import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.IntersectionType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.TypeUtils;
+import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BTypedesc;
@@ -36,7 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_CLOSE_SQUARE_BRACKET;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_DOLLAR_SIGN;
+import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKET;
 
 /**
  * Extern functions for validating constraints.
@@ -50,7 +54,7 @@ public class Constraints {
             if (value instanceof BError) {
                 return ErrorUtils.buildTypeConversionError((BError) value);
             }
-            List<String> failedConstraints = validateAfterTypeConversion(value, type);
+            List<String> failedConstraints = validateAfterTypeConversion(value, type, SYMBOL_DOLLAR_SIGN);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
@@ -62,18 +66,32 @@ public class Constraints {
         }
     }
 
-    private static List<String> validateAfterTypeConversion(Object value, Type type) {
+    private static List<String> validateArrayMembers(Object value, ArrayType type, String path) {
+        Type memberType = type.getElementType();
+        BArray members = ((BArray) value);
+        List<String> failedConstraints = new ArrayList<>();
+        for (int i = 0; i < members.getLength(); i++) {
+            failedConstraints.addAll(validateAfterTypeConversion(members.get(i), memberType, path +
+                                        SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET));
+        }
+        return failedConstraints;
+    }
+
+    private static List<String> validateAfterTypeConversion(Object value, Type type, String path) {
+        if (type instanceof ArrayType) {
+            return validateArrayMembers(value, (ArrayType) type, path);
+        }
         List<String> failedConstraints = new ArrayList<>();
         if (type.isReadOnly()) {
             type = getTypeFromReadOnly(type);
         }
         if (type instanceof AnnotatableType) {
             AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-            annotations.validate(value, (AnnotatableType) type, SYMBOL_DOLLAR_SIGN);
+            annotations.validate(value, (AnnotatableType) type, path);
         } else if (type instanceof UnionType) {
             Optional<Type> matchingType = getMatchingType(value, type);
             if (matchingType.isPresent()) {
-                return validateAfterTypeConversion(value, matchingType.get());
+                return validateAfterTypeConversion(value, matchingType.get(), path);
             }
         }
         return failedConstraints;
