@@ -16,7 +16,7 @@ The Ballerina `constraint` library facilitates APIs to do validations on the Bal
 
 Issues and Projects tabs are disabled for this repository as this is part of the Ballerina Standard Library. To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Standard Library parent repository](https://github.com/ballerina-platform/ballerina-standard-library).
 
-This repository only contains the source code for the module.
+This repository only contains the source code for the module
 
 ## Build from the source
 
