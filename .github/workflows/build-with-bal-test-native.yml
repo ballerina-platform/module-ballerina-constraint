@@ -17,6 +17,10 @@ on:
                 default: ''
     schedule:
         -   cron: '30 18 * * *'
+    pull_request:
+        branches: 
+            - <default-branch-name>
+        types: [labeled, synchronize, reopened]
 
 jobs:
     call_stdlib_workflow:
