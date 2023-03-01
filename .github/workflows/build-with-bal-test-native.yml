@@ -19,7 +19,7 @@ on:
         -   cron: '30 18 * * *'
     pull_request:
         branches: 
-            - <default-branch-name>
+            - main
         types: [labeled, synchronize, reopened]
 
 jobs:
