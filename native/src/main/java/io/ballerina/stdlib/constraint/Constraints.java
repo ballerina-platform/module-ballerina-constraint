@@ -25,6 +25,7 @@ import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.types.UnionType;
 import io.ballerina.runtime.api.utils.TypeUtils;
+import io.ballerina.runtime.api.utils.ValueUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
@@ -32,7 +33,6 @@ import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.constraint.annotations.AbstractAnnotations;
 import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
-import org.ballerinalang.langlib.value.CloneWithType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +48,15 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKE
 public class Constraints {
 
     public static Object validate(Object value, BTypedesc typedesc) {
+        Type type = typedesc.getDescribingType();
+
         try {
-            Type type = typedesc.getDescribingType();
             value = cloneWithTargetType(value, type);
-            if (value instanceof BError) {
-                return ErrorUtils.buildTypeConversionError((BError) value);
-            }
+        } catch (BError e) {
+            return ErrorUtils.buildTypeConversionError(e);
+        }
+
+        try {
             List<String> failedConstraints = validateAfterTypeConversion(value, type, SYMBOL_DOLLAR_SIGN);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
@@ -142,10 +145,8 @@ public class Constraints {
     }
 
     private static Object cloneWithTargetType(Object value, Type targetType) {
-        if (!TypeUtils.isSameType(TypeUtils.getType(value), targetType)) {
-            value = CloneWithType.convert(targetType, value);
-        }
-        return value;
+        return TypeUtils.isSameType(TypeUtils.getType(value), targetType) ? value
+                : ValueUtils.convert(value, targetType);
     }
 
     private Constraints() {
