@@ -18,6 +18,8 @@
 
 package io.ballerina.stdlib.constraint.compiler;
 
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTag;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagArray;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagFloat;
@@ -50,8 +52,9 @@ public class ConstraintCompatibilityMatrix {
         matrix.put(ANNOTATION_TAG_ARRAY, new AnnotationTagArray());
     }
 
-    boolean isAnnotationTagCompatible(String annotationTag, String fieldType) {
-        return matrix.get(annotationTag).isCompatibleFieldType(fieldType);
+    boolean isAnnotationTagCompatibleWithTypeSymbol(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                    TypeSymbol fielsTypeSymbol) {
+        return matrix.get(annotationTag).isCompatibleFieldType(ctx, fielsTypeSymbol);
     }
 
     boolean isAnnotationConstraintsCompatible(String annotationTag, ArrayList<String> constraints) {

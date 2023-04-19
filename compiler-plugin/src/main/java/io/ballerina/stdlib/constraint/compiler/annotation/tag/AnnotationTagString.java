@@ -18,7 +18,8 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
-import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_STRING;
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 
 /**
  * The class to represent the `@constraint:String` annotation tag.
@@ -26,7 +27,7 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_STRING;
 public class AnnotationTagString implements LengthConstrainedAnnotationTag {
 
     @Override
-    public boolean isCompatibleFieldType(String fieldType) {
-        return fieldType.equals(TYPE_STRING);
+    public boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol) {
+        return fieldTypeSymbol.subtypeOf(ctx.semanticModel().types().STRING);
     }
 }
