@@ -3,6 +3,12 @@ This file contains all the notable changes done to the Ballerina Constraint pack
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- [Allow constraints on subtypes](https://github.com/ballerina-platform/ballerina-standard-library/issues/4349)
+
 ## [1.1.0] - 2023-02-20
 
 ### Fixed
@@ -11,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Fix constraint validation on array members](https://github.com/ballerina-platform/ballerina-standard-library/issues/3974)
 
 ### Added
+- [Add `@pattern` constraint on string types](https://github.com/ballerina-platform/ballerina-standard-library/issues/3179)
 - [Add constraint support for readonly types](https://github.com/ballerina-platform/ballerina-standard-library/issues/3742)
 
 ## [1.0.1] - 2022-11-29

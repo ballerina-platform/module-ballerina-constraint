@@ -90,3 +90,39 @@ type StringA string;
     minValue: getA()
 }
 type IntA int;
+
+@constraint:String {
+    minLength: 2
+}
+type Name string;
+
+@constraint:String {
+    maxLength: 10
+}
+type NickName Name;
+
+@constraint:Int {
+    maxValue: 1000
+}
+type Id int:Signed32;
+
+type FullName record {|
+    @constraint:String {
+        maxLength: 20
+    }
+    Name firstName;
+    Name lastName;
+|};
+
+type UserNew record {
+    @constraint:Int {
+        minValue: 1
+    }
+    int:Signed32 id;
+    FullName name;
+    @constraint:String {
+        minLength: 2
+    }
+    Name nickName?; 
+    int age;
+};

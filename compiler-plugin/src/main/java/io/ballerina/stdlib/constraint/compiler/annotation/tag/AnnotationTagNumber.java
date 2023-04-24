@@ -18,9 +18,8 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
-import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_DECIMAL;
-import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_FLOAT;
-import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 
 /**
  * The class to represent the `@constraint:Number` annotation tag.
@@ -28,7 +27,10 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.TYPE_INT;
 public class AnnotationTagNumber implements ValueConstrainedAnnotationTag {
 
     @Override
-    public boolean isCompatibleFieldType(String fieldType) {
-        return fieldType.equals(TYPE_INT) || fieldType.equals(TYPE_FLOAT) || fieldType.equals(TYPE_DECIMAL);
+    public boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol) {
+        return fieldTypeSymbol.subtypeOf(ctx.semanticModel().types().builder().UNION_TYPE.withMemberTypes(
+                ctx.semanticModel().types().INT,
+                ctx.semanticModel().types().FLOAT,
+                ctx.semanticModel().types().DECIMAL).build());
     }
 }
