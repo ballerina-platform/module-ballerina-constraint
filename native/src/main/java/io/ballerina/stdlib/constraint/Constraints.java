@@ -54,7 +54,21 @@ public class Constraints {
             if (value instanceof BError) {
                 return ErrorUtils.buildTypeConversionError((BError) value);
             }
-            List<String> failedConstraints = validateAfterTypeConversion(value, type, SYMBOL_DOLLAR_SIGN);
+            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
+            if (!failedConstraints.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraints);
+            }
+            return value;
+        } catch (InternalValidationException e) {
+            return ErrorUtils.createGenericError(e.getMessage());
+        } catch (RuntimeException e) {
+            return ErrorUtils.buildUnexpectedError(e);
+        }
+    }
+
+    public static Object validateAfterTypeConversion(Object value, Type type) {
+        try {
+            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
@@ -71,13 +85,13 @@ public class Constraints {
         BArray members = ((BArray) value);
         List<String> failedConstraints = new ArrayList<>();
         for (int i = 0; i < members.getLength(); i++) {
-            failedConstraints.addAll(validateAfterTypeConversion(members.get(i), memberType, path +
+            failedConstraints.addAll(validateAfterTypeConversionInternal(members.get(i), memberType, path +
                                         SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET));
         }
         return failedConstraints;
     }
 
-    private static List<String> validateAfterTypeConversion(Object value, Type type, String path) {
+    private static List<String> validateAfterTypeConversionInternal(Object value, Type type, String path) {
         if (type instanceof ArrayType) {
             return validateArrayMembers(value, (ArrayType) type, path);
         }
@@ -91,7 +105,7 @@ public class Constraints {
         } else if (type instanceof UnionType) {
             Optional<Type> matchingType = getMatchingType(value, type);
             if (matchingType.isPresent()) {
-                return validateAfterTypeConversion(value, matchingType.get(), path);
+                return validateAfterTypeConversionInternal(value, matchingType.get(), path);
             }
         }
         return failedConstraints;
