@@ -827,3 +827,37 @@ function testConstraintAnnotationOnSubtypeAsRecordFieldFailure() {
         test:assertFail("Expected error not found.");
     }
 }
+
+type UserDetails record {|
+    @String {minLength: 2, maxLength: 20}
+    string x\-name;
+    @Array {maxLength: 2}
+    Age[] x\-age\$;
+|};
+
+@test:Config {}
+function testConstraintOnFieldsWithEscapeCharsSuccess() {
+    UserDetails user = {
+        x\-name: "John Doe",
+        x\-age\$: [18, 19]
+    };
+    UserDetails|error validation = validate(user);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testConstraintOnFieldsWithEscapeCharsFailure() {
+    UserDetails user = {
+        x\-name: "J",
+        x\-age\$: [17, 19, 20, 15]
+    };
+    UserDetails|error validation = validate(user);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.x-age$:maxLength'," +
+        "'$.x-age$[0]:minValue','$.x-age$[3]:minValue','$.x-name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
