@@ -23,6 +23,7 @@ import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.Field;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
+import io.ballerina.runtime.api.utils.IdentifierUtils;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
@@ -56,7 +57,8 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
         BMap<BString, Object> recordAnnotations = type.getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(PREFIX_RECORD_FIELD)) {
-                String fieldName = entry.getKey().getValue().substring(PREFIX_RECORD_FIELD.length() + 1);
+                String fieldName = IdentifierUtils.unescapeBallerina(
+                        entry.getKey().getValue().substring(PREFIX_RECORD_FIELD.length() + 1));
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
                 if (fieldValue != null) { // This can be null due to optional fields
