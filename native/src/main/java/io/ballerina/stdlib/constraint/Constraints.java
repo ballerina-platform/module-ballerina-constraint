@@ -18,6 +18,7 @@
 
 package io.ballerina.stdlib.constraint;
 
+import io.ballerina.runtime.api.TypeTags;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.IntersectionType;
@@ -124,7 +125,11 @@ public class Constraints {
         if (intersectionType != null) {
             List<Type> constituentTypes = intersectionType.getConstituentTypes();
             if (constituentTypes.size() == 2) {
-                type = TypeUtils.getReferredType(constituentTypes.get(0));
+                if (constituentTypes.get(0).getTag() == TypeTags.READONLY_TAG) {
+                    type = TypeUtils.getReferredType(constituentTypes.get(1));
+                } else {
+                    type = TypeUtils.getReferredType(constituentTypes.get(0));
+                }
             }
         }
         return type;
