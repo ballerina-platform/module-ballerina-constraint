@@ -21,25 +21,37 @@ package io.ballerina.stdlib.constraint.validators;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MESSAGE;
 
 /**
  * Extern functions for validating number constraints `@constraint:Number` of Ballerina.
  */
 public class NumberConstraintValidator implements ValueValidator {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public NumberConstraintValidator(List<String> failedConstraints) {
-        this.failedConstraints = failedConstraints;
+    public NumberConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
-    public void validate(BMap<BString, Object> constraints, Number fieldValue, String path) {
+    public void validate(BMap<BString, Object> constraints, Number fieldValue, String path, boolean isMemberValue) {
+        List<String> constraintFailures = new ArrayList<>();
+        String message = null;
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, failedConstraints, path);
+            if (constraint.getKey().getValue().equals(CONSTRAINT_MESSAGE)) {
+                message = ((BString) constraint.getValue()).getValue();
+            }
+            validate(constraint, fieldValue, constraintFailures);
+        }
+        if (!constraintFailures.isEmpty()) {
+            failedConstraintsInfo.add(new ConstraintErrorInfo(path, message, constraintFailures, isMemberValue));
         }
     }
 

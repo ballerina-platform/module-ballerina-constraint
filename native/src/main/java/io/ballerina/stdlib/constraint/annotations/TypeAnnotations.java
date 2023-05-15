@@ -29,6 +29,7 @@ import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 
 import java.util.List;
 
@@ -40,20 +41,20 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKE
  */
 public class TypeAnnotations extends AbstractAnnotations {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public TypeAnnotations(List<String> failedConstraints) {
-        super(failedConstraints);
-        this.failedConstraints = failedConstraints;
+    public TypeAnnotations(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        super(failedConstraintsInfo);
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
     @Override
-    public void validate(Object value, AnnotatableType type, String path) {
+    public void validate(Object value, AnnotatableType type, String path, boolean isMemberValue) {
         BMap<BString, Object> typeAnnotations = type.getAnnotations();
         Object fieldValue = getFieldValue(value);
-        super.validateAnnotations(typeAnnotations, fieldValue, path);
+        super.validateAnnotations(typeAnnotations, fieldValue, path, isMemberValue);
         if (type.getTag() == TypeTags.TYPE_REFERENCED_TYPE_TAG) {
-            validateReferredType(value, type, path);
+            validateReferredType(value, type, path, isMemberValue);
         }
     }
 
@@ -68,7 +69,7 @@ public class TypeAnnotations extends AbstractAnnotations {
         return value;
     }
 
-    private void validateReferredType(Object value, Type type, String path) {
+    private void validateReferredType(Object value, Type type, String path, boolean isMemberValue) {
         Type referredType = TypeUtils.getReferredType(type);
         if (referredType.isReadOnly() && referredType instanceof IntersectionType) {
             List<Type> constituentTypes = ((IntersectionType) referredType).getConstituentTypes();
@@ -82,10 +83,11 @@ public class TypeAnnotations extends AbstractAnnotations {
         }
         if (referredType instanceof AnnotatableType) {
             if (referredType instanceof RecordType) {
-                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
-                recordFieldAnnotations.validate(value, (AnnotatableType) referredType, path);
+                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(
+                        this.failedConstraintsInfo);
+                recordFieldAnnotations.validate(value, (AnnotatableType) referredType, path, isMemberValue);
             } else {
-                validate(value, (AnnotatableType) referredType, path);
+                validate(value, (AnnotatableType) referredType, path, isMemberValue);
             }
         } else if (referredType instanceof ArrayType) {
             validateArrayType((ArrayType) referredType, (BArray) value, path);
@@ -97,16 +99,17 @@ public class TypeAnnotations extends AbstractAnnotations {
         Type elementType = referredType.getElementType();
         if (elementType.getTag() == TypeTags.TYPE_REFERENCED_TYPE_TAG && elementType instanceof AnnotatableType) {
             if (elementType instanceof RecordType) {
-                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(this.failedConstraints);
+                RecordFieldAnnotations recordFieldAnnotations = new RecordFieldAnnotations(
+                        this.failedConstraintsInfo);
                 for (int i = 0; i < value.getLength(); i++) {
                     BMap<BString, Object> map = (BMap<BString, Object>) value.getRefValue(i);
                     recordFieldAnnotations.validate(map, (AnnotatableType) elementType,
-                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET, true);
                 }
             } else {
                 for (int i = 0; i < value.getLength(); i++) {
                     validate(value.getRefValue(i), (AnnotatableType) elementType,
-                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET, true);
                 }
             }
         }

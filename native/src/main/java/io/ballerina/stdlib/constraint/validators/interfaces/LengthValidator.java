@@ -34,25 +34,21 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
  */
 public interface LengthValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints) {
         switch (constraint.getKey().getValue()) {
             case CONSTRAINT_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue(), path);
                 if (!validateLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
+                    failedConstraints.add(CONSTRAINT_LENGTH);
                 }
                 break;
             case CONSTRAINT_MIN_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_MIN_LENGTH, (long) constraint.getValue(), path);
                 if (!validateMinLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_LENGTH);
+                    failedConstraints.add(CONSTRAINT_MIN_LENGTH);
                 }
                 break;
             case CONSTRAINT_MAX_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_MAX_LENGTH, (long) constraint.getValue(), path);
                 if (!validateMaxLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_LENGTH);
+                    failedConstraints.add(CONSTRAINT_MAX_LENGTH);
                 }
                 break;
             default:
@@ -60,11 +56,20 @@ public interface LengthValidator {
         }
     }
 
-    static void checkLengthConstraintValue(String constraintField, long constraintValue, String path) {
-        if (constraintValue <= 0) {
-            throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
-                                                  constraintField + " constraint. Length constraints should be " +
-                                                  "positive");
+    default void checkLengthConstraintValue(Map.Entry<BString, Object> constraint, String path) {
+        switch (constraint.getKey().getValue()) {
+            case CONSTRAINT_LENGTH:
+            case CONSTRAINT_MIN_LENGTH:
+            case CONSTRAINT_MAX_LENGTH:
+                long constraintValue = (long) constraint.getValue();
+                String constraintField = constraint.getKey().getValue();
+                if (constraintValue <= 0) {
+                    throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
+                            constraintField + " constraint. Length constraints should be positive");
+                }
+                break;
+            default:
+                break;
         }
     }
 

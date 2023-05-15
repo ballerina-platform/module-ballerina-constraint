@@ -29,6 +29,7 @@ import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BDecimal;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -43,16 +44,16 @@ import static io.ballerina.stdlib.constraint.Constants.SYMBOL_OPEN_SQUARE_BRACKE
  */
 public class RecordFieldAnnotations extends AbstractAnnotations {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public RecordFieldAnnotations(List<String> failedConstraints) {
-        super(failedConstraints);
-        this.failedConstraints = failedConstraints;
+    public RecordFieldAnnotations(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        super(failedConstraintsInfo);
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void validate(Object value, AnnotatableType type, String path) {
+    public void validate(Object value, AnnotatableType type, String path, boolean isMemberValue) {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
         BMap<BString, Object> recordAnnotations = type.getAnnotations();
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
@@ -62,11 +63,12 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 BMap<BString, Object> recordFieldAnnotations = (BMap<BString, Object>) entry.getValue();
                 Object fieldValue = getFieldValue(record, fieldName);
                 if (fieldValue != null) { // This can be null due to optional fields
-                    super.validateAnnotations(recordFieldAnnotations, fieldValue, path + SYMBOL_DOT + fieldName);
+                    super.validateAnnotations(recordFieldAnnotations, fieldValue, path + SYMBOL_DOT + fieldName,
+                            isMemberValue);
                 }
             }
         }
-        validateReferredType(record, (RecordType) type, path);
+        validateReferredType(record, (RecordType) type, path, isMemberValue);
     }
 
     private Object getFieldValue(BMap<BString, Object> record, String fieldName) {
@@ -81,7 +83,8 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
         return obj;
     }
 
-    private void validateReferredType(BMap<BString, Object> record, RecordType type, String path) {
+    private void validateReferredType(BMap<BString, Object> record, RecordType type, String path,
+                                      boolean isMemberValue) {
         for (Field recordField : type.getFields().values()) {
             Type fieldType = recordField.getFieldType();
             String fieldName = recordField.getFieldName();
@@ -89,11 +92,12 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
             if (fieldValue != null) { // This can be null due to optional fields
                 if (fieldType instanceof AnnotatableType) {
                     if (fieldType instanceof RecordType) {
-                        validate(fieldValue, (AnnotatableType) fieldType, path + SYMBOL_DOT + fieldName);
+                        validate(fieldValue, (AnnotatableType) fieldType, path + SYMBOL_DOT + fieldName,
+                                isMemberValue);
                     } else {
-                        TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                        TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraintsInfo);
                         typeAnnotations.validate(fieldValue, (AnnotatableType) fieldType,
-                                path + SYMBOL_DOT + fieldName);
+                                path + SYMBOL_DOT + fieldName, isMemberValue);
                     }
                 } else if (fieldType instanceof ArrayType) {
                     validateArrayType((ArrayType) fieldType, (BArray) fieldValue, path + SYMBOL_DOT + fieldName);
@@ -110,13 +114,13 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
                 for (int i = 0; i < fieldValue.getLength(); i++) {
                     BMap<BString, Object> map = (BMap<BString, Object>) fieldValue.getRefValue(i);
                     validate(map, (AnnotatableType) elementType,
-                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET, true);
                 }
             } else {
-                TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraints);
+                TypeAnnotations typeAnnotations = new TypeAnnotations(this.failedConstraintsInfo);
                 for (int i = 0; i < fieldValue.getLength(); i++) {
                     typeAnnotations.validate(fieldValue.getRefValue(i), (AnnotatableType) elementType,
-                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET);
+                            path + SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET, true);
                 }
             }
         }

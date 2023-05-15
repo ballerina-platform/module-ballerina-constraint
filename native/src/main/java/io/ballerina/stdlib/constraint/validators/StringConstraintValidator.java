@@ -20,34 +20,46 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.validators.interfaces.LengthValidator;
 import io.ballerina.stdlib.constraint.validators.interfaces.PatternValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MESSAGE;
 
 /**
  * Extern functions for validating string constraints `@constraint:String` of Ballerina.
  */
 public class StringConstraintValidator implements LengthValidator, PatternValidator {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public StringConstraintValidator(List<String> failedConstraints) {
-        this.failedConstraints = failedConstraints;
+    public StringConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
-    public void validate(BMap<BString, Object> constraints, String fieldValue, String path) {
+    public void validate(BMap<BString, Object> constraints, String fieldValue, String path, boolean isMemberValue) {
+        List<String> constraintFailures = new ArrayList<>();
+        String message = null;
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, failedConstraints, path);
+            if (constraint.getKey().getValue().equals(CONSTRAINT_MESSAGE)) {
+                message = ((BString) constraint.getValue()).getValue();
+            }
+            LengthValidator.super.checkLengthConstraintValue(constraint, path);
+            validate(constraint, fieldValue, constraintFailures);
+        }
+        if (!constraintFailures.isEmpty()) {
+            failedConstraintsInfo.add(new ConstraintErrorInfo(path, message, constraintFailures, isMemberValue));
         }
     }
 
     @Override
-    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                         String path) {
-        LengthValidator.super.validate(constraint, fieldValue, failedConstraints, path);
-        PatternValidator.super.validate(constraint, fieldValue, failedConstraints, path);
+    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints) {
+        LengthValidator.super.validate(constraint, fieldValue, failedConstraints);
+        PatternValidator.super.validate(constraint, fieldValue, failedConstraints);
     }
 
     @Override

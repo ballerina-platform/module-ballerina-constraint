@@ -55,9 +55,30 @@ public class Constraints {
             if (value instanceof BError) {
                 return ErrorUtils.buildTypeConversionError((BError) value);
             }
-            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
-            if (!failedConstraints.isEmpty()) {
-                return ErrorUtils.buildValidationError(failedConstraints);
+            List<ConstraintErrorInfo> failedConstraintsInfo = validateAfterTypeConversionInternal(value, type,
+                    SYMBOL_DOLLAR_SIGN);
+            if (!failedConstraintsInfo.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraintsInfo);
+            }
+            return value;
+        } catch (InternalValidationException e) {
+            return ErrorUtils.createGenericError(e.getMessage());
+        } catch (RuntimeException e) {
+            return ErrorUtils.buildUnexpectedError(e);
+        }
+    }
+
+    public static Object validateNew(Object value, BTypedesc typedesc) {
+        try {
+            Type type = typedesc.getDescribingType();
+            value = cloneWithTargetType(value, type);
+            if (value instanceof BError) {
+                return ErrorUtils.buildTypeConversionError((BError) value);
+            }
+            List<ConstraintErrorInfo> failedConstraintsInfo = validateAfterTypeConversionInternal(value, type,
+                    SYMBOL_DOLLAR_SIGN);
+            if (!failedConstraintsInfo.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraintsInfo);
             }
             return value;
         } catch (InternalValidationException e) {
@@ -69,9 +90,10 @@ public class Constraints {
 
     public static Object validateAfterTypeConversion(Object value, Type type) {
         try {
-            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
-            if (!failedConstraints.isEmpty()) {
-                return ErrorUtils.buildValidationError(failedConstraints);
+            List<ConstraintErrorInfo> failedConstraintsInfo = validateAfterTypeConversionInternal(
+                    value, type, SYMBOL_DOLLAR_SIGN);
+            if (!failedConstraintsInfo.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraintsInfo);
             }
             return value;
         } catch (InternalValidationException e) {
@@ -81,35 +103,35 @@ public class Constraints {
         }
     }
 
-    private static List<String> validateArrayMembers(Object value, ArrayType type, String path) {
+    private static List<ConstraintErrorInfo> validateArrayMembers(Object value, ArrayType type, String path) {
         Type memberType = type.getElementType();
         BArray members = ((BArray) value);
-        List<String> failedConstraints = new ArrayList<>();
+        List<ConstraintErrorInfo> failedConstraintsInfo = new ArrayList<>();
         for (int i = 0; i < members.getLength(); i++) {
-            failedConstraints.addAll(validateAfterTypeConversionInternal(members.get(i), memberType, path +
+            failedConstraintsInfo.addAll(validateAfterTypeConversionInternal(members.get(i), memberType, path +
                                         SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET));
         }
-        return failedConstraints;
+        return failedConstraintsInfo;
     }
 
-    private static List<String> validateAfterTypeConversionInternal(Object value, Type type, String path) {
+    private static List<ConstraintErrorInfo> validateAfterTypeConversionInternal(Object value, Type type, String path) {
         if (type instanceof ArrayType) {
             return validateArrayMembers(value, (ArrayType) type, path);
         }
-        List<String> failedConstraints = new ArrayList<>();
+        List<ConstraintErrorInfo> failedConstraintsInfo = new ArrayList<>();
         if (type.isReadOnly()) {
             type = getTypeFromReadOnly(type);
         }
         if (type instanceof AnnotatableType) {
-            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-            annotations.validate(value, (AnnotatableType) type, path);
+            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraintsInfo);
+            annotations.validate(value, (AnnotatableType) type, path, false);
         } else if (type instanceof UnionType) {
             Optional<Type> matchingType = getMatchingType(value, type);
             if (matchingType.isPresent()) {
                 return validateAfterTypeConversionInternal(value, matchingType.get(), path);
             }
         }
-        return failedConstraints;
+        return failedConstraintsInfo;
     }
 
     private static Type getTypeFromReadOnly(Type type) {
@@ -152,11 +174,12 @@ public class Constraints {
         return Optional.empty();
     }
 
-    private static AbstractAnnotations getAnnotationImpl(Type type, List<String> failedConstraints) {
+    private static AbstractAnnotations getAnnotationImpl(Type type,
+                                                         List<ConstraintErrorInfo> failedConstraintsInfo) {
         if (type instanceof RecordType) {
-            return new RecordFieldAnnotations(failedConstraints);
+            return new RecordFieldAnnotations(failedConstraintsInfo);
         } else {
-            return new TypeAnnotations(failedConstraints);
+            return new TypeAnnotations(failedConstraintsInfo);
         }
     }
 

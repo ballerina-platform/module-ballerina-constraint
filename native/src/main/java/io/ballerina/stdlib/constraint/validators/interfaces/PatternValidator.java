@@ -27,18 +27,16 @@ import java.util.List;
 import java.util.Map;
 
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_PATTERN;
-import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
 
 /**
  * The interface to validate the pattern related constraints.
  */
 public interface PatternValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints) {
         if (constraint.getKey().getValue().equals(CONSTRAINT_PATTERN)) {
             if (!validatePattern(fieldValue, constraint.getValue())) {
-                failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_PATTERN);
+                failedConstraints.add(CONSTRAINT_PATTERN);
             }
         }
     }

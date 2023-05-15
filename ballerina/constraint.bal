@@ -31,6 +31,13 @@ public annotation StringConstraints String on type, record field;
 # The annotation, which is used for the constraints of the `anydata[]` type.
 public annotation ArrayConstraints Array on type, record field;
 
+# Represents the common fields of the constraint annotation records.
+#
+# + message - The error message to be used in case of a constraint violation
+public type CommonFields record {|
+    string message?;
+|};
+
 # Represents the constraints associated with `int` type.
 #
 # + minValue - The inclusive lower bound of the constrained type
@@ -38,6 +45,7 @@ public annotation ArrayConstraints Array on type, record field;
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type IntConstraints record {|
+    *CommonFields;
     int minValue?;
     int maxValue?;
     int minValueExclusive?;
@@ -51,6 +59,7 @@ public type IntConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type FloatConstraints record {|
+    *CommonFields;
     float minValue?;
     float maxValue?;
     float minValueExclusive?;
@@ -64,6 +73,7 @@ public type FloatConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type NumberConstraints record {|
+    *CommonFields;
     decimal minValue?;
     decimal maxValue?;
     decimal minValueExclusive?;
@@ -77,6 +87,7 @@ public type NumberConstraints record {|
 # + maxLength - The inclusive upper bound of the number of characters of the constrained `string` type
 # + pattern - The regular expression to be matched with the constrained `string` type
 public type StringConstraints record {|
+    *CommonFields;
     int length?;
     int minLength?;
     int maxLength?;
@@ -89,6 +100,7 @@ public type StringConstraints record {|
 # + minLength - The inclusive lower bound of the number of members of the constrained type
 # + maxLength - The inclusive upper bound of the number of members of the constrained type
 public type ArrayConstraints record {|
+    *CommonFields;
     int length?;
     int minLength?;
     int maxLength?;

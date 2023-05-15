@@ -27,34 +27,32 @@ import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MAX_VALUE;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MAX_VALUE_EXCLUSIVE;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MIN_VALUE;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MIN_VALUE_EXCLUSIVE;
-import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
 
 /**
  * The interface to validate the value related constraints.
  */
 public interface ValueValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints) {
         switch (constraint.getKey().getValue()) {
             case CONSTRAINT_MIN_VALUE:
                 if (!validateMinValue(fieldValue, constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_VALUE);
+                    failedConstraints.add(CONSTRAINT_MIN_VALUE);
                 }
                 break;
             case CONSTRAINT_MAX_VALUE:
                 if (!validateMaxValue(fieldValue, constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_VALUE);
+                    failedConstraints.add(CONSTRAINT_MAX_VALUE);
                 }
                 break;
             case CONSTRAINT_MIN_VALUE_EXCLUSIVE:
                 if (!validateMinValueExclusive(fieldValue, constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_VALUE_EXCLUSIVE);
+                    failedConstraints.add(CONSTRAINT_MIN_VALUE_EXCLUSIVE);
                 }
                 break;
             case CONSTRAINT_MAX_VALUE_EXCLUSIVE:
                 if (!validateMaxValueExclusive(fieldValue, constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_VALUE_EXCLUSIVE);
+                    failedConstraints.add(CONSTRAINT_MAX_VALUE_EXCLUSIVE);
                 }
                 break;
             default:
