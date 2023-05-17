@@ -23,8 +23,10 @@ import io.ballerina.compiler.api.symbols.Symbol;
 import io.ballerina.compiler.api.symbols.TypeSymbol;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
+import io.ballerina.compiler.syntax.tree.Node;
 import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.RecordFieldNode;
+import io.ballerina.compiler.syntax.tree.SyntaxKind;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.Diagnostic;
@@ -33,6 +35,7 @@ import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 import java.util.List;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.Constants.RECORD;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
@@ -64,7 +67,8 @@ public class RecordFieldConstraintValidator implements AnalysisTask<SyntaxNodeAn
         }
         RecordFieldSymbol recordFieldSymbol = (RecordFieldSymbol) optionalTypeSymbol.get();
         TypeSymbol fieldTypeSymbol = recordFieldSymbol.typeDescriptor();
-        String fieldType = recordFieldNode.typeName().toString().trim();
+        Node typeNode = recordFieldNode.typeName();
+        String fieldType = typeNode.kind().equals(SyntaxKind.RECORD_TYPE_DESC) ? RECORD : typeNode.toString().trim();
         validateConstraints(ctx, annotationNodes, fieldType, fieldTypeSymbol);
     }
 }

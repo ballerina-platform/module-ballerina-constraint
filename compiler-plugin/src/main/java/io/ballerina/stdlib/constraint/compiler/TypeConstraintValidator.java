@@ -23,7 +23,9 @@ import io.ballerina.compiler.api.symbols.TypeDefinitionSymbol;
 import io.ballerina.compiler.api.symbols.TypeSymbol;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
+import io.ballerina.compiler.syntax.tree.Node;
 import io.ballerina.compiler.syntax.tree.NodeList;
+import io.ballerina.compiler.syntax.tree.SyntaxKind;
 import io.ballerina.compiler.syntax.tree.TypeDefinitionNode;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
@@ -33,6 +35,7 @@ import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 import java.util.List;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.Constants.RECORD;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
@@ -64,7 +67,8 @@ public class TypeConstraintValidator implements AnalysisTask<SyntaxNodeAnalysisC
         }
         TypeDefinitionSymbol typeDefinitionSymbol = (TypeDefinitionSymbol) optionalTypeSymbol.get();
         TypeSymbol fieldTypeSymbol = typeDefinitionSymbol.typeDescriptor();
-        String fieldType = typeDefinitionNode.typeDescriptor().toString().trim();
+        Node typeNode = typeDefinitionNode.typeDescriptor();
+        String fieldType = typeNode.kind().equals(SyntaxKind.RECORD_TYPE_DESC) ? RECORD : typeNode.toString().trim();
         validateConstraints(ctx, annotationNodes, fieldType, fieldTypeSymbol);
     }
 }
