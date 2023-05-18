@@ -58,6 +58,16 @@ allprojects {
     }
 }
 
+subprojects {
+    configurations {
+        ballerinaStdLibs
+    }
+    dependencies {
+        /* Standard libraries */
+        ballerinaStdLibs "io.ballerina.stdlib:time-ballerina:${stdlibTimeVersion}"
+    }
+}
+
 def moduleVersion = project.version.replace("-SNAPSHOT", "")
 
 release {

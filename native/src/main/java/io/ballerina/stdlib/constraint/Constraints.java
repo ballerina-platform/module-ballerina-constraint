@@ -18,6 +18,7 @@
 
 package io.ballerina.stdlib.constraint;
 
+import io.ballerina.runtime.api.TypeTags;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
 import io.ballerina.runtime.api.types.IntersectionType;
@@ -57,7 +58,21 @@ public class Constraints {
         }
 
         try {
-            List<String> failedConstraints = validateAfterTypeConversion(value, type, SYMBOL_DOLLAR_SIGN);
+            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
+            if (!failedConstraints.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraints);
+            }
+            return value;
+        } catch (InternalValidationException e) {
+            return ErrorUtils.createGenericError(e.getMessage());
+        } catch (RuntimeException e) {
+            return ErrorUtils.buildUnexpectedError(e);
+        }
+    }
+
+    public static Object validateAfterTypeConversion(Object value, Type type) {
+        try {
+            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
@@ -74,13 +89,13 @@ public class Constraints {
         BArray members = ((BArray) value);
         List<String> failedConstraints = new ArrayList<>();
         for (int i = 0; i < members.getLength(); i++) {
-            failedConstraints.addAll(validateAfterTypeConversion(members.get(i), memberType, path +
+            failedConstraints.addAll(validateAfterTypeConversionInternal(members.get(i), memberType, path +
                                         SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET));
         }
         return failedConstraints;
     }
 
-    private static List<String> validateAfterTypeConversion(Object value, Type type, String path) {
+    private static List<String> validateAfterTypeConversionInternal(Object value, Type type, String path) {
         if (type instanceof ArrayType) {
             return validateArrayMembers(value, (ArrayType) type, path);
         }
@@ -94,7 +109,7 @@ public class Constraints {
         } else if (type instanceof UnionType) {
             Optional<Type> matchingType = getMatchingType(value, type);
             if (matchingType.isPresent()) {
-                return validateAfterTypeConversion(value, matchingType.get(), path);
+                return validateAfterTypeConversionInternal(value, matchingType.get(), path);
             }
         }
         return failedConstraints;
@@ -113,7 +128,11 @@ public class Constraints {
         if (intersectionType != null) {
             List<Type> constituentTypes = intersectionType.getConstituentTypes();
             if (constituentTypes.size() == 2) {
-                type = TypeUtils.getReferredType(constituentTypes.get(0));
+                if (constituentTypes.get(0).getTag() == TypeTags.READONLY_TAG) {
+                    type = TypeUtils.getReferredType(constituentTypes.get(1));
+                } else {
+                    type = TypeUtils.getReferredType(constituentTypes.get(0));
+                }
             }
         }
         return type;

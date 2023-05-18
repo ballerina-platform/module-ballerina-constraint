@@ -18,7 +18,8 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
-import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_ARRAY;
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 
 /**
  * The class to represent the `@constraint:Array` annotation tag.
@@ -26,7 +27,8 @@ import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_ARRAY;
 public class AnnotationTagArray implements LengthConstrainedAnnotationTag {
 
     @Override
-    public boolean isCompatibleFieldType(String fieldType) {
-        return fieldType.endsWith(SYMBOL_ARRAY);
+    public boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol) {
+        return fieldTypeSymbol.subtypeOf(ctx.semanticModel().types().builder().ARRAY_TYPE.
+                withType(ctx.semanticModel().types().ANYDATA).build());
     }
 }

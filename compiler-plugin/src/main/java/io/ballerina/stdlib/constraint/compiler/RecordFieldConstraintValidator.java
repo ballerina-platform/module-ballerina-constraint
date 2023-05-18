@@ -18,21 +18,24 @@
 
 package io.ballerina.stdlib.constraint.compiler;
 
+import io.ballerina.compiler.api.symbols.RecordFieldSymbol;
+import io.ballerina.compiler.api.symbols.Symbol;
+import io.ballerina.compiler.api.symbols.TypeSymbol;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
+import io.ballerina.compiler.syntax.tree.Node;
 import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.RecordFieldNode;
-import io.ballerina.compiler.syntax.tree.UnionTypeDescriptorNode;
+import io.ballerina.compiler.syntax.tree.SyntaxKind;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.Diagnostic;
 import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.populateFieldTypeList;
+import static io.ballerina.stdlib.constraint.compiler.Constants.RECORD;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
@@ -58,13 +61,14 @@ public class RecordFieldConstraintValidator implements AnalysisTask<SyntaxNodeAn
             return;
         }
         NodeList<AnnotationNode> annotationNodes = optionalMetadataNode.get().annotations();
-        String fieldType = recordFieldNode.typeName().toString().trim();
-        ArrayList<String> fieldTypeList = new ArrayList<>();
-        if (recordFieldNode.typeName() instanceof UnionTypeDescriptorNode) {
-            populateFieldTypeList((UnionTypeDescriptorNode) recordFieldNode.typeName(), fieldTypeList);
-        } else {
-            fieldTypeList.add(fieldType);
+        Optional<Symbol> optionalTypeSymbol = ctx.semanticModel().symbol(recordFieldNode);
+        if (optionalTypeSymbol.isEmpty() || !(optionalTypeSymbol.get() instanceof RecordFieldSymbol)) {
+            return;
         }
-        validateConstraints(ctx, annotationNodes, fieldType, fieldTypeList);
+        RecordFieldSymbol recordFieldSymbol = (RecordFieldSymbol) optionalTypeSymbol.get();
+        TypeSymbol fieldTypeSymbol = recordFieldSymbol.typeDescriptor();
+        Node typeNode = recordFieldNode.typeName();
+        String fieldType = typeNode.kind().equals(SyntaxKind.RECORD_TYPE_DESC) ? RECORD : typeNode.toString().trim();
+        validateConstraints(ctx, annotationNodes, fieldType, fieldTypeSymbol);
     }
 }

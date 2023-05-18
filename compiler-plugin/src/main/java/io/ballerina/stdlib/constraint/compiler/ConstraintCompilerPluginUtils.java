@@ -18,6 +18,7 @@
 
 package io.ballerina.stdlib.constraint.compiler;
 
+import io.ballerina.compiler.api.symbols.TypeSymbol;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.BasicLiteralNode;
 import io.ballerina.compiler.syntax.tree.ExpressionNode;
@@ -28,7 +29,6 @@ import io.ballerina.compiler.syntax.tree.NodeLocation;
 import io.ballerina.compiler.syntax.tree.SeparatedNodeList;
 import io.ballerina.compiler.syntax.tree.SpecificFieldNode;
 import io.ballerina.compiler.syntax.tree.UnaryExpressionNode;
-import io.ballerina.compiler.syntax.tree.UnionTypeDescriptorNode;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.DiagnosticFactory;
 import io.ballerina.tools.diagnostics.DiagnosticInfo;
@@ -36,6 +36,7 @@ import io.ballerina.tools.diagnostics.DiagnosticInfo;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.compiler.Constants.MODULE_NAME;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_COLON;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_DECIMAL;
@@ -52,22 +53,13 @@ public class ConstraintCompilerPluginUtils {
 
     private static final ConstraintCompatibilityMatrix matrix = new ConstraintCompatibilityMatrix();
 
-    static void populateFieldTypeList(UnionTypeDescriptorNode node, ArrayList<String> fieldTypeList) {
-        fieldTypeList.add(node.rightTypeDesc().toString().trim());
-        if (node.leftTypeDesc() instanceof UnionTypeDescriptorNode) {
-            populateFieldTypeList((UnionTypeDescriptorNode) node.leftTypeDesc(), fieldTypeList);
-        } else {
-            fieldTypeList.add(node.leftTypeDesc().toString().trim());
-        }
-    }
-
     static void validateConstraints(SyntaxNodeAnalysisContext ctx, NodeList<AnnotationNode> annotationNodes,
-                                    String fieldType, ArrayList<String> fieldTypeList) {
+                                    String fieldType, TypeSymbol fieldTypeSymbol) {
         for (AnnotationNode annotationNode : annotationNodes) {
             String[] annotationParts = annotationNode.annotReference().toString().trim().split(SYMBOL_COLON);
             if (annotationParts[0].equals(MODULE_NAME)) {
                 String annotationTag = annotationParts[1];
-                checkAnnotationTagCompatibility(ctx, annotationNode, annotationTag, fieldType, fieldTypeList);
+                checkAnnotationTagCompatibility(ctx, annotationNode, annotationTag, fieldType, fieldTypeSymbol);
                 checkAnnotationConstraintsAvailability(ctx, annotationNode, annotationTag, fieldType);
                 checkAnnotationConstraintsCompatibility(ctx, annotationNode, annotationTag, fieldType);
                 checkAnnotationConstraintsValidity(ctx, annotationNode, annotationTag, fieldType);
@@ -77,12 +69,9 @@ public class ConstraintCompilerPluginUtils {
 
     private static void checkAnnotationTagCompatibility(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
                                                         String annotationTag, String fieldType,
-                                                        ArrayList<String> fieldTypeList) {
-        for (String type : fieldTypeList) {
-            if (!matrix.isAnnotationTagCompatible(annotationTag, type)) {
-                reportAnnotationTagIncompatibility(ctx, annotationTag, fieldType, annotationNode.location());
-                break;
-            }
+                                                        TypeSymbol fieldTypeSymbol) {
+        if (!matrix.isAnnotationTagCompatibleWithTypeSymbol(ctx, annotationTag, fieldTypeSymbol)) {
+            reportAnnotationTagIncompatibility(ctx, annotationTag, fieldType, annotationNode.location());
         }
     }
 
@@ -91,7 +80,9 @@ public class ConstraintCompilerPluginUtils {
                                                                String fieldType) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.filter(node -> node.fields().size() > 0).isEmpty()) {
-            reportConstraintsUnavailability(ctx, annotationTag, fieldType, annotationNode.location());
+            if (!annotationTag.equals(ANNOTATION_TAG_DATE)) {
+                reportConstraintsUnavailability(ctx, annotationTag, fieldType, annotationNode.location());
+            }
         }
     }
 

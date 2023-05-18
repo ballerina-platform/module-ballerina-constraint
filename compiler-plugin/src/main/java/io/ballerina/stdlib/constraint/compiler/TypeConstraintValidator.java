@@ -18,21 +18,24 @@
 
 package io.ballerina.stdlib.constraint.compiler;
 
+import io.ballerina.compiler.api.symbols.Symbol;
+import io.ballerina.compiler.api.symbols.TypeDefinitionSymbol;
+import io.ballerina.compiler.api.symbols.TypeSymbol;
 import io.ballerina.compiler.syntax.tree.AnnotationNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
+import io.ballerina.compiler.syntax.tree.Node;
 import io.ballerina.compiler.syntax.tree.NodeList;
+import io.ballerina.compiler.syntax.tree.SyntaxKind;
 import io.ballerina.compiler.syntax.tree.TypeDefinitionNode;
-import io.ballerina.compiler.syntax.tree.UnionTypeDescriptorNode;
 import io.ballerina.projects.plugins.AnalysisTask;
 import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.tools.diagnostics.Diagnostic;
 import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.populateFieldTypeList;
+import static io.ballerina.stdlib.constraint.compiler.Constants.RECORD;
 import static io.ballerina.stdlib.constraint.compiler.ConstraintCompilerPluginUtils.validateConstraints;
 
 /**
@@ -58,13 +61,14 @@ public class TypeConstraintValidator implements AnalysisTask<SyntaxNodeAnalysisC
             return;
         }
         NodeList<AnnotationNode> annotationNodes = optionalMetadataNode.get().annotations();
-        String fieldType = typeDefinitionNode.typeDescriptor().toString().trim();
-        ArrayList<String> fieldTypeList = new ArrayList<>();
-        if (typeDefinitionNode.typeDescriptor() instanceof UnionTypeDescriptorNode) {
-            populateFieldTypeList((UnionTypeDescriptorNode) typeDefinitionNode.typeDescriptor(), fieldTypeList);
-        } else {
-            fieldTypeList.add(fieldType);
+        Optional<Symbol> optionalTypeSymbol = ctx.semanticModel().symbol(typeDefinitionNode);
+        if (optionalTypeSymbol.isEmpty() || !(optionalTypeSymbol.get() instanceof TypeDefinitionSymbol)) {
+            return;
         }
-        validateConstraints(ctx, annotationNodes, fieldType, fieldTypeList);
+        TypeDefinitionSymbol typeDefinitionSymbol = (TypeDefinitionSymbol) optionalTypeSymbol.get();
+        TypeSymbol fieldTypeSymbol = typeDefinitionSymbol.typeDescriptor();
+        Node typeNode = typeDefinitionNode.typeDescriptor();
+        String fieldType = typeNode.kind().equals(SyntaxKind.RECORD_TYPE_DESC) ? RECORD : typeNode.toString().trim();
+        validateConstraints(ctx, annotationNodes, fieldType, fieldTypeSymbol);
     }
 }

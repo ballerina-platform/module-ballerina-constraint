@@ -18,6 +18,9 @@
 
 package io.ballerina.stdlib.constraint.compiler.annotation.tag;
 
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
+
 import java.util.ArrayList;
 
 /**
@@ -25,7 +28,7 @@ import java.util.ArrayList;
  */
 public interface AnnotationTag {
 
-    boolean isCompatibleFieldType(String fieldType);
+    boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol);
 
     boolean haveCompatibleConstraints(ArrayList<String> constraints);
 

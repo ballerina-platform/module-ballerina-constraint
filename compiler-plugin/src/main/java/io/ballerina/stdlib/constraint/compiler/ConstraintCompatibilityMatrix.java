@@ -18,8 +18,11 @@
 
 package io.ballerina.stdlib.constraint.compiler;
 
+import io.ballerina.compiler.api.symbols.TypeSymbol;
+import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTag;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagArray;
+import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagDate;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagFloat;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagInt;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagNumber;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_ARRAY;
+import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_FLOAT;
 import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_NUMBER;
@@ -48,10 +52,12 @@ public class ConstraintCompatibilityMatrix {
         matrix.put(ANNOTATION_TAG_NUMBER, new AnnotationTagNumber());
         matrix.put(ANNOTATION_TAG_STRING, new AnnotationTagString());
         matrix.put(ANNOTATION_TAG_ARRAY, new AnnotationTagArray());
+        matrix.put(ANNOTATION_TAG_DATE, new AnnotationTagDate());
     }
 
-    boolean isAnnotationTagCompatible(String annotationTag, String fieldType) {
-        return matrix.get(annotationTag).isCompatibleFieldType(fieldType);
+    boolean isAnnotationTagCompatibleWithTypeSymbol(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                    TypeSymbol fielsTypeSymbol) {
+        return matrix.get(annotationTag).isCompatibleFieldType(ctx, fielsTypeSymbol);
     }
 
     boolean isAnnotationConstraintsCompatible(String annotationTag, ArrayList<String> constraints) {

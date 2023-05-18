@@ -25,6 +25,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_ARRAY;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_FLOAT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_NUMBER;
@@ -36,6 +37,7 @@ import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstant
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_INT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_MAP_OF_ANYDATA;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_NIL;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_RECORD;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_STRING;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_TABLE_OF_ANYDATA;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_XML;
@@ -130,7 +132,7 @@ public class CompilerPluginTest {
         Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_7");
         PackageCompilation compilation = currentPackage.getCompilation();
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
-        Assert.assertEquals(diagnosticResult.errorCount(), 22);
+        Assert.assertEquals(diagnosticResult.errorCount(), 23);
         CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_INT, "int?");
         CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_INT, "int|float");
         CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_FLOAT, "float?");
@@ -153,6 +155,7 @@ public class CompilerPluginTest {
         CompilerPluginTestUtils.assertError101(diagnosticResult, 19, ANNOTATION_TAG_STRING, "string|int");
         CompilerPluginTestUtils.assertError101(diagnosticResult, 20, ANNOTATION_TAG_ARRAY, "anydata[]?");
         CompilerPluginTestUtils.assertError101(diagnosticResult, 21, ANNOTATION_TAG_ARRAY, "int[]|float[]?");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 22, ANNOTATION_TAG_STRING, "int:Signed32");
     }
 
     @Test
@@ -297,5 +300,19 @@ public class CompilerPluginTest {
         for (int i = 0; i < expectedErrorCount; i++) {
             CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
         }
+    }
+
+    @Test
+    public void testDateAnnotationTagConstraints() {
+        Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_20");
+        PackageCompilation compilation = currentPackage.getCompilation();
+        DiagnosticResult diagnosticResult = compilation.diagnosticResult();
+        int expectedErrorCount = 5;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_DATE, TYPE_INT);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_DATE, TYPE_RECORD);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_DATE, TYPE_RECORD);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_DATE, "CustomRecord");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_DATE, TYPE_RECORD);
     }
 }

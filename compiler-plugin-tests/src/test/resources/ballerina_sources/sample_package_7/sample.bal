@@ -156,3 +156,8 @@ type UnionArrayType2 int[]|float[];
     maxLength: 10
 }
 type UnionArrayType3 int[]|float[]?;
+
+@constraint:String {
+    minLength: 1000
+}
+type Id int:Signed32;

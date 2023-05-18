@@ -590,7 +590,6 @@ function testInvalidLengthConstraintOnArrayRecordField() {
     }
 }
 
-
 // Testing annotation validations with union type desc
 
 type Union1 record {|
@@ -714,6 +713,150 @@ function testCustomAnnotationFailure() {
     OrderNew|error validation = validate(rec);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$.userId:length' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+// Constraint on subtypes
+
+@String {
+    minLength: 2
+}
+type Name string;
+
+@String {
+    maxLength: 10
+}
+type NickName Name;
+
+@Int {
+    maxValue: 1000
+}
+type Id int:Signed32;
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeSuccess1() {
+    NickName|error validation = validate("J");
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeSuccess2() {
+    Id|error validation = validate(100);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeFailure1() {
+    NickName|error validation = validate("James Maccurdy");
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeFailure2() {
+    Id|error validation = validate(1001);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+type FullName record {|
+    @String {
+        maxLength: 20
+    }
+    Name firstName;
+    Name lastName;
+|};
+
+type UserNew record {
+    @Int {
+        minValue: 1
+    }
+    int:Signed32 id;
+    FullName name;
+    @String {
+        minLength: 2
+    }
+    Name nickName?; 
+    int age;
+};
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeAsRecordFieldSuccess() {
+    UserNew user = {
+        id: 1,
+        name: {
+            firstName: "John",
+            lastName: "Doe"
+        },
+        nickName: "JD",
+        age: 20
+    };
+    UserNew|error validation = validate(user);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testConstraintAnnotationOnSubtypeAsRecordFieldFailure() {
+    UserNew user = {
+        id: 1,
+        name: {
+            firstName: "John",
+            lastName: "Doe"
+        },
+        nickName: "J",
+        age: 20
+    };
+    UserNew|error validation = validate(user);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.nickName:minLength','$.nickName:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+type UserDetails record {|
+    @String {minLength: 2, maxLength: 20}
+    string x\-name;
+    @Array {maxLength: 2}
+    Age[] x\-age\$;
+|};
+
+@test:Config {}
+function testConstraintOnFieldsWithEscapeCharsSuccess() {
+    UserDetails user = {
+        x\-name: "John Doe",
+        x\-age\$: [18, 19]
+    };
+    UserDetails|error validation = validate(user);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+function testConstraintOnFieldsWithEscapeCharsFailure() {
+    UserDetails user = {
+        x\-name: "J",
+        x\-age\$: [17, 19, 20, 15]
+    };
+    UserDetails|error validation = validate(user);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.x-age$:maxLength'," +
+        "'$.x-age$[0]:minValue','$.x-age$[3]:minValue','$.x-name:minLength' constraint(s).");
     } else {
         test:assertFail("Expected error not found.");
     }
