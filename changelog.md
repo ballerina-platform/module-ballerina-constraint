@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Allow constraints on subtypes](https://github.com/ballerina-platform/ballerina-standard-library/issues/4349)
 
 ### Changed
-- [Use ValueUtils.convert API instead of CloneWithType method](https://github.com/ballerina-platform/ballerina-standard-library/issues/3933)
+- [Use `ValueUtils.convert` API instead of `CloneWithType` method](https://github.com/ballerina-platform/ballerina-standard-library/issues/3933)
 
 ## [1.1.0] - 2023-02-20
 
