@@ -18,6 +18,9 @@
 
 package io.ballerina.stdlib.constraint;
 
+import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.values.BString;
+
 /**
  * Constants related to constraint module.
  */
@@ -39,6 +42,7 @@ public class Constants {
     public static final String ANNOTATION_TAG_NUMBER = "Number";
     public static final String ANNOTATION_TAG_STRING = "String";
     public static final String ANNOTATION_TAG_ARRAY = "Array";
+    public static final String ANNOTATION_TAG_DATE = "Date";
 
     public static final String CONSTRAINT_MIN_VALUE = "minValue";
     public static final String CONSTRAINT_MAX_VALUE = "maxValue";
@@ -48,6 +52,24 @@ public class Constants {
     public static final String CONSTRAINT_MIN_LENGTH = "minLength";
     public static final String CONSTRAINT_MAX_LENGTH = "maxLength";
     public static final String CONSTRAINT_PATTERN = "pattern";
+    public static final String CONSTRAINT_DATE_OPTION = "option";
+    public static final String PAST = "PAST";
+    public static final String PAST_OR_PRESENT = "PAST_OR_PRESENT";
+    public static final String FUTURE = "FUTURE";
+    public static final String FUTURE_OR_PRESENT = "FUTURE_OR_PRESENT";
+    public static final String PAST_DATE = "pastDate";
+    public static final String PAST_OR_PRESENT_DATE = "pastOrPresentDate";
+    public static final String FUTURE_DATE = "futureDate";
+    public static final String FUTURE_OR_PRESENT_DATE = "futureOrPresentDate";
+    public static final String CONSTRAINT_VALID_DATE = "validDate";
+
+    public static final String YEAR = "year";
+    public static final String MONTH = "month";
+    public static final String DAY = "day";
+
+    public static final BString DATE_RECORD_YEAR_BSTRING = StringUtils.fromString(YEAR);
+    public static final BString DATE_RECORD_MONTH_BSTRING = StringUtils.fromString(MONTH);
+    public static final BString DATE_RECORD_DAY_BSTRING = StringUtils.fromString(DAY);
 
     static final String GENERIC_ERROR = "Error";
     static final String VALIDATION_ERROR = "ValidationError";

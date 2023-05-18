@@ -31,6 +31,27 @@ public annotation StringConstraints String on type, record field;
 # The annotation, which is used for the constraints of the `anydata[]` type.
 public annotation ArrayConstraints Array on type, record field;
 
+# The annotation, which is used for the constraints of the `Date` type, which is structurally equivalent
+# to the following record:
+# ```ballerina
+# type Date record {
+#    int year;
+#    int month;
+#    int day;
+# };
+# ```
+# This annotation will enable validation on the date fields in the record. Additionally,
+# the `option` field can be used to validate the date against the provided option.
+public annotation DateConstraints Date on type, record field;
+
+// This is a private type used to validate the usage of the `constraint:Date` annotation
+// in the compiler plugin.
+type DateRecord record {
+    int year;
+    int month;
+    int day;
+};
+
 # Represents the constraints associated with `int` type.
 #
 # + minValue - The inclusive lower bound of the constrained type
@@ -93,6 +114,25 @@ public type ArrayConstraints record {|
     int minLength?;
     int maxLength?;
 |};
+
+# Represents the date option to be validated.
+# + PAST - validates whether the date is in the past
+# + PAST_OR_PRESENT - validates whether the date is in the past or present
+# + FUTURE - validates whether the date is in the future
+# + FUTURE_OR_PRESENT - validates whether the date is in the future or present
+public enum DateOption {
+   PAST,
+   PAST_OR_PRESENT,
+   FUTURE,
+   FUTURE_OR_PRESENT
+}
+
+# Represents the constraints associated with `Date` type.
+#
+# + option - date option to be validated
+public type DateConstraints record {
+   DateOption option?;
+};
 
 # Validates the provided value against the configured annotations. Additionally, if the type of the value is different
 # from the expected return type then the value will be cloned with the contextually expected type before the validation.

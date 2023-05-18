@@ -25,6 +25,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_ARRAY;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_FLOAT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_NUMBER;
@@ -36,6 +37,7 @@ import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstant
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_INT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_MAP_OF_ANYDATA;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_NIL;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_RECORD;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_STRING;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_TABLE_OF_ANYDATA;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_XML;
@@ -298,5 +300,19 @@ public class CompilerPluginTest {
         for (int i = 0; i < expectedErrorCount; i++) {
             CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
         }
+    }
+
+    @Test
+    public void testDateAnnotationTagConstraints() {
+        Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_20");
+        PackageCompilation compilation = currentPackage.getCompilation();
+        DiagnosticResult diagnosticResult = compilation.diagnosticResult();
+        int expectedErrorCount = 5;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 0, ANNOTATION_TAG_DATE, TYPE_INT);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 1, ANNOTATION_TAG_DATE, TYPE_RECORD);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_DATE, TYPE_RECORD);
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_DATE, "CustomRecord");
+        CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_DATE, TYPE_RECORD);
     }
 }

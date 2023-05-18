@@ -36,6 +36,7 @@ import io.ballerina.tools.diagnostics.DiagnosticInfo;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.compiler.Constants.MODULE_NAME;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_COLON;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_DECIMAL;
@@ -79,7 +80,9 @@ public class ConstraintCompilerPluginUtils {
                                                                String fieldType) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.filter(node -> node.fields().size() > 0).isEmpty()) {
-            reportConstraintsUnavailability(ctx, annotationTag, fieldType, annotationNode.location());
+            if (!annotationTag.equals(ANNOTATION_TAG_DATE)) {
+                reportConstraintsUnavailability(ctx, annotationTag, fieldType, annotationNode.location());
+            }
         }
     }
 

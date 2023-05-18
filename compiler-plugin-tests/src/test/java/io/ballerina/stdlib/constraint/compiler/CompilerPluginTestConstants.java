@@ -28,6 +28,7 @@ public class CompilerPluginTestConstants {
     static final String ANNOTATION_TAG_NUMBER = "Number";
     static final String ANNOTATION_TAG_STRING = "String";
     static final String ANNOTATION_TAG_ARRAY = "Array";
+    static final String ANNOTATION_TAG_DATE = "Date";
 
     static final String TYPE_NIL = "()";
     static final String TYPE_BOOLEAN = "boolean";
@@ -39,4 +40,5 @@ public class CompilerPluginTestConstants {
     static final String TYPE_ANYDATA_ARRAY = "anydata[]";
     static final String TYPE_MAP_OF_ANYDATA = "map<anydata>";
     static final String TYPE_TABLE_OF_ANYDATA = "table<map<anydata>>";
+    static final String TYPE_RECORD = "record";
 }

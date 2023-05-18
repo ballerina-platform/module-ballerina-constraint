@@ -55,6 +55,8 @@ public class RecordFieldAnnotations extends AbstractAnnotations {
     public void validate(Object value, AnnotatableType type, String path) {
         BMap<BString, Object> record = (BMap<BString, Object>) value;
         BMap<BString, Object> recordAnnotations = type.getAnnotations();
+        // Validate the annotations of the record
+        super.validateAnnotations(recordAnnotations, record, path);
         for (Map.Entry<BString, Object> entry : recordAnnotations.entrySet()) {
             if (entry.getKey().getValue().startsWith(PREFIX_RECORD_FIELD)) {
                 String fieldName = IdentifierUtils.unescapeBallerina(

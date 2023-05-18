@@ -22,6 +22,7 @@ import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
+import io.ballerina.stdlib.constraint.validators.DateConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.IntConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.NumberConstraintValidator;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_RECORD_REGEX;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_ARRAY;
+import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_DATE;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_FLOAT;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.Constants.ANNOTATION_TAG_NUMBER;
@@ -48,6 +50,7 @@ public abstract class AbstractAnnotations {
     private final NumberConstraintValidator numberConstraintValidator;
     private final StringConstraintValidator stringConstraintValidator;
     private final ArrayConstraintValidator arrayConstraintValidator;
+    private final DateConstraintValidator dateConstraintValidator;
 
     public AbstractAnnotations(List<String> failedConstraints) {
         this.intConstraintValidator = new IntConstraintValidator(failedConstraints);
@@ -55,6 +58,7 @@ public abstract class AbstractAnnotations {
         this.numberConstraintValidator = new NumberConstraintValidator(failedConstraints);
         this.stringConstraintValidator = new StringConstraintValidator(failedConstraints);
         this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraints);
+        this.dateConstraintValidator = new DateConstraintValidator(failedConstraints);
     }
 
     public abstract void validate(Object value, AnnotatableType type, String path);
@@ -91,6 +95,9 @@ public abstract class AbstractAnnotations {
                 break;
             case ANNOTATION_TAG_ARRAY:
                 this.arrayConstraintValidator.validate(constraints, (Long) fieldValue, path);
+                break;
+            case ANNOTATION_TAG_DATE:
+                this.dateConstraintValidator.validate(constraints, fieldValue, path);
                 break;
             default:
                 break;
