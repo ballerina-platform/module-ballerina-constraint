@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- [Introduce `@constriant:Date` to validate date structures](https://github.com/ballerina-platform/ballerina-standard-library/issues/3960)
 - [Allow constraints on subtypes](https://github.com/ballerina-platform/ballerina-standard-library/issues/4349)
 
 ## [1.1.0] - 2023-02-20
