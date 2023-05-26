@@ -18,7 +18,9 @@
 
 package io.ballerina.stdlib.constraint.validators.interfaces;
 
+import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,39 +31,48 @@ import static io.ballerina.stdlib.constraint.Constants.FUTURE;
 import static io.ballerina.stdlib.constraint.Constants.FUTURE_DATE;
 import static io.ballerina.stdlib.constraint.Constants.FUTURE_OR_PRESENT;
 import static io.ballerina.stdlib.constraint.Constants.FUTURE_OR_PRESENT_DATE;
+import static io.ballerina.stdlib.constraint.Constants.MESSAGE;
 import static io.ballerina.stdlib.constraint.Constants.PAST;
 import static io.ballerina.stdlib.constraint.Constants.PAST_DATE;
 import static io.ballerina.stdlib.constraint.Constants.PAST_OR_PRESENT;
 import static io.ballerina.stdlib.constraint.Constants.PAST_OR_PRESENT_DATE;
-import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
+import static io.ballerina.stdlib.constraint.Constants.VALUE;
 
 /**
  * The interface to validate the date related constraints.
  */
 public interface DateValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, LocalDate date, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, LocalDate date, boolean isMemberValue,
+                          List<ConstraintErrorInfo> failedConstraints, String path) {
         if (constraint.getKey().getValue().equals(CONSTRAINT_DATE_OPTION)) {
-            switch (constraint.getValue().toString()) {
+            Object constraintValue = constraint.getValue();
+            String message = null;
+            if (constraintValue instanceof BMap) {
+                message = ((BMap) constraintValue).getStringValue(MESSAGE).getValue();
+                constraintValue = ((BMap) constraintValue).get(VALUE);
+            }
+            switch (constraintValue.toString()) {
                 case PAST:
                     if (!validateIsPastDate(date)) {
-                        failedConstraints.add(path + SYMBOL_SEPARATOR + PAST_DATE);
+                        failedConstraints.add(new ConstraintErrorInfo(path, message, PAST_DATE, isMemberValue));
                     }
                     break;
                 case PAST_OR_PRESENT:
                     if (!validateIsPastOrPresentDate(date)) {
-                        failedConstraints.add(path + SYMBOL_SEPARATOR + PAST_OR_PRESENT_DATE);
+                        failedConstraints.add(new ConstraintErrorInfo(path, message, PAST_OR_PRESENT_DATE,
+                                isMemberValue));
                     }
                     break;
                 case FUTURE:
                     if (!validateIsFutureDate(date)) {
-                        failedConstraints.add(path + SYMBOL_SEPARATOR + FUTURE_DATE);
+                        failedConstraints.add(new ConstraintErrorInfo(path, message, FUTURE_DATE, isMemberValue));
                     }
                     break;
                 case FUTURE_OR_PRESENT:
                     if (!validateIsFutureOrPresentDate(date)) {
-                        failedConstraints.add(path + SYMBOL_SEPARATOR + FUTURE_OR_PRESENT_DATE);
+                        failedConstraints.add(new ConstraintErrorInfo(path, message, FUTURE_OR_PRESENT_DATE,
+                                isMemberValue));
                     }
                     break;
                 default:
@@ -69,7 +80,6 @@ public interface DateValidator {
             }
         }
     }
-
 
     static boolean validateIsPastDate(LocalDate date) {
         return date.isBefore(LocalDate.now());

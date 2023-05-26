@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.validators.interfaces.LengthValidator;
 import io.ballerina.stdlib.constraint.validators.interfaces.PatternValidator;
 
@@ -31,23 +32,24 @@ import java.util.Map;
  */
 public class StringConstraintValidator implements LengthValidator, PatternValidator {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public StringConstraintValidator(List<String> failedConstraints) {
-        this.failedConstraints = failedConstraints;
+    public StringConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
-    public void validate(BMap<BString, Object> constraints, String fieldValue, String path) {
+    public void validate(BMap<BString, Object> constraints, String fieldValue, String path, boolean isMemberValue) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, failedConstraints, path);
+            LengthValidator.super.checkLengthConstraintValue(constraint, path);
+            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
         }
     }
 
     @Override
-    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                         String path) {
-        LengthValidator.super.validate(constraint, fieldValue, failedConstraints, path);
-        PatternValidator.super.validate(constraint, fieldValue, failedConstraints, path);
+    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, boolean isMemberValue,
+                         List<ConstraintErrorInfo> failedConstraintsInfo, String path) {
+        LengthValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
+        PatternValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
     }
 
     @Override

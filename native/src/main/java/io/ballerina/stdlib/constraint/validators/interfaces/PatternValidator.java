@@ -19,26 +19,35 @@
 package io.ballerina.stdlib.constraint.validators.interfaces;
 
 import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BRegexpValue;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import org.ballerinalang.langlib.regexp.Matches;
 
 import java.util.List;
 import java.util.Map;
 
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_PATTERN;
-import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
+import static io.ballerina.stdlib.constraint.Constants.MESSAGE;
+import static io.ballerina.stdlib.constraint.Constants.VALUE;
 
 /**
  * The interface to validate the pattern related constraints.
  */
 public interface PatternValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, boolean isMemberValue,
+                          List<ConstraintErrorInfo> failedConstraints, String path) {
+        Object constraintValue = constraint.getValue();
+        String message = null;
+        if (constraintValue instanceof BMap) {
+            message = ((BMap) constraintValue).getStringValue(MESSAGE).getValue();
+            constraintValue = ((BMap) constraintValue).get(VALUE);
+        }
         if (constraint.getKey().getValue().equals(CONSTRAINT_PATTERN)) {
-            if (!validatePattern(fieldValue, constraint.getValue())) {
-                failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_PATTERN);
+            if (!validatePattern(fieldValue, constraintValue)) {
+                failedConstraints.add(new ConstraintErrorInfo(path, message, CONSTRAINT_PATTERN, isMemberValue));
             }
         }
     }

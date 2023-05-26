@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint.validators;
 
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.validators.interfaces.LengthValidator;
 
 import java.util.List;
@@ -30,15 +31,16 @@ import java.util.Map;
  */
 public class ArrayConstraintValidator implements LengthValidator {
 
-    private final List<String> failedConstraints;
+    private final List<ConstraintErrorInfo> failedConstraintsInfo;
 
-    public ArrayConstraintValidator(List<String> failedConstraints) {
-        this.failedConstraints = failedConstraints;
+    public ArrayConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        this.failedConstraintsInfo = failedConstraintsInfo;
     }
 
-    public void validate(BMap<BString, Object> constraints, Long fieldValue, String path) {
+    public void validate(BMap<BString, Object> constraints, Long fieldValue, String path, boolean isMemberValue) {
         for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, failedConstraints, path);
+            LengthValidator.super.checkLengthConstraintValue(constraint, path);
+            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
         }
     }
 

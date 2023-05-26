@@ -21,6 +21,7 @@ package io.ballerina.stdlib.constraint.annotations;
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.validators.ArrayConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.DateConstraintValidator;
 import io.ballerina.stdlib.constraint.validators.FloatConstraintValidator;
@@ -52,24 +53,25 @@ public abstract class AbstractAnnotations {
     private final ArrayConstraintValidator arrayConstraintValidator;
     private final DateConstraintValidator dateConstraintValidator;
 
-    public AbstractAnnotations(List<String> failedConstraints) {
-        this.intConstraintValidator = new IntConstraintValidator(failedConstraints);
-        this.floatConstraintValidator = new FloatConstraintValidator(failedConstraints);
-        this.numberConstraintValidator = new NumberConstraintValidator(failedConstraints);
-        this.stringConstraintValidator = new StringConstraintValidator(failedConstraints);
-        this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraints);
-        this.dateConstraintValidator = new DateConstraintValidator(failedConstraints);
+    public AbstractAnnotations(List<ConstraintErrorInfo> failedConstraintsInfo) {
+        this.intConstraintValidator = new IntConstraintValidator(failedConstraintsInfo);
+        this.floatConstraintValidator = new FloatConstraintValidator(failedConstraintsInfo);
+        this.numberConstraintValidator = new NumberConstraintValidator(failedConstraintsInfo);
+        this.stringConstraintValidator = new StringConstraintValidator(failedConstraintsInfo);
+        this.arrayConstraintValidator = new ArrayConstraintValidator(failedConstraintsInfo);
+        this.dateConstraintValidator = new DateConstraintValidator(failedConstraintsInfo);
     }
 
-    public abstract void validate(Object value, AnnotatableType type, String path);
+    public abstract void validate(Object value, AnnotatableType type, String path, boolean isMemberValue);
 
     @SuppressWarnings("unchecked")
-    public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue, String path) {
+    public void validateAnnotations(BMap<BString, Object> annotations, Object fieldValue, String path,
+                                    boolean isMemberValue) {
         for (Map.Entry<BString, Object> annotationRecord : annotations.entrySet()) {
             if (fromConstraintModule(annotationRecord)) {
                 String annotationTag = annotationRecord.getKey().getValue().split(SYMBOL_SEPARATOR, 3)[2];
                 BMap<BString, Object> constraints = (BMap<BString, Object>) annotationRecord.getValue();
-                validateAnnotationTags(annotationTag, constraints, fieldValue, path);
+                validateAnnotationTags(annotationTag, constraints, fieldValue, path, isMemberValue);
             }
         }
     }
@@ -79,25 +81,25 @@ public abstract class AbstractAnnotations {
     }
 
     private void validateAnnotationTags(String annotationTag, BMap<BString, Object> constraints, Object fieldValue,
-                                        String path) {
+                                        String path, boolean isMemberValue) {
         switch (annotationTag) {
             case ANNOTATION_TAG_INT:
-                this.intConstraintValidator.validate(constraints, (Number) fieldValue, path);
+                this.intConstraintValidator.validate(constraints, (Number) fieldValue, path, isMemberValue);
                 break;
             case ANNOTATION_TAG_FLOAT:
-                this.floatConstraintValidator.validate(constraints, (Number) fieldValue, path);
+                this.floatConstraintValidator.validate(constraints, (Number) fieldValue, path, isMemberValue);
                 break;
             case ANNOTATION_TAG_NUMBER:
-                this.numberConstraintValidator.validate(constraints, (Number) fieldValue, path);
+                this.numberConstraintValidator.validate(constraints, (Number) fieldValue, path, isMemberValue);
                 break;
             case ANNOTATION_TAG_STRING:
-                this.stringConstraintValidator.validate(constraints, (String) fieldValue, path);
+                this.stringConstraintValidator.validate(constraints, (String) fieldValue, path, isMemberValue);
                 break;
             case ANNOTATION_TAG_ARRAY:
-                this.arrayConstraintValidator.validate(constraints, (Long) fieldValue, path);
+                this.arrayConstraintValidator.validate(constraints, (Long) fieldValue, path, isMemberValue);
                 break;
             case ANNOTATION_TAG_DATE:
-                this.dateConstraintValidator.validate(constraints, fieldValue, path);
+                this.dateConstraintValidator.validate(constraints, fieldValue, path, isMemberValue);
                 break;
             default:
                 break;
