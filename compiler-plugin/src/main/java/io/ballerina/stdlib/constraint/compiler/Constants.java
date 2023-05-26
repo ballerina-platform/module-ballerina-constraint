@@ -52,8 +52,5 @@ public class Constants {
     public static final String CONSTRAINT_LENGTH = "length";
     public static final String CONSTRAINT_MIN_LENGTH = "minLength";
     public static final String CONSTRAINT_MAX_LENGTH = "maxLength";
-    public static final String CONSTRAINT_IS_PAST = "isPast";
-    public static final String CONSTRAINT_IS_PAST_OR_PRESENT = "isPastOrPresent";
-    public static final String CONSTRAINT_IS_FUTURE = "isFuture";
-    public static final String CONSTRAINT_IS_FUTURE_OR_PRESENT = "isFutureOrPresent";
+    public static final String CONSTRAINT_VALUE = "value";
 }
