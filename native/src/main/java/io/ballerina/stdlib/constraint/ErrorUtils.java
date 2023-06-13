@@ -98,7 +98,7 @@ public class ErrorUtils {
 
     static String buildDefaultErrorMessage(String failedConstraint) {
         return VALIDATION_ERROR_MESSAGE_PREFIX + SYMBOL_SINGLE_QUOTE + failedConstraint + SYMBOL_SINGLE_QUOTE +
-                SYMBOL_COMMA + VALIDATION_ERROR_MESSAGE_SUFFIX + SYMBOL_DOT;
+                VALIDATION_ERROR_MESSAGE_SUFFIX + SYMBOL_DOT;
     }
 
     static BMap<BString, Object> buildErrorDetails(Map<String, List<String>> details) {
