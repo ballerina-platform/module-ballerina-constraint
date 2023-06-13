@@ -71,7 +71,10 @@ type Foo record {
 
 @constraint:Float {
     minValue: 0,
-    maxValue: 10
+    maxValue: {
+        value: 10,
+        message: "Max value should be 10"
+    }
 }
 type NilType ();
 
@@ -94,7 +97,10 @@ type IntType int;
 type FloatType float;
 
 @constraint:Float {
-    minValue: 0,
+    minValue: {
+        value: 0,
+        message: "Min value should be 0"
+    },
     maxValue: 10
 }
 type DecimalType decimal;

@@ -70,7 +70,10 @@ type Foo record {
 };
 
 @constraint:Int {
-    minValue: 0,
+    minValue: {
+        value: 0,
+        message: "Min value is 0"
+    },
     maxValue: 10
 }
 type NilType ();
@@ -113,7 +116,10 @@ type XmlType xml;
 
 @constraint:Int {
     minValue: 0,
-    maxValue: 10
+    maxValue: {
+        value: 10,
+        message: "Max value is 10"
+    }
 }
 type ArrayType anydata[];
 

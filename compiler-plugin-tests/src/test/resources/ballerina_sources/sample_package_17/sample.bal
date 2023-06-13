@@ -19,24 +19,36 @@ import ballerina/constraint;
 type Foo record {
     @constraint:Array {
         length: 10,
-        minLength: 8
+        minLength: {
+            value: 8,
+            message: "Min length should be 8"
+        }
     }
     anydata[] value1;
     @constraint:Array {
-        length: 10,
+        length: {
+            value: 10,
+            message: "Length should be 10"
+        },
         maxLength: 12
     }
     anydata[] value2;
 };
 
 @constraint:Array {
-    length: 10,
+    length: {
+        value: 10,
+        message: "Length should be 10"
+    },
     minLength: 8
 }
 type ArrayType1 anydata[];
 
 @constraint:Array {
     length: 10,
-    maxLength: 12
+    maxLength: {
+        value: 12,
+        message: "Max length should be 12"
+    }
 }
 type ArrayType2 anydata[];

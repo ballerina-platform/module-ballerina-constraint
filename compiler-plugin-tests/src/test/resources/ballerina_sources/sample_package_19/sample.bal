@@ -22,19 +22,28 @@ type Foo record {
     }
     anydata[] value1;
     @constraint:Array {
-        minLength: -1,
+        minLength: {
+            value: -1,
+            message: "Min length should be greater than 0"
+        },
         maxLength: -1
     }
     anydata[] value2;
 };
 
 @constraint:Array {
-    length: -1
+    length: {
+        value: -1,
+        message: "Length should be greater than 0"
+    }
 }
 type ArrayType1 anydata[];
 
 @constraint:Array {
     minLength: -1,
-    maxLength: -1
+    maxLength: {
+        value: -1,
+        message: "Max length should be greater than 0"
+    }
 }
 type ArrayType2 anydata[];

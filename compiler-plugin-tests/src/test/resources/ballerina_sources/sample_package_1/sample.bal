@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/constraint;
+import ballerina/time;
 
 type BankAccount record {
     @constraint:String {
@@ -126,3 +127,66 @@ type UserNew record {
     Name nickName?; 
     int age;
 };
+
+@constraint:String {
+    minLength : {
+        value : 5,
+        message : "Name should be at least 5 characters long"
+    },
+    maxLength : {
+        value : 10,
+        message : "Name should be at most 10 characters long"
+    },
+    pattern : {
+        value : re `^[a-zA-Z0-9]+$`,
+        message : "Only alpha numeric characters are allowed in the name"
+    }
+}
+type TraineeName string;
+
+@constraint:Date {
+    option: {
+        value: constraint:PAST,
+        message: "Date of birth should be in the past"
+    },
+    message: "Invalid date found for date of birth"
+}
+type DateOfBirth time:Date;
+
+@constraint:String {
+    minLength : {
+        value : 5,
+        message : "Badge should be at least 5 characters long"
+    }
+}
+type Badge string;
+
+type Trainee record {|
+    TraineeName TraineeName;
+    DateOfBirth dob;
+    @constraint:Number {
+        minValue: {
+            value: 0,
+            message: "Weight should be a positive value"
+        }
+    }
+    decimal weight;
+    @constraint:Number {
+        minValue: {
+            value: 0,
+            message: "Height should be a positive value"
+        }
+    }
+    decimal height;
+    @constraint:Date {
+        message: "Invalid date found for date of joining"
+    }
+    time:Date dateOfJoining;
+    @constraint:Array {
+        maxLength: {
+            value: 5,
+            message: "Maximum 5 badges are allowed"
+        }
+    }
+    Badge[] badges;
+|};
