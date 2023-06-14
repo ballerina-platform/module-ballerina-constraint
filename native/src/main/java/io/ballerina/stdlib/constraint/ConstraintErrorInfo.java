@@ -30,22 +30,11 @@ public class ConstraintErrorInfo {
     final String failedConstraint;
     final boolean onMemberType;
 
-    public ConstraintErrorInfo(String path, String message, String failedConstraint) {
-        this.path = path;
-        this.message = message;
-        this.failedConstraint = failedConstraint;
-        this.onMemberType = false;
-    }
-
     public ConstraintErrorInfo(String path, String message, String failedConstraint, boolean onMemberType) {
         this.path = path;
         this.message = message;
         this.failedConstraint = failedConstraint;
         this.onMemberType = onMemberType;
-    }
-
-    public String getPath() {
-        return path;
     }
 
     public String getMessage() {
