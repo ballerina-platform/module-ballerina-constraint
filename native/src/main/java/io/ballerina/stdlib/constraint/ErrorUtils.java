@@ -19,17 +19,12 @@
 package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.creators.ErrorCreator;
-import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BError;
-import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static io.ballerina.stdlib.constraint.Constants.GENERIC_ERROR;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_COMMA;
@@ -59,7 +54,6 @@ public class ErrorUtils {
         List<String> customErrorMsgList = new ArrayList<>();
         List<String> restErrorMsgList = new ArrayList<>();
         List<String> causeMsgList = new ArrayList<>();
-        Map<String, List<String>> details = new TreeMap<>();
         for (ConstraintErrorInfo constraintErrorInfo : failedConstraintsInfo) {
             causeMsgList.add(constraintErrorInfo.getFailedConstraintsWithPath());
             if (constraintErrorInfo.hasMessage()) {
@@ -67,22 +61,15 @@ public class ErrorUtils {
             } else {
                 restErrorMsgList.add(constraintErrorInfo.getFailedConstraintsWithPath());
             }
-            String path = constraintErrorInfo.getPath();
-            if (details.containsKey(path)) {
-                details.get(path).add(constraintErrorInfo.getErrorMessage());
-            } else {
-                details.put(path, new ArrayList<>(List.of(constraintErrorInfo.getErrorMessage())));
-            }
         }
-        BMap<BString, Object> errorDetails = buildErrorDetails(details);
         if (customErrorMsgList.isEmpty()) {
-            return createError(buildDefaultErrorMessage(causeMsgList), errorDetails);
+            return createError(buildDefaultErrorMessage(causeMsgList));
         }
         BError cause = createGenericError(buildDefaultErrorMessage(causeMsgList));
         if (!restErrorMsgList.isEmpty()) {
             customErrorMsgList.add(buildDefaultErrorMessage(restErrorMsgList));
         }
-        return createError(buildErrorMessage(customErrorMsgList), cause, errorDetails);
+        return createError(buildErrorMessage(customErrorMsgList), cause);
     }
 
     static String buildDefaultErrorMessage(List<String> failedConstraints) {
@@ -95,23 +82,6 @@ public class ErrorUtils {
         errorMsg.append(VALIDATION_ERROR_MESSAGE_SUFFIX).append(SYMBOL_DOT);
         return errorMsg.toString();
     }
-
-    static String buildDefaultErrorMessage(String failedConstraint) {
-        return VALIDATION_ERROR_MESSAGE_PREFIX + SYMBOL_SINGLE_QUOTE + failedConstraint + SYMBOL_SINGLE_QUOTE +
-                VALIDATION_ERROR_MESSAGE_SUFFIX + SYMBOL_DOT;
-    }
-
-    static BMap<BString, Object> buildErrorDetails(Map<String, List<String>> details) {
-        BMap<BString, Object> errorDetails = ValueCreator.createMapValue();
-        BMap<BString, Object> violations = ValueCreator.createMapValue();
-        for (Map.Entry<String, List<String>> entry : details.entrySet()) {
-            String failedConstraintMessage = buildErrorMessage(entry.getValue());
-            violations.put(StringUtils.fromString(entry.getKey()), StringUtils.fromString(failedConstraintMessage));
-        }
-        errorDetails.put(Constants.VIOLATIONS, violations);
-        return errorDetails;
-    }
-
 
     static String buildErrorMessage(List<String> list) {
         int size = list.size();
@@ -146,9 +116,9 @@ public class ErrorUtils {
                                         StringUtils.fromString(errMessage), null, null);
     }
 
-    static BError createError(String errMessage, BMap<BString, Object> details) {
+    static BError createError(String errMessage) {
         return ErrorCreator.createError(ModuleUtils.getModule(), Constants.VALIDATION_ERROR,
-                                        StringUtils.fromString(errMessage), null, details);
+                                        StringUtils.fromString(errMessage), null, null);
     }
 
     static BError createError(String errMessage, BError err, String errorType) {
@@ -156,8 +126,8 @@ public class ErrorUtils {
                                         StringUtils.fromString(errMessage), err, null);
     }
 
-    static BError createError(String errMessage, BError err, BMap<BString, Object> details) {
+    static BError createError(String errMessage, BError err) {
         return ErrorCreator.createError(ModuleUtils.getModule(), Constants.VALIDATION_ERROR,
-                                        StringUtils.fromString(errMessage), err, details);
+                                        StringUtils.fromString(errMessage), err, null);
     }
 }

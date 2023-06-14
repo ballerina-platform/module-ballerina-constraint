@@ -20,7 +20,6 @@ package io.ballerina.stdlib.constraint;
 
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SINGLE_QUOTE;
-import static io.ballerina.stdlib.constraint.ErrorUtils.buildDefaultErrorMessage;
 
 /**
  * Represents a constraint violation error information.
@@ -58,10 +57,6 @@ public class ConstraintErrorInfo {
 
     public boolean hasMessage() {
         return message != null;
-    }
-
-    public String getErrorMessage() {
-        return message != null ? message : buildDefaultErrorMessage(failedConstraint);
     }
 
     public String getFailedConstraintsWithPath() {
