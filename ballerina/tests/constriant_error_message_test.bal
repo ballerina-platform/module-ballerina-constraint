@@ -299,3 +299,163 @@ function testErrorMessageInRecordTypeAllNegative() {
         test:assertFail("Expected error not found.");
     }
 }
+
+type Trainee0 record {|
+    TraineeName TraineeName;
+    DateOfBirth dob;
+    @Number {
+        minValueExclusive: 0
+    }
+    decimal weight;
+    @Number {
+        minValueExclusive: 0,
+        maxValueExclusive: 250
+    }
+    decimal height;
+    @Date
+    time:Date dateOfJoining;
+    @Array {
+        maxLength: 5
+    }
+    Badge[] badges;
+|};
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypePositive() {
+    Trainee0 trainee = TRAINEE.clone();
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, trainee);
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative1() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.TraineeName = "abc";
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Name should be at least 5 characters long.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    trainee.TraineeName = "ab*";
+    validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Name should be at least 5 characters long and Only alpha numeric characters are allowed in the name.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative2() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.dob = {
+        year: 2055,
+        month: 10,
+        day: 10
+    };
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Date of birth should be in the past.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative3() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.weight = -50.5;
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.weight:minValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative4() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.height = -150.5;
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.height:minValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative5() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.height = 300;
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.height:maxValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative6() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.dateOfJoining = {
+        year: 2022,
+        month: 2,
+        day: 30
+    };
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.dateOfJoining.day:validDate' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeNegative7() {
+    Trainee0 trainee = TRAINEE.clone();
+    trainee.badges = ["badge1", "badge2", "bad"];
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "'$.badges[2]':Badge should be at least 5 characters long.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+function testErrorMessageInMixedRecordTypeAllNegative() {
+    Trainee0 trainee = {
+        TraineeName: "abc",
+        dob: {
+            year: 2055,
+            month: 10,
+            day: 10
+        },
+        weight: -50.5,
+        height: -150.5,
+        dateOfJoining: {
+            year: 2022,
+            month: 2,
+            day: 30
+        },
+        badges: ["badge1", "badge2", "bad", "badge4", "badge5", "badge6"]
+    };
+    Trainee0|error validation = validate(trainee);
+    if validation is error {
+        test:assertEquals(validation.message(), "Name should be at least 5 characters long, Date of birth should be " +
+                          "in the past, '$.badges[2]':Badge should be at least 5 characters long and Validation failed" +
+                          " for '$.badges:maxLength','$.dateOfJoining.day:validDate','$.height:minValueExclusive'," +
+                          "'$.weight:minValueExclusive' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
