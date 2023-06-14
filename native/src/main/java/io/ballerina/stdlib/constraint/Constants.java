@@ -73,7 +73,6 @@ public class Constants {
 
     public static final BString VALUE = StringUtils.fromString("value");
     public static final BString MESSAGE = StringUtils.fromString("message");
-    public static final BString VIOLATIONS = StringUtils.fromString("violations");
 
     public static final String CONSTRAINT_MESSAGE = "message";
 
