@@ -19,11 +19,17 @@ import ballerina/constraint;
 type Foo record {
     @constraint:Int {
         minValue: 1,
-        minValueExclusive: 0
+        minValueExclusive: {
+            value: 0,
+            message: "value should be greater than 0"
+        }
     }
     int value1;
     @constraint:Int {
-        maxValue: 10,
+        maxValue: {
+            value: 10,
+            message: "value should be less than 10"
+        },
         maxValueExclusive: 11
     }
     int value2;

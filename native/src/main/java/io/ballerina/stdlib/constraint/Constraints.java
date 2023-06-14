@@ -58,9 +58,10 @@ public class Constraints {
         }
 
         try {
-            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
-            if (!failedConstraints.isEmpty()) {
-                return ErrorUtils.buildValidationError(failedConstraints);
+            List<ConstraintErrorInfo> failedConstraintsInfo = validateAfterTypeConversionInternal(value, type,
+                    SYMBOL_DOLLAR_SIGN, false);
+            if (!failedConstraintsInfo.isEmpty()) {
+                return ErrorUtils.buildValidationError(failedConstraintsInfo);
             }
             return value;
         } catch (InternalValidationException e) {
@@ -72,7 +73,8 @@ public class Constraints {
 
     public static Object validateAfterTypeConversion(Object value, Type type) {
         try {
-            List<String> failedConstraints = validateAfterTypeConversionInternal(value, type, SYMBOL_DOLLAR_SIGN);
+            List<ConstraintErrorInfo> failedConstraints = validateAfterTypeConversionInternal(value, type,
+                    SYMBOL_DOLLAR_SIGN, false);
             if (!failedConstraints.isEmpty()) {
                 return ErrorUtils.buildValidationError(failedConstraints);
             }
@@ -84,35 +86,36 @@ public class Constraints {
         }
     }
 
-    private static List<String> validateArrayMembers(Object value, ArrayType type, String path) {
+    private static List<ConstraintErrorInfo> validateArrayMembers(Object value, ArrayType type, String path) {
         Type memberType = type.getElementType();
         BArray members = ((BArray) value);
-        List<String> failedConstraints = new ArrayList<>();
+        List<ConstraintErrorInfo> failedConstraints = new ArrayList<>();
         for (int i = 0; i < members.getLength(); i++) {
             failedConstraints.addAll(validateAfterTypeConversionInternal(members.get(i), memberType, path +
-                                        SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET));
+                                        SYMBOL_OPEN_SQUARE_BRACKET + i + SYMBOL_CLOSE_SQUARE_BRACKET, true));
         }
         return failedConstraints;
     }
 
-    private static List<String> validateAfterTypeConversionInternal(Object value, Type type, String path) {
+    private static List<ConstraintErrorInfo> validateAfterTypeConversionInternal(Object value, Type type, String path,
+                                                                                 boolean isMemberValue) {
         if (type instanceof ArrayType) {
             return validateArrayMembers(value, (ArrayType) type, path);
         }
-        List<String> failedConstraints = new ArrayList<>();
+        List<ConstraintErrorInfo> failedConstraintsInfo = new ArrayList<>();
         if (type.isReadOnly()) {
             type = getTypeFromReadOnly(type);
         }
         if (type instanceof AnnotatableType) {
-            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraints);
-            annotations.validate(value, (AnnotatableType) type, path);
+            AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraintsInfo);
+            annotations.validate(value, (AnnotatableType) type, path, isMemberValue);
         } else if (type instanceof UnionType) {
             Optional<Type> matchingType = getMatchingType(value, type);
             if (matchingType.isPresent()) {
-                return validateAfterTypeConversionInternal(value, matchingType.get(), path);
+                return validateAfterTypeConversionInternal(value, matchingType.get(), path, isMemberValue);
             }
         }
-        return failedConstraints;
+        return failedConstraintsInfo;
     }
 
     private static Type getTypeFromReadOnly(Type type) {
@@ -155,7 +158,7 @@ public class Constraints {
         return Optional.empty();
     }
 
-    private static AbstractAnnotations getAnnotationImpl(Type type, List<String> failedConstraints) {
+    private static AbstractAnnotations getAnnotationImpl(Type type, List<ConstraintErrorInfo> failedConstraints) {
         if (type instanceof RecordType) {
             return new RecordFieldAnnotations(failedConstraints);
         } else {

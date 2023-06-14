@@ -98,7 +98,10 @@ type UnionIntType1 int?;
 type UnionIntType2 int|float;
 
 @constraint:Float {
-    maxValue: 99.9
+    maxValue: {
+        value: 99.9,
+        message: "Value should be less than 99.9"
+    }
 }
 type UnionFloatType1 float?;
 
@@ -158,6 +161,9 @@ type UnionArrayType2 int[]|float[];
 type UnionArrayType3 int[]|float[]?;
 
 @constraint:String {
-    minLength: 1000
+    minLength: {
+        value: 1000,
+        message: "Length should be less than 1000"
+    }
 }
 type Id int:Signed32;

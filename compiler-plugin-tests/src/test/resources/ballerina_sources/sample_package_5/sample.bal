@@ -20,7 +20,10 @@ string:RegExp regExp = re `[0-9]*`;
 
 @constraint:String {
     length: 10,
-    pattern: regExp
+    pattern: {
+        value: regExp,
+        message: "Invalid value"
+    }
 }
 type PhoneNumber string;
 
@@ -110,7 +113,10 @@ type FloatType float;
 type DecimalType decimal;
 
 @constraint:String {
-    length: 10
+    length: {
+        value: 10,
+        message: "Invalid length"
+    }
 }
 type StringType string;
 

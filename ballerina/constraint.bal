@@ -52,6 +52,15 @@ type DateRecord record {
     int day;
 };
 
+# Represents the constraint details as a record.
+#
+# + value - The value for the constraint
+# + message - The message to be returned in case of the constraint violation
+public type ConstraintRecord record {|
+    anydata value;
+    string message;
+|};
+
 # Represents the constraints associated with `int` type.
 #
 # + minValue - The inclusive lower bound of the constrained type
@@ -59,10 +68,10 @@ type DateRecord record {
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type IntConstraints record {|
-    int minValue?;
-    int maxValue?;
-    int minValueExclusive?;
-    int maxValueExclusive?;
+    int|record{| *ConstraintRecord; int value; |} minValue?;
+    int|record{| *ConstraintRecord; int value; |} maxValue?;
+    int|record{| *ConstraintRecord; int value; |} minValueExclusive?;
+    int|record{| *ConstraintRecord; int value; |} maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `float` type.
@@ -72,10 +81,10 @@ public type IntConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type FloatConstraints record {|
-    float minValue?;
-    float maxValue?;
-    float minValueExclusive?;
-    float maxValueExclusive?;
+    float|record{| *ConstraintRecord; float value; |} minValue?;
+    float|record{| *ConstraintRecord; float value; |} maxValue?;
+    float|record{| *ConstraintRecord; float value; |} minValueExclusive?;
+    float|record{| *ConstraintRecord; float value; |} maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `int`, `float` and `decimal` types.
@@ -85,10 +94,10 @@ public type FloatConstraints record {|
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
 public type NumberConstraints record {|
-    decimal minValue?;
-    decimal maxValue?;
-    decimal minValueExclusive?;
-    decimal maxValueExclusive?;
+    decimal|record{| *ConstraintRecord; decimal value; |} minValue?;
+    decimal|record{| *ConstraintRecord; decimal value; |} maxValue?;
+    decimal|record{| *ConstraintRecord; decimal value; |} minValueExclusive?;
+    decimal|record{| *ConstraintRecord; decimal value; |} maxValueExclusive?;
 |};
 
 # Represents the constraints associated with `string` type.
@@ -98,10 +107,10 @@ public type NumberConstraints record {|
 # + maxLength - The inclusive upper bound of the number of characters of the constrained `string` type
 # + pattern - The regular expression to be matched with the constrained `string` type
 public type StringConstraints record {|
-    int length?;
-    int minLength?;
-    int maxLength?;
-    string:RegExp pattern?;
+    int|record{| *ConstraintRecord; int value; |} length?;
+    int|record{| *ConstraintRecord; int value; |} minLength?;
+    int|record{| *ConstraintRecord; int value; |} maxLength?;
+    string:RegExp|record{| *ConstraintRecord; string:RegExp value; |} pattern?;
 |};
 
 # Represents the constraints associated with `anydata[]` type.
@@ -110,9 +119,9 @@ public type StringConstraints record {|
 # + minLength - The inclusive lower bound of the number of members of the constrained type
 # + maxLength - The inclusive upper bound of the number of members of the constrained type
 public type ArrayConstraints record {|
-    int length?;
-    int minLength?;
-    int maxLength?;
+    int|record{| *ConstraintRecord; int value; |} length?;
+    int|record{| *ConstraintRecord; int value; |} minLength?;
+    int|record{| *ConstraintRecord; int value; |} maxLength?;
 |};
 
 # Represents the date option to be validated.
@@ -130,8 +139,10 @@ public enum DateOption {
 # Represents the constraints associated with `Date` type.
 #
 # + option - date option to be validated
+# + message - The message to be returned in case of the constraint violation
 public type DateConstraints record {
-   DateOption option?;
+   DateOption|record{| *ConstraintRecord; DateOption value; |} option?;
+   string message?;
 };
 
 # Validates the provided value against the configured annotations. Additionally, if the type of the value is different

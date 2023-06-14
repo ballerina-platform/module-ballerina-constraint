@@ -18,7 +18,9 @@
 
 package io.ballerina.stdlib.constraint.validators.interfaces;
 
+import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
 import io.ballerina.stdlib.constraint.InternalValidationException;
 
 import java.util.List;
@@ -27,32 +29,37 @@ import java.util.Map;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_LENGTH;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MAX_LENGTH;
 import static io.ballerina.stdlib.constraint.Constants.CONSTRAINT_MIN_LENGTH;
+import static io.ballerina.stdlib.constraint.Constants.MESSAGE;
 import static io.ballerina.stdlib.constraint.Constants.SYMBOL_SEPARATOR;
+import static io.ballerina.stdlib.constraint.Constants.VALUE;
 
 /**
  * The interface to validate the length related constraints.
  */
 public interface LengthValidator {
 
-    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, List<String> failedConstraints,
-                          String path) {
+    default void validate(Map.Entry<BString, Object> constraint, Object fieldValue, boolean isMemberValue,
+                          List<ConstraintErrorInfo> failedConstraints, String path) {
+        Object constraintValue = constraint.getValue();
+        String message = null;
+        if (constraintValue instanceof BMap) {
+            message = ((BMap) constraintValue).getStringValue(MESSAGE).getValue();
+            constraintValue = ((BMap) constraintValue).get(VALUE);
+        }
         switch (constraint.getKey().getValue()) {
             case CONSTRAINT_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_LENGTH, (long) constraint.getValue(), path);
-                if (!validateLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_LENGTH);
+                if (!validateLength(fieldValue, (long) constraintValue)) {
+                    failedConstraints.add(new ConstraintErrorInfo(path, message, CONSTRAINT_LENGTH, isMemberValue));
                 }
                 break;
             case CONSTRAINT_MIN_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_MIN_LENGTH, (long) constraint.getValue(), path);
-                if (!validateMinLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MIN_LENGTH);
+                if (!validateMinLength(fieldValue, (long) constraintValue)) {
+                    failedConstraints.add(new ConstraintErrorInfo(path, message, CONSTRAINT_MIN_LENGTH, isMemberValue));
                 }
                 break;
             case CONSTRAINT_MAX_LENGTH:
-                checkLengthConstraintValue(CONSTRAINT_MAX_LENGTH, (long) constraint.getValue(), path);
-                if (!validateMaxLength(fieldValue, (long) constraint.getValue())) {
-                    failedConstraints.add(path + SYMBOL_SEPARATOR + CONSTRAINT_MAX_LENGTH);
+                if (!validateMaxLength(fieldValue, (long) constraintValue)) {
+                    failedConstraints.add(new ConstraintErrorInfo(path, message, CONSTRAINT_MAX_LENGTH, isMemberValue));
                 }
                 break;
             default:
@@ -60,11 +67,22 @@ public interface LengthValidator {
         }
     }
 
-    static void checkLengthConstraintValue(String constraintField, long constraintValue, String path) {
-        if (constraintValue <= 0) {
-            throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
-                                                  constraintField + " constraint. Length constraints should be " +
-                                                  "positive");
+    default void checkLengthConstraintValue(Map.Entry<BString, Object> constraint, String path) {
+        Object constraintValue = constraint.getValue() instanceof BMap ? ((BMap) constraint.getValue()).get(VALUE) :
+                constraint.getValue();
+        switch (constraint.getKey().getValue()) {
+            case CONSTRAINT_LENGTH:
+            case CONSTRAINT_MIN_LENGTH:
+            case CONSTRAINT_MAX_LENGTH:
+                long constraintLongValue = (long) constraintValue;
+                String constraintField = constraint.getKey().getValue();
+                if (constraintLongValue <= 0) {
+                    throw new InternalValidationException("invalid value found for " + path + SYMBOL_SEPARATOR +
+                            constraintField + " constraint. Length constraints should be positive");
+                }
+                break;
+            default:
+                break;
         }
     }
 

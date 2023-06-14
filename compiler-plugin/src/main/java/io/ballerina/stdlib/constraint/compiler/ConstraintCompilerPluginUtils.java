@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static io.ballerina.stdlib.constraint.compiler.Constants.ANNOTATION_TAG_DATE;
+import static io.ballerina.stdlib.constraint.compiler.Constants.CONSTRAINT_VALUE;
+import static io.ballerina.stdlib.constraint.compiler.Constants.EMPTY;
 import static io.ballerina.stdlib.constraint.compiler.Constants.MODULE_NAME;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_COLON;
 import static io.ballerina.stdlib.constraint.compiler.Constants.SYMBOL_DECIMAL;
@@ -111,17 +113,45 @@ public class ConstraintCompilerPluginUtils {
             for (MappingFieldNode constraint : constraints) {
                 SpecificFieldNode node = (SpecificFieldNode) constraint;
                 Optional<ExpressionNode> valueExpr = node.valueExpr();
-                if (valueExpr.isPresent() && (valueExpr.get() instanceof BasicLiteralNode ||
-                                                valueExpr.get() instanceof UnaryExpressionNode)) {
-                    String constraintValue = valueExpr.get().toString().trim()
-                            .replaceAll(SYMBOL_NEW_LINE, "")
-                            .replaceAll(SYMBOL_DECIMAL, "");
-                    String constraintField = node.fieldName().toString().trim();
-                    if (!matrix.isAnnotationConstraintsValid(annotationTag, constraintField, constraintValue)) {
-                        reportConstraintsInvalidity(ctx, annotationTag, fieldType, annotationNode.location());
+                if (valueExpr.isPresent()) {
+                    if (valueExpr.get() instanceof BasicLiteralNode ||
+                            valueExpr.get() instanceof UnaryExpressionNode) {
+                        getValueFromSimpleValueExpressionNode(ctx, annotationNode, annotationTag, fieldType,
+                                node, valueExpr.get());
+                    } else if (valueExpr.get() instanceof MappingConstructorExpressionNode) {
+                        getValueFromMappingConstructor(ctx, annotationNode, annotationTag, fieldType,
+                                node, valueExpr.get());
                     }
                 }
             }
+        }
+    }
+
+    private static void getValueFromMappingConstructor(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
+                                                       String annotationTag, String fieldType, SpecificFieldNode node,
+                                                       ExpressionNode valueExpr) {
+        MappingConstructorExpressionNode expressionNode = (MappingConstructorExpressionNode) valueExpr;
+        SeparatedNodeList<MappingFieldNode> fields = expressionNode.fields();
+        for (MappingFieldNode field : fields) {
+            SpecificFieldNode fieldNode = (SpecificFieldNode) field;
+            if (fieldNode.fieldName().toString().trim().equals(CONSTRAINT_VALUE)) {
+                Optional<ExpressionNode> fieldExpr = fieldNode.valueExpr();
+                fieldExpr.ifPresent(expressionNode1 -> getValueFromSimpleValueExpressionNode(ctx,
+                        annotationNode, annotationTag, fieldType, node, expressionNode1));
+            }
+        }
+    }
+
+    private static void getValueFromSimpleValueExpressionNode(SyntaxNodeAnalysisContext ctx,
+                                                              AnnotationNode annotationNode, String annotationTag,
+                                                              String fieldType, SpecificFieldNode node,
+                                                              ExpressionNode valueExpr) {
+        String constraintValue = valueExpr.toString().trim()
+                .replaceAll(SYMBOL_NEW_LINE, EMPTY)
+                .replaceAll(SYMBOL_DECIMAL, EMPTY);
+        String constraintField = node.fieldName().toString().trim();
+        if (!matrix.isAnnotationConstraintsValid(annotationTag, constraintField, constraintValue)) {
+            reportConstraintsInvalidity(ctx, annotationTag, fieldType, annotationNode.location());
         }
     }
 

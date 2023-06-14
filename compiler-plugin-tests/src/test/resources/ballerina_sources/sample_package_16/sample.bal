@@ -18,25 +18,37 @@ import ballerina/constraint;
 
 type Foo record {
     @constraint:String {
-        length: 10,
+        length: {
+            value: 10,
+            message: "Length should be 10"
+        },
         minLength: 8
     }
     string value1;
     @constraint:String {
         length: 10,
-        maxLength: 12
+        maxLength: {
+            value: 12,
+            message: "Length should be 12"
+        }
     }
     string value2;
 };
 
 @constraint:String {
     length: 10,
-    minLength: 8
+    minLength: {
+        value: 8,
+        message: "Length should be 8"
+    }
 }
 type StringType1 string;
 
 @constraint:String {
-    length: 10,
+    length: {
+        value: 10,
+        message: "Length should be 10"
+    },
     maxLength: 12
 }
 type StringType2 string;

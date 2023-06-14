@@ -31,12 +31,18 @@ type Foo record {
 
 @constraint:Number {
     minValue: 1,
-    minValueExclusive: 0
+    minValueExclusive: {
+        value: 0,
+        message: "Min value should be greater than 0"
+    }
 }
 type DecimalType1 decimal;
 
 @constraint:Number {
-    maxValue: 10,
+    maxValue: {
+        value: 10,
+        message: "Max value should be less than 10"
+    },
     maxValueExclusive: 11
 }
 type DecimalType2 decimal;

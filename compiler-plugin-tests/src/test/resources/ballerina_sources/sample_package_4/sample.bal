@@ -89,7 +89,10 @@ type IntType int;
 
 @constraint:Number {
     minValue: 0,
-    maxValue: 10
+    maxValue: {
+        value: 10,
+        message: "Max value is 10"
+    }
 }
 type FloatType float;
 
@@ -112,7 +115,10 @@ type StringType string;
 type XmlType xml;
 
 @constraint:Number {
-    minValue: 0,
+    minValue: {
+        value: 0,
+        message: "Min value is 0"
+    },
     maxValue: 10
 }
 type ArrayType anydata[];

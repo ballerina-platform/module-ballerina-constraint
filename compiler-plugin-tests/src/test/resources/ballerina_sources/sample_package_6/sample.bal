@@ -65,7 +65,10 @@ type Foo record {
 type NilType ();
 
 @constraint:Array {
-    length: 10
+    length: {
+        value: 10,
+        message: "Length should be 10"
+    }
 }
 type BooleanType boolean;
 

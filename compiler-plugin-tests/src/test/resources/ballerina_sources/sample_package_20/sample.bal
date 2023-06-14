@@ -66,6 +66,28 @@ type Date7 record {|
 }
 type Date8 time:Civil;
 
+@constraint:Date {
+    option: {
+        value: constraint:FUTURE,
+        message: "Date should be in the future"
+    }
+}
+type Date9 time:Civil;
+
+@constraint:Date {
+    message: "Date should be in the future"
+}
+type Date10 time:Date;
+
+@constraint:Date {
+    option: {
+        value: constraint:FUTURE,
+        message: "Date should be in the future"
+    },
+    message: "Date is invalid"
+}
+type Date11 time:Civil;
+
 
 type User1 record {
     string name;
@@ -134,15 +156,26 @@ type User7 readonly & record {
     |} dob;
 };
 
+type User8 record {
+    string name;
+    @constraint:Date {
+        message: "Date should be in the future"
+    }
+    time:Date dob;
+};
+
 // Invalid cases
 
 @constraint:Date
-type Date9 int;
+type Date12 int;
 
 @constraint:Date {
-    option: constraint:PAST
+    option: {
+        value: constraint:PAST,
+        message: "Date should be in the past"
+    }
 }
-type Date10 record {
+type Date13 record {
     int year;
     int month;
     int date;
@@ -151,14 +184,14 @@ type Date10 record {
 @constraint:Date {
     option: "PAST_OR_PRESENT"
 }
-type Date11 record {};
+type Date14 record {};
 
 type CustomRecord record {
     int year;
     int month;
 };
 
-type User8 record {
+type User9 record {
     string name;
     @constraint:Date {
         option: constraint:FUTURE
@@ -166,7 +199,7 @@ type User8 record {
     CustomRecord dob;
 };
 
-type User9 record {
+type User10 record {
     string name;
     @constraint:Date {
         option: "FUTURE_OR_PRESENT"

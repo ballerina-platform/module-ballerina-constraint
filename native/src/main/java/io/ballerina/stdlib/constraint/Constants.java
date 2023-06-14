@@ -71,6 +71,11 @@ public class Constants {
     public static final BString DATE_RECORD_MONTH_BSTRING = StringUtils.fromString(MONTH);
     public static final BString DATE_RECORD_DAY_BSTRING = StringUtils.fromString(DAY);
 
+    public static final BString VALUE = StringUtils.fromString("value");
+    public static final BString MESSAGE = StringUtils.fromString("message");
+
+    public static final String CONSTRAINT_MESSAGE = "message";
+
     static final String GENERIC_ERROR = "Error";
     static final String VALIDATION_ERROR = "ValidationError";
     static final String TYPE_CONVERSION_ERROR = "TypeConversionError";
