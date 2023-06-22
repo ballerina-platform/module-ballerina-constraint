@@ -94,7 +94,7 @@ test {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.enabled true
+        xml.required = true
     }
     sourceSets project(':constraint-compiler-plugin').sourceSets.main
 }
