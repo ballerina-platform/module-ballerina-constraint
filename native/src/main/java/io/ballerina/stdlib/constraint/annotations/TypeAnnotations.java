@@ -70,7 +70,7 @@ public class TypeAnnotations extends AbstractAnnotations {
     }
 
     private void validateReferredType(Object value, Type type, String path, boolean isMemberValue) {
-        Type referredType = TypeUtils.getReferredType(type);
+        Type referredType = TypeUtils.getReferredType(type, false);
         if (referredType.isReadOnly() && referredType instanceof IntersectionType) {
             List<Type> constituentTypes = ((IntersectionType) referredType).getConstituentTypes();
             if (constituentTypes.size() == 2) {
