@@ -51,7 +51,9 @@ import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.
 /**
  * The compiler plugin utility functions.
  */
-public class ConstraintCompilerPluginUtils {
+public final class ConstraintCompilerPluginUtils {
+
+    private ConstraintCompilerPluginUtils() {}
 
     private static final ConstraintCompatibilityMatrix matrix = new ConstraintCompatibilityMatrix();
 

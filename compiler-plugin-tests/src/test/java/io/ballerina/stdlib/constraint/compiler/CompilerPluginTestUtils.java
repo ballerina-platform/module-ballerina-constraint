@@ -38,7 +38,9 @@ import static io.ballerina.stdlib.constraint.compiler.ConstraintDiagnosticCodes.
 /**
  * Utility functions related to compiler plugins tests.
  */
-public class CompilerPluginTestUtils {
+public final class CompilerPluginTestUtils {
+
+    private CompilerPluginTestUtils() {}
 
     private static final Path RESOURCE_DIRECTORY = Paths.get("src", "test", "resources", "ballerina_sources")
             .toAbsolutePath();

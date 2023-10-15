@@ -35,7 +35,9 @@ import static io.ballerina.stdlib.constraint.Constants.TYPE_CONVERSION_ERROR;
 /**
  * Utility functions related to errors.
  */
-public class ErrorUtils {
+public final class ErrorUtils {
+
+    private ErrorUtils() {}
 
     private static final String UNEXPECTED_ERROR_MESSAGE = "Unexpected error found due to typedesc and value mismatch.";
     private static final String TYPE_CONVERSION_ERROR_MESSAGE = "Type conversion failed due to typedesc and value " +
