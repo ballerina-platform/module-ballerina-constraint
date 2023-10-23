@@ -21,7 +21,9 @@ package io.ballerina.stdlib.constraint.compiler;
 /**
  * The constants related to compiler plugin.
  */
-public class Constants {
+public final class Constants {
+
+    private Constants() {}
 
     public static final String PACKAGE_NAME = "ballerina";
     public static final String MODULE_NAME = "constraint";

@@ -24,7 +24,9 @@ import io.ballerina.runtime.api.values.BString;
 /**
  * Constants related to constraint module.
  */
-public class Constants {
+public final class Constants {
+
+    private Constants() {}
 
     public static final String PREFIX_RECORD_FIELD = "$field$";
     public static final String ANNOTATION_RECORD_REGEX = "^ballerina/constraint:[0-9]+:.+";

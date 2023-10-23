@@ -21,7 +21,9 @@ package io.ballerina.stdlib.constraint.compiler;
 /**
  * The constants related to compiler plugin tests.
  */
-public class CompilerPluginTestConstants {
+public final class CompilerPluginTestConstants {
+
+    private CompilerPluginTestConstants() {}
 
     static final String ANNOTATION_TAG_INT = "Int";
     static final String ANNOTATION_TAG_FLOAT = "Float";
