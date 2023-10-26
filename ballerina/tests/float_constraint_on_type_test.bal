@@ -223,3 +223,256 @@ isolated function testFloatConstraintOnTypeFailure2() {
         test:assertFail("Expected error not found.");
     }
 }
+
+@Float {
+    maxIntegerDigits: 5,
+    maxFractionDigits: 4
+}
+type MaxDigitFloatType float;
+
+@test:Config {}
+function testMaxDigitFloatPositive() {
+    MaxDigitFloatType|error validation = validate(12934.8065);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 12934.8065);
+    }
+
+    validation = validate(12.80);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 12.80);
+    }
+
+    validation = validate(0.0);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0.0);
+    }
+
+    validation = validate(-12934.8065);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -12934.8065);
+    }
+
+    validation = validate(-12.80);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -12.80);
+    }
+
+    validation = validate(-0.0);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -0.0);
+    }
+
+    validation = validate(1234);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.0);
+    }
+
+    validation = validate(1234.00000000);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.0);
+    }
+
+    validation = validate(0.0001);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0.0001);
+    }
+
+    validation = validate(-0.0001);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -0.0001);
+    }
+
+    validation = validate(0);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0.0);
+    }
+
+    validation = validate(+1234.456);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.456);
+    }
+
+    validation = validate(1.2345e3);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.5);
+    }
+
+    validation = validate(1.2345e+3);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.5);
+    }
+
+    validation = validate(101234.2e-3);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 101.2342);
+    }
+
+    validation = validate(.2345);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0.2345);
+    }
+}
+
+@test:Config {}
+function testMaxDigitFloatNegative() {
+    MaxDigitFloatType|error validation = validate(1234567.435);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxIntegerDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(1234.12345);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(1234567.12345);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits','$:maxIntegerDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(0.00001);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(-0.00001);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(1.23e6);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxIntegerDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(1.234e-6);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(.123456);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+type DigitFloat float;
+
+@Float {
+    maxIntegerDigits: {
+        value: 4,
+        message: "Integer digits should be less than or equal to 4"
+    }
+}
+type MaxIntegerDigitFloatRefType DigitFloat;
+
+@test:Config {}
+function testMaxIntegerDigitsRefType() {
+    MaxIntegerDigitFloatRefType|error validation = validate(-1234.12345);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -1234.12345);
+    }
+
+    validation = validate(12.1234000);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 12.1234);
+    }
+
+    validation = validate(123456);
+    if validation is error {
+        test:assertEquals(validation.message(), "Integer digits should be less than or equal to 4.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(1234456.001);
+    if validation is error {
+        test:assertEquals(validation.message(), "Integer digits should be less than or equal to 4.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@Float {
+    maxFractionDigits: {
+        value: 3,
+        message: "Fraction digits should be less than or equal to 3"
+    }
+}
+type MaxFractionDigitFloatRefType DigitFloat;
+
+@test:Config {}
+function testMaxFractionDigitsRefType() {
+    MaxFractionDigitFloatRefType|error validation = validate(1234.12);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234.12);
+    }
+
+    validation = validate(0.001);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0.001);
+    }
+
+    validation = validate(1234.1234);
+    if validation is error {
+        test:assertEquals(validation.message(), "Fraction digits should be less than or equal to 3.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

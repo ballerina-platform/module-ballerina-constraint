@@ -223,3 +223,146 @@ isolated function testIntConstraintOnTypeFailure2() {
         test:assertFail("Expected error not found.");
     }
 }
+
+@Int {
+    maxDigits: 10
+}
+type MaxDigitIntType int;
+
+@test:Config {}
+function testMaxDigitIntPositive() {
+    MaxDigitIntType|error validation = validate(123425);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 123425);
+    }
+
+    validation = validate(12.3e8);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1230000000);
+    }
+
+    validation = validate(+1234256789);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234256789);
+    }
+
+    validation = validate(+1.99e9);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1990000000);
+    }
+
+    validation = validate(-1234256789);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -1234256789);
+    }
+
+    validation = validate(-1.99e9);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -1990000000);
+    }
+
+    validation = validate(0);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 0);
+    }
+}
+
+@test:Config {}
+function testMaxDigitIntNegative() {
+    MaxDigitIntType|error validation = validate(12342567890);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(12.3e10);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(+12342567890);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(+1.99e11);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(-12342567890);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(-1.99e11);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+type DigitInteger int;
+
+@Int {
+    maxDigits: {
+        value: 4,
+        message: "Max digit count exceeded."
+    }
+}
+type MaxDigitIntRefType DigitInteger;
+
+@test:Config {}
+function testMaxDigitIntRefType() {
+    MaxDigitIntRefType|error validation = validate(1234);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, 1234);
+    }
+
+    validation = validate(-123);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    } else {
+        test:assertEquals(validation, -123);
+    }
+
+    validation = validate(12345);
+    if validation is error {
+        test:assertEquals(validation.message(), "Max digit count exceeded.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+
+    validation = validate(-12000);
+    if validation is error {
+        test:assertEquals(validation.message(), "Max digit count exceeded.");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
