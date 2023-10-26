@@ -27,6 +27,7 @@ import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagFloat
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagInt;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagNumber;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.AnnotationTagString;
+import io.ballerina.stdlib.constraint.compiler.annotation.tag.DigitsConstrainedAnnotationTag;
 import io.ballerina.stdlib.constraint.compiler.annotation.tag.LengthConstrainedAnnotationTag;
 
 import java.util.ArrayList;
@@ -66,7 +67,11 @@ public class ConstraintCompatibilityMatrix {
 
     boolean isAnnotationConstraintsValid(String annotationTag, String constraintField, String constraintValue) {
         AnnotationTag tag = matrix.get(annotationTag);
-        return !(tag instanceof LengthConstrainedAnnotationTag) ||
-                ((LengthConstrainedAnnotationTag) tag).isValidConstraintValue(constraintField, constraintValue);
+        if (tag instanceof LengthConstrainedAnnotationTag) {
+            return ((LengthConstrainedAnnotationTag) tag).isValidConstraintValue(constraintField, constraintValue);
+        } else if (tag instanceof DigitsConstrainedAnnotationTag) {
+            return ((DigitsConstrainedAnnotationTag) tag).isValidConstraintValue(constraintField, constraintValue);
+        }
+        return true;
     }
 }

@@ -24,7 +24,7 @@ import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 /**
  * The class to represent the `@constraint:Number` annotation tag.
  */
-public class AnnotationTagNumber implements ValueConstrainedAnnotationTag {
+public class AnnotationTagNumber implements ValueConstrainedAnnotationTag, DigitsConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol) {

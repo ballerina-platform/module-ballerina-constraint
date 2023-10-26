@@ -24,7 +24,7 @@ import io.ballerina.projects.plugins.SyntaxNodeAnalysisContext;
 /**
  * The class to represent the `@constraint:Float` annotation tag.
  */
-public class AnnotationTagFloat implements ValueConstrainedAnnotationTag {
+public class AnnotationTagFloat implements ValueConstrainedAnnotationTag, DigitsConstrainedAnnotationTag {
 
     @Override
     public boolean isCompatibleFieldType(SyntaxNodeAnalysisContext ctx, TypeSymbol fieldTypeSymbol) {

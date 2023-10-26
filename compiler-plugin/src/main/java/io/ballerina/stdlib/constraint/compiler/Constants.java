@@ -54,5 +54,8 @@ public final class Constants {
     public static final String CONSTRAINT_LENGTH = "length";
     public static final String CONSTRAINT_MIN_LENGTH = "minLength";
     public static final String CONSTRAINT_MAX_LENGTH = "maxLength";
+    public static final String CONSTRAINT_MAX_DIGITS = "maxDigits";
+    public static final String CONSTRAINT_MAX_INTEGER_DIGITS = "maxIntegerDigits";
+    public static final String CONSTRAINT_MAX_FRACTION_DIGITS = "maxFractionDigits";
     public static final String CONSTRAINT_VALUE = "value";
 }
