@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
+- [Add support to overwrite default error message for constraint violations](https://github.com/ballerina-platform/ballerina-standard-library/issues/3211)
 - [Add constraint support for number of digits](https://github.com/ballerina-platform/ballerina-standard-library/issues/5081)
 
 ### Changed
