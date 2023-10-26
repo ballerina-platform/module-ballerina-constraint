@@ -46,4 +46,7 @@ public final class CompilerPluginTestConstants {
     static final String LENGTH_CONSTRAINT = "length";
     static final String MIN_LENGTH_CONSTRAINT = "minLength";
     static final String MAX_LENGTH_CONSTRAINT = "maxLength";
+    static final String MAX_DIGITS = "maxDigits";
+    static final String MAX_INTEGER_DIGITS = "maxIntegerDigits";
+    static final String MAX_FRACTION_DIGITS = "maxFractionDigits";
 }
