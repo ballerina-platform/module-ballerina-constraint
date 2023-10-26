@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- [Add constraint support for number of digits](https://github.com/ballerina-platform/ballerina-standard-library/issues/5081)
+
 ### Changed
 - [Make some of the Java classes proper utility classes](https://github.com/ballerina-platform/ballerina-standard-library/issues/4929)
 
