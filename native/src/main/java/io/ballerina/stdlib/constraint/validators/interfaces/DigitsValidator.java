@@ -96,38 +96,45 @@ public interface DigitsValidator {
     default DigitParts getDigitPartsFromDouble(double value) {
         String valueString = Double.toString(value);
         if (valueString.matches(SCIENTIFIC_NOTATION_REGEX)) {
-            Pattern pattern = Pattern.compile(SCIENTIFIC_NOTATION_REGEX);
-            Matcher matcher = pattern.matcher(valueString);
-            if (matcher.matches()) {
-                String groupA = matcher.group(1);
-                String groupB = matcher.group(2);
-                String groupC = matcher.group(3);
-
-                int countA = value < 0 ? groupA.length() - 1 : groupA.length();
-                int countB = groupB.equals(ZERO_STRING) ? 0 : groupB.length();
-                int intC = Integer.parseInt(groupC);
-
-                int intDigits;
-                int fractionDigits;
-                if (intC > 0) {
-                    intDigits = countA + Math.min(countB, intC);
-                    fractionDigits = countB - Math.min(countB, intC);
-                } else {
-                    intDigits = Math.max(1, countA + intC);
-                    fractionDigits = countB - intC;
-                }
-                return new DigitParts(intDigits, fractionDigits);
-            }
-            return null;
+            return getDigitPartsFromScientificNotation(value, valueString);
         } else {
-            String[] parts = valueString.split(DOT_SEPARATOR);
-            int intDigits = value < 0 ? parts[0].length() - 1 : parts[0].length();
-            if (parts.length == 1) {
-                return new DigitParts(intDigits, 0);
+            return getDigitPartsFromString(value, valueString);
+        }
+    }
+
+    private static DigitParts getDigitPartsFromString(double value, String valueString) {
+        String[] parts = valueString.split(DOT_SEPARATOR);
+        int intDigits = value < 0 ? parts[0].length() - 1 : parts[0].length();
+        if (parts.length == 1) {
+            return new DigitParts(intDigits, 0);
+        } else {
+            return new DigitParts(intDigits, parts[1].length());
+        }
+    }
+
+    private static DigitParts getDigitPartsFromScientificNotation(double value, String valueString) {
+        Pattern pattern = Pattern.compile(SCIENTIFIC_NOTATION_REGEX);
+        Matcher matcher = pattern.matcher(valueString);
+        int intDigits = 0;
+        int fractionDigits = 0;
+        if (matcher.matches()) {
+            String groupA = matcher.group(1);
+            String groupB = matcher.group(2);
+            String groupC = matcher.group(3);
+
+            int countA = value < 0 ? groupA.length() - 1 : groupA.length();
+            int countB = groupB.equals(ZERO_STRING) ? 0 : groupB.length();
+            int intC = Integer.parseInt(groupC);
+
+            if (intC > 0) {
+                intDigits = countA + Math.min(countB, intC);
+                fractionDigits = countB - Math.min(countB, intC);
             } else {
-                return new DigitParts(intDigits, parts[1].length());
+                intDigits = Math.max(1, countA + intC);
+                fractionDigits = countB - intC;
             }
         }
+        return new DigitParts(intDigits, fractionDigits);
     }
 
     boolean validateMaxDigits(Object fieldValue, Object constraintValue);
