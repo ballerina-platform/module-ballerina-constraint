@@ -18,40 +18,17 @@
 
 package io.ballerina.stdlib.constraint.validators;
 
-import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
-import io.ballerina.stdlib.constraint.validators.interfaces.DigitsValidator;
-import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Extern functions for validating float constraints `@constraint:Float` of Ballerina.
  */
-public class FloatConstraintValidator implements ValueValidator, DigitsValidator {
-
-    private final List<ConstraintErrorInfo> failedConstraintsInfo;
-    private DigitParts digitParts;
+public class FloatConstraintValidator extends NumberConstraintValidator {
 
     public FloatConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
-        this.failedConstraintsInfo = failedConstraintsInfo;
-    }
-
-    public void validate(BMap<BString, Object> constraints, Object fieldValue, String path, boolean isMemberValue) {
-        for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            DigitsValidator.super.checkDigitsConstraintValue(constraint, path);
-            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        }
-    }
-
-    @Override
-    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, boolean isMemberValue,
-                         List<ConstraintErrorInfo> failedConstraintsInfo, String path) {
-        DigitsValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        ValueValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
+        super(failedConstraintsInfo);
     }
 
     @Override
@@ -72,28 +49,5 @@ public class FloatConstraintValidator implements ValueValidator, DigitsValidator
     @Override
     public boolean validateMaxValueExclusive(Object fieldValue, Object constraintValue) {
         return ((Number) fieldValue).doubleValue() < (Double) constraintValue;
-    }
-
-    @Override
-    public boolean validateMaxDigits(Object fieldValue, Object constraintValue) {
-        return true;
-    }
-
-    @Override
-    public boolean validateMaxIntegerDigits(Object fieldValue, Object constraintValue) {
-        double fieldNumericValue = ((Number) fieldValue).doubleValue();
-        if (Objects.isNull(digitParts)) {
-            digitParts = getDigitPartsFromDouble(fieldNumericValue);
-        }
-        return digitParts.integerDigits() <= (Long) constraintValue;
-    }
-
-    @Override
-    public boolean validateMaxFractionDigits(Object fieldValue, Object constraintValue) {
-        double fieldNumericValue = ((Number) fieldValue).doubleValue();
-        if (Objects.isNull(digitParts)) {
-            digitParts = getDigitPartsFromDouble(fieldNumericValue);
-        }
-        return digitParts.fractionDigits() <= (Long) constraintValue;
     }
 }

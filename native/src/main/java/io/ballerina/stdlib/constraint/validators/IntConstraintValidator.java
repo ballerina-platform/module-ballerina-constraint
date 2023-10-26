@@ -18,38 +18,17 @@
 
 package io.ballerina.stdlib.constraint.validators;
 
-import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
-import io.ballerina.stdlib.constraint.validators.interfaces.DigitsValidator;
-import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Extern functions for validating int constraints `@constraint:Int` of Ballerina.
  */
-public class IntConstraintValidator implements ValueValidator, DigitsValidator {
-
-    private final List<ConstraintErrorInfo> failedConstraintsInfo;
+public class IntConstraintValidator extends NumberConstraintValidator {
 
     public IntConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
-        this.failedConstraintsInfo = failedConstraintsInfo;
-    }
-
-    public void validate(BMap<BString, Object> constraints, Number fieldValue, String path, boolean isMemberValue) {
-        for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            DigitsValidator.super.checkDigitsConstraintValue(constraint, path);
-            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        }
-    }
-
-    @Override
-    public void validate(Map.Entry<BString, Object> constraint, Object fieldValue, boolean isMemberValue,
-                         List<ConstraintErrorInfo> failedConstraintsInfo, String path) {
-        DigitsValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        ValueValidator.super.validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
+        super(failedConstraintsInfo);
     }
 
     @Override
