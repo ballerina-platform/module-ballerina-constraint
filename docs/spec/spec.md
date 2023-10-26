@@ -100,6 +100,7 @@ public type IntConstraints record {|
     int maxValue?;
     int minValueExclusive?;
     int maxValueExclusive?;
+    int maxDigits?;
 |};
 
 // Float constraints which applies only when the value is `float`.
@@ -109,6 +110,8 @@ public type FloatConstraints record {|
     float maxValue?;
     float minValueExclusive?;
     float maxValueExclusive?;
+    int maxIntegerDigits?;
+    int maxFractionDigits?;
 |};
 
 // Number constraints which applies when the value is `int|float|decimal`.
@@ -118,6 +121,8 @@ public type NumberConstraints record {|
     decimal maxValue?;
     decimal minValueExclusive?;
     decimal maxValueExclusive?;
+    int maxIntegerDigits?;
+    int maxFractionDigits?;
 |};
 ```
 
@@ -129,6 +134,9 @@ All the supported constraints on number types are illustrated in the following t
 | maxValue          |                                v <= c                                |
 | minValueExclusive |                                v > c                                 |
 | maxValueExclusive |                                v < c                                 |
+|maxDigits          |                      Number of digits in v <= c                      |
+|maxIntegerDigits   |                Number of integer digits in v <= c                    |
+|maxFractionDigits  |               Number of fraction digits in v <= c                    |
 
 When defining constraints on number types, either `minValue` or `minValueExclusive` can be present. Similarly, either 
 `maxValue` or `maxValueExclusive` can be present.
