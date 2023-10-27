@@ -30,7 +30,7 @@ public enum ConstraintDiagnosticCodes {
     CONSTRAINT_101("CONSTRAINT_101", "invalid `@constraint:%s` annotation on `%s` type", ERROR),
     CONSTRAINT_102("CONSTRAINT_102", "no constraints found on `@constraint:%s` annotation on `%s` type", ERROR),
     CONSTRAINT_103("CONSTRAINT_103", "incompatible constraints on `@constraint:%s` annotation on `%s` type", ERROR),
-    CONSTRAINT_104("CONSTRAINT_104", "invalid constraint value on `@constraint:%s` annotation on `%s` type", ERROR);
+    CONSTRAINT_104("CONSTRAINT_104", "invalid constraint value for `%s` on `@constraint:%s` annotation", ERROR);
 
     private final String code;
     private final String message;

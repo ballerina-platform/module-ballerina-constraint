@@ -43,4 +43,10 @@ public final class CompilerPluginTestConstants {
     static final String TYPE_MAP_OF_ANYDATA = "map<anydata>";
     static final String TYPE_TABLE_OF_ANYDATA = "table<map<anydata>>";
     static final String TYPE_RECORD = "record";
+    static final String LENGTH_CONSTRAINT = "length";
+    static final String MIN_LENGTH_CONSTRAINT = "minLength";
+    static final String MAX_LENGTH_CONSTRAINT = "maxLength";
+    static final String MAX_DIGITS = "maxDigits";
+    static final String MAX_INTEGER_DIGITS = "maxIntegerDigits";
+    static final String MAX_FRACTION_DIGITS = "maxFractionDigits";
 }

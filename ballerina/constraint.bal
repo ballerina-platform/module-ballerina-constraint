@@ -67,11 +67,13 @@ public type ConstraintRecord record {|
 # + maxValue - The inclusive upper bound of the constrained type
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
+# + maxDigits - The maximum number of digits in the constrained type
 public type IntConstraints record {|
     int|record{| *ConstraintRecord; int value; |} minValue?;
     int|record{| *ConstraintRecord; int value; |} maxValue?;
     int|record{| *ConstraintRecord; int value; |} minValueExclusive?;
     int|record{| *ConstraintRecord; int value; |} maxValueExclusive?;
+    int|record{| *ConstraintRecord; int value; |} maxDigits?;
 |};
 
 # Represents the constraints associated with `float` type.
@@ -80,11 +82,15 @@ public type IntConstraints record {|
 # + maxValue - The inclusive upper bound of the constrained type
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
+# + maxIntegerDigits - The maximum number of digits in the integer part of the constrained type
+# + maxFractionDigits - The maximum number of digits in the fraction part of the constrained type
 public type FloatConstraints record {|
     float|record{| *ConstraintRecord; float value; |} minValue?;
     float|record{| *ConstraintRecord; float value; |} maxValue?;
     float|record{| *ConstraintRecord; float value; |} minValueExclusive?;
     float|record{| *ConstraintRecord; float value; |} maxValueExclusive?;
+    int|record{| *ConstraintRecord; int value; |} maxIntegerDigits?;
+    int|record{| *ConstraintRecord; int value; |} maxFractionDigits?;
 |};
 
 # Represents the constraints associated with `int`, `float` and `decimal` types.
@@ -93,11 +99,15 @@ public type FloatConstraints record {|
 # + maxValue - The inclusive upper bound of the constrained type
 # + minValueExclusive - The exclusive lower bound of the constrained type
 # + maxValueExclusive - The exclusive upper bound of the constrained type
+# + maxIntegerDigits - The maximum number of digits in the integer part of the constrained type
+# + maxFractionDigits - The maximum number of digits in the fraction part of the constrained type
 public type NumberConstraints record {|
     decimal|record{| *ConstraintRecord; decimal value; |} minValue?;
     decimal|record{| *ConstraintRecord; decimal value; |} maxValue?;
     decimal|record{| *ConstraintRecord; decimal value; |} minValueExclusive?;
     decimal|record{| *ConstraintRecord; decimal value; |} maxValueExclusive?;
+    int|record{| *ConstraintRecord; int value; |} maxIntegerDigits?;
+    int|record{| *ConstraintRecord; int value; |} maxFractionDigits?;
 |};
 
 # Represents the constraints associated with `string` type.

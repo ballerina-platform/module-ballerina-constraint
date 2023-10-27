@@ -66,7 +66,7 @@ public final class ConstraintCompilerPluginUtils {
                 checkAnnotationTagCompatibility(ctx, annotationNode, annotationTag, fieldType, fieldTypeSymbol);
                 checkAnnotationConstraintsAvailability(ctx, annotationNode, annotationTag, fieldType);
                 checkAnnotationConstraintsCompatibility(ctx, annotationNode, annotationTag, fieldType);
-                checkAnnotationConstraintsValidity(ctx, annotationNode, annotationTag, fieldType);
+                checkAnnotationConstraintsValidity(ctx, annotationNode, annotationTag);
             }
         }
     }
@@ -108,7 +108,7 @@ public final class ConstraintCompilerPluginUtils {
     }
 
     private static void checkAnnotationConstraintsValidity(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                           String annotationTag, String fieldType) {
+                                                           String annotationTag) {
         Optional<MappingConstructorExpressionNode> value = annotationNode.annotValue();
         if (value.isPresent()) {
             SeparatedNodeList<MappingFieldNode> constraints = value.get().fields();
@@ -118,20 +118,18 @@ public final class ConstraintCompilerPluginUtils {
                 if (valueExpr.isPresent()) {
                     if (valueExpr.get() instanceof BasicLiteralNode ||
                             valueExpr.get() instanceof UnaryExpressionNode) {
-                        getValueFromSimpleValueExpressionNode(ctx, annotationNode, annotationTag, fieldType,
+                        getValueFromSimpleValueExpressionNode(ctx, annotationTag,
                                 node, valueExpr.get());
                     } else if (valueExpr.get() instanceof MappingConstructorExpressionNode) {
-                        getValueFromMappingConstructor(ctx, annotationNode, annotationTag, fieldType,
-                                node, valueExpr.get());
+                        getValueFromMappingConstructor(ctx, annotationTag, node, valueExpr.get());
                     }
                 }
             }
         }
     }
 
-    private static void getValueFromMappingConstructor(SyntaxNodeAnalysisContext ctx, AnnotationNode annotationNode,
-                                                       String annotationTag, String fieldType, SpecificFieldNode node,
-                                                       ExpressionNode valueExpr) {
+    private static void getValueFromMappingConstructor(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                       SpecificFieldNode node, ExpressionNode valueExpr) {
         MappingConstructorExpressionNode expressionNode = (MappingConstructorExpressionNode) valueExpr;
         SeparatedNodeList<MappingFieldNode> fields = expressionNode.fields();
         for (MappingFieldNode field : fields) {
@@ -139,21 +137,19 @@ public final class ConstraintCompilerPluginUtils {
             if (fieldNode.fieldName().toString().trim().equals(CONSTRAINT_VALUE)) {
                 Optional<ExpressionNode> fieldExpr = fieldNode.valueExpr();
                 fieldExpr.ifPresent(expressionNode1 -> getValueFromSimpleValueExpressionNode(ctx,
-                        annotationNode, annotationTag, fieldType, node, expressionNode1));
+                        annotationTag, node, expressionNode1));
             }
         }
     }
 
-    private static void getValueFromSimpleValueExpressionNode(SyntaxNodeAnalysisContext ctx,
-                                                              AnnotationNode annotationNode, String annotationTag,
-                                                              String fieldType, SpecificFieldNode node,
-                                                              ExpressionNode valueExpr) {
+    private static void getValueFromSimpleValueExpressionNode(SyntaxNodeAnalysisContext ctx, String annotationTag,
+                                                              SpecificFieldNode node, ExpressionNode valueExpr) {
         String constraintValue = valueExpr.toString().trim()
                 .replaceAll(SYMBOL_NEW_LINE, EMPTY)
                 .replaceAll(SYMBOL_DECIMAL, EMPTY);
         String constraintField = node.fieldName().toString().trim();
         if (!matrix.isAnnotationConstraintsValid(annotationTag, constraintField, constraintValue)) {
-            reportConstraintsInvalidity(ctx, annotationTag, fieldType, annotationNode.location());
+            reportConstraintsInvalidity(ctx, annotationTag, constraintField, node.location());
         }
     }
 
@@ -179,9 +175,9 @@ public final class ConstraintCompilerPluginUtils {
     }
 
     private static void reportConstraintsInvalidity(SyntaxNodeAnalysisContext ctx, String annotationTag,
-                                                    String fieldType, NodeLocation location) {
+                                                    String field, NodeLocation location) {
         DiagnosticInfo diagnosticInfo = new DiagnosticInfo(CONSTRAINT_104.getCode(),
-                String.format(CONSTRAINT_104.getMessage(), annotationTag, fieldType), CONSTRAINT_104.getSeverity());
+                String.format(CONSTRAINT_104.getMessage(), field, annotationTag), CONSTRAINT_104.getSeverity());
         ctx.reportDiagnostic(DiagnosticFactory.createDiagnostic(diagnosticInfo, location));
     }
 }

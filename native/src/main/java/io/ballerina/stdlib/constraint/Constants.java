@@ -30,6 +30,7 @@ public final class Constants {
 
     public static final String PREFIX_RECORD_FIELD = "$field$";
     public static final String ANNOTATION_RECORD_REGEX = "^ballerina/constraint:[0-9]+:.+";
+    public static final String SCIENTIFIC_NOTATION_REGEX = "^(-?[0-9]+)\\.([0-9]+)[Ee]([+-]?[0-9]+)$";
 
     public static final String SYMBOL_DOLLAR_SIGN = "$";
     public static final String SYMBOL_DOT = ".";
@@ -38,6 +39,8 @@ public final class Constants {
     public static final String SYMBOL_OPEN_SQUARE_BRACKET = "[";
     public static final String SYMBOL_CLOSE_SQUARE_BRACKET = "]";
     public static final String SYMBOL_SEPARATOR = ":";
+    public static final String DOT_SEPARATOR = "\\.";
+    public static final String ZERO_STRING = "0";
 
     public static final String ANNOTATION_TAG_INT = "Int";
     public static final String ANNOTATION_TAG_FLOAT = "Float";
@@ -50,6 +53,9 @@ public final class Constants {
     public static final String CONSTRAINT_MAX_VALUE = "maxValue";
     public static final String CONSTRAINT_MIN_VALUE_EXCLUSIVE = "minValueExclusive";
     public static final String CONSTRAINT_MAX_VALUE_EXCLUSIVE = "maxValueExclusive";
+    public static final String CONSTRAINT_MAX_DIGITS = "maxDigits";
+    public static final String CONSTRAINT_MAX_INTEGER_DIGITS = "maxIntegerDigits";
+    public static final String CONSTRAINT_MAX_FRACTION_DIGITS = "maxFractionDigits";
     public static final String CONSTRAINT_LENGTH = "length";
     public static final String CONSTRAINT_MIN_LENGTH = "minLength";
     public static final String CONSTRAINT_MAX_LENGTH = "maxLength";

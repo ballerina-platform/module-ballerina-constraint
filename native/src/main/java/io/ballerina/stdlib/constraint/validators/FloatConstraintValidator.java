@@ -18,29 +18,17 @@
 
 package io.ballerina.stdlib.constraint.validators;
 
-import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
-import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Extern functions for validating float constraints `@constraint:Float` of Ballerina.
  */
-public class FloatConstraintValidator implements ValueValidator {
-
-    private final List<ConstraintErrorInfo> failedConstraintsInfo;
+public class FloatConstraintValidator extends NumberConstraintValidator {
 
     public FloatConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
-        this.failedConstraintsInfo = failedConstraintsInfo;
-    }
-
-    public void validate(BMap<BString, Object> constraints, Object fieldValue, String path, boolean isMemberValue) {
-        for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        }
+        super(failedConstraintsInfo);
     }
 
     @Override

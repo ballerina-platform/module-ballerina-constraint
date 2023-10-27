@@ -18,29 +18,17 @@
 
 package io.ballerina.stdlib.constraint.validators;
 
-import io.ballerina.runtime.api.values.BMap;
-import io.ballerina.runtime.api.values.BString;
 import io.ballerina.stdlib.constraint.ConstraintErrorInfo;
-import io.ballerina.stdlib.constraint.validators.interfaces.ValueValidator;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Extern functions for validating int constraints `@constraint:Int` of Ballerina.
  */
-public class IntConstraintValidator implements ValueValidator {
-
-    private final List<ConstraintErrorInfo> failedConstraintsInfo;
+public class IntConstraintValidator extends NumberConstraintValidator {
 
     public IntConstraintValidator(List<ConstraintErrorInfo> failedConstraintsInfo) {
-        this.failedConstraintsInfo = failedConstraintsInfo;
-    }
-
-    public void validate(BMap<BString, Object> constraints, Number fieldValue, String path, boolean isMemberValue) {
-        for (Map.Entry<BString, Object> constraint : constraints.entrySet()) {
-            validate(constraint, fieldValue, isMemberValue, failedConstraintsInfo, path);
-        }
+        super(failedConstraintsInfo);
     }
 
     @Override
@@ -62,5 +50,23 @@ public class IntConstraintValidator implements ValueValidator {
     @Override
     public boolean validateMaxValueExclusive(Object fieldValue, Object constraintValue) {
         return ((Number) fieldValue).longValue() < (Long) constraintValue;
+    }
+
+    @Override
+    public boolean validateMaxDigits(Object fieldValue, Object constraintValue) {
+        long fieldNumericValue = ((Number) fieldValue).longValue();
+        String numericString = Long.toString(fieldNumericValue);
+        int length = fieldNumericValue < 0 ? numericString.length() - 1 : numericString.length();
+        return length <= (Long) constraintValue;
+    }
+
+    @Override
+    public boolean validateMaxIntegerDigits(Object fieldValue, Object constraintValue) {
+        return true;
+    }
+
+    @Override
+    public boolean validateMaxFractionDigits(Object fieldValue, Object constraintValue) {
+        return true;
     }
 }

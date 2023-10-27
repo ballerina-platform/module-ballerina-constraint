@@ -30,6 +30,12 @@ import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstant
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_INT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_NUMBER;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.ANNOTATION_TAG_STRING;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.LENGTH_CONSTRAINT;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.MAX_DIGITS;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.MAX_FRACTION_DIGITS;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.MAX_INTEGER_DIGITS;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.MAX_LENGTH_CONSTRAINT;
+import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.MIN_LENGTH_CONSTRAINT;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_ANYDATA_ARRAY;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_BOOLEAN;
 import static io.ballerina.stdlib.constraint.compiler.CompilerPluginTestConstants.TYPE_DECIMAL;
@@ -285,9 +291,12 @@ public class CompilerPluginTest {
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
         int expectedErrorCount = 6;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
-        for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_STRING, TYPE_STRING);
-        }
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 0, ANNOTATION_TAG_STRING, LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_STRING, MIN_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 2, ANNOTATION_TAG_STRING, MAX_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 3, ANNOTATION_TAG_STRING, LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 4, ANNOTATION_TAG_STRING, MIN_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 5, ANNOTATION_TAG_STRING, MAX_LENGTH_CONSTRAINT);
     }
 
     @Test
@@ -297,9 +306,12 @@ public class CompilerPluginTest {
         DiagnosticResult diagnosticResult = compilation.diagnosticResult();
         int expectedErrorCount = 6;
         Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
-        for (int i = 0; i < expectedErrorCount; i++) {
-            CompilerPluginTestUtils.assertError104(diagnosticResult, i, ANNOTATION_TAG_ARRAY, TYPE_ANYDATA_ARRAY);
-        }
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 0, ANNOTATION_TAG_ARRAY, LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_ARRAY, MIN_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 2, ANNOTATION_TAG_ARRAY, MAX_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 3, ANNOTATION_TAG_ARRAY, LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 4, ANNOTATION_TAG_ARRAY, MIN_LENGTH_CONSTRAINT);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 5, ANNOTATION_TAG_ARRAY, MAX_LENGTH_CONSTRAINT);
     }
 
     @Test
@@ -314,5 +326,19 @@ public class CompilerPluginTest {
         CompilerPluginTestUtils.assertError101(diagnosticResult, 2, ANNOTATION_TAG_DATE, TYPE_RECORD);
         CompilerPluginTestUtils.assertError101(diagnosticResult, 3, ANNOTATION_TAG_DATE, "CustomRecord");
         CompilerPluginTestUtils.assertError101(diagnosticResult, 4, ANNOTATION_TAG_DATE, TYPE_RECORD);
+    }
+
+    @Test
+    public void testDigitAnnotationTagConstraintsValidity() {
+        Package currentPackage = CompilerPluginTestUtils.loadPackage("sample_package_21");
+        PackageCompilation compilation = currentPackage.getCompilation();
+        DiagnosticResult diagnosticResult = compilation.diagnosticResult();
+        int expectedErrorCount = 5;
+        Assert.assertEquals(diagnosticResult.errorCount(), expectedErrorCount);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 0, ANNOTATION_TAG_INT, MAX_DIGITS);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 1, ANNOTATION_TAG_FLOAT, MAX_INTEGER_DIGITS);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 2, ANNOTATION_TAG_FLOAT, MAX_FRACTION_DIGITS);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 3, ANNOTATION_TAG_NUMBER, MAX_INTEGER_DIGITS);
+        CompilerPluginTestUtils.assertError104(diagnosticResult, 4, ANNOTATION_TAG_NUMBER, MAX_FRACTION_DIGITS);
     }
 }

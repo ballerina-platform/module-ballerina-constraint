@@ -76,10 +76,10 @@ public final class CompilerPluginTestUtils {
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_103.getCode());
     }
 
-    static void assertError104(DiagnosticResult diagnosticResult, int index, String annotationTag, String fieldType) {
+    static void assertError104(DiagnosticResult diagnosticResult, int index, String annotationTag, String fieldName) {
         Diagnostic diagnostic = (Diagnostic) diagnosticResult.errors().toArray()[index];
         Assert.assertEquals(diagnostic.diagnosticInfo().messageFormat(),
-                String.format(CONSTRAINT_104.getMessage(), annotationTag, fieldType));
+                String.format(CONSTRAINT_104.getMessage(), fieldName, annotationTag));
         Assert.assertEquals(diagnostic.diagnosticInfo().code(), CONSTRAINT_104.getCode());
     }
 }
