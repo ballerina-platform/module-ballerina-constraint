@@ -29,7 +29,7 @@ type ReadOnlyAlbumWithoutConstraints readonly & record {|
 |};
 
 @test:Config {}
-function testReadOnlyAlbumWithoutConstraints() {
+isolated function testReadOnlyAlbumWithoutConstraints() {
     Album album = {title: "Blue Train", artist: "John Coltrane"};
     ReadOnlyAlbum|error validation1 = validate(album);
     if validation1 is error {
@@ -75,7 +75,7 @@ type ReadOnlyAlbumWithConstraints readonly & record {|
 |};
 
 @test:Config {}
-function testReadOnlyAlbumWithConstraintsSuccess() {
+isolated function testReadOnlyAlbumWithConstraintsSuccess() {
     Album album = {title: "Jeru", artist: "Gerry Mulligan"};
     ReadOnlyConstrainedAlbum|error validation1 = validate(album);
     if validation1 is error {
@@ -101,7 +101,7 @@ function testReadOnlyAlbumWithConstraintsSuccess() {
 }
 
 @test:Config {}
-function testReadOnlyAlbumWithConstraintsFailure() {
+isolated function testReadOnlyAlbumWithConstraintsFailure() {
     Album album = {title: "Blue Train", artist: "John Coltrane"};
     ReadOnlyConstrainedAlbum|error validation1 = validate(album);
     if validation1 is error {
@@ -143,7 +143,7 @@ type AlbumWithReadOnlyConstraints record {|
 |};
 
 @test:Config {}
-function testAlbumWithReadOnlyConstraintsSuccess() {
+isolated function testAlbumWithReadOnlyConstraintsSuccess() {
     Album album = {title: "Jeru", artist: "Gerry Mulligan"};
     AlbumWithReadOnlyConstraints|error validation = validate(album);
     if validation is error {
@@ -152,7 +152,7 @@ function testAlbumWithReadOnlyConstraintsSuccess() {
 }
 
 @test:Config {}
-function testAlbumWithReadOnlyConstraintsFailure() {
+isolated function testAlbumWithReadOnlyConstraintsFailure() {
     Album album = {title: "Blue Train", artist: "John Coltrane"};
     AlbumWithReadOnlyConstraints|error validation = validate(album);
     if validation is error {
@@ -174,7 +174,7 @@ type ReadOnlyAlbumWithConstraintType readonly & record {|
 |};
 
 @test:Config {}
-function testReadOnlyAlbumWithConstraintTypeSuccess() {
+isolated function testReadOnlyAlbumWithConstraintTypeSuccess() {
     Album album = {title: "Jeru", artist: "Gerry Mulligan"};
     ReadOnlyAlbumWithConstraintType|error validation = validate(album);
     if validation is error {
@@ -183,7 +183,7 @@ function testReadOnlyAlbumWithConstraintTypeSuccess() {
 }
 
 @test:Config {}
-function testReadOnlyAlbumWithConstraintTypeFailure() {
+isolated function testReadOnlyAlbumWithConstraintTypeFailure() {
     Album album = {title: "Blue Train", artist: "John Coltrane"};
     ReadOnlyAlbumWithConstraintType|error validation = validate(album);
     if validation is error {
@@ -205,7 +205,7 @@ type AlbumWithReadOnlyConstraintType record {|
 |};
 
 @test:Config {}
-function testAlbumWithReadOnlyConstraintTypeSuccess() {
+isolated function testAlbumWithReadOnlyConstraintTypeSuccess() {
     Album album = {title: "Jeru", artist: "Gerry Mulligan"};
     AlbumWithReadOnlyConstraintType|error validation = validate(album);
     if validation is error {
@@ -214,7 +214,7 @@ function testAlbumWithReadOnlyConstraintTypeSuccess() {
 }
 
 @test:Config {}
-function testAlbumWithReadOnlyConstraintTypeFailure() {
+isolated function testAlbumWithReadOnlyConstraintTypeFailure() {
     Album album = {title: "Blue Train", artist: "John Coltrane"};
     AlbumWithReadOnlyConstraintType|error validation = validate(album);
     if validation is error {
@@ -237,7 +237,7 @@ type Artist record {|
 |};
 
 @test:Config {}
-function testArtistSuccess() {
+isolated function testArtistSuccess() {
     Artist artist = {
         name: "Gerry Mulligan",
         rating: 4,
@@ -253,7 +253,7 @@ function testArtistSuccess() {
 }
 
 @test:Config {}
-function testArtistFailure() {
+isolated function testArtistFailure() {
     Artist artist = {
         name: "John Coltrane",
         rating: 4,
@@ -273,7 +273,7 @@ function testArtistFailure() {
 type ReadOnlyArtist readonly & Artist;
 
 @test:Config {}
-function testReadOnlyArtistSuccess() {
+isolated function testReadOnlyArtistSuccess() {
     Artist artist = {
         name: "Gerry Mulligan",
         rating: 4,
@@ -301,7 +301,7 @@ function testReadOnlyArtistSuccess() {
 }
 
 @test:Config {}
-function testReadOnlyArtistFailure1() {
+isolated function testReadOnlyArtistFailure1() {
     Artist artist = {
         name: "Gerry Mulligan",
         rating: 10,
@@ -334,7 +334,7 @@ function testReadOnlyArtistFailure1() {
 }
 
 @test:Config {}
-function testReadOnlyArtistFailure2() {
+isolated function testReadOnlyArtistFailure2() {
     Artist artist = {
         name: "John Coltrane",
         rating: 10,
