@@ -25,7 +25,7 @@ type User record {|
 |};
 
 @test:Config {}
-function testValidationWithCloneWithTypeSuccess1() {
+isolated function testValidationWithCloneWithTypeSuccess1() {
     json rec = {"id": 1, "name": "Joy"};
     User|error validation = validate(rec);
     if validation is error {
@@ -38,7 +38,7 @@ function testValidationWithCloneWithTypeSuccess1() {
 }
 
 @test:Config {}
-function testValidationWithCloneWithTypeSuccess2() {
+isolated function testValidationWithCloneWithTypeSuccess2() {
     json rec = {"id": 1, "name": "Joy"};
     do {
         User validation = check validate(rec);
@@ -51,7 +51,7 @@ function testValidationWithCloneWithTypeSuccess2() {
 }
 
 @test:Config {}
-function testValidationWithCloneWithTypeFailure1() {
+isolated function testValidationWithCloneWithTypeFailure1() {
     json rec = {"id": 1, "username": "Joy"};
     User|error validation = validate(rec);
     if validation is error {
@@ -62,7 +62,7 @@ function testValidationWithCloneWithTypeFailure1() {
 }
 
 @test:Config {}
-function testValidationWithCloneWithTypeFailure2() {
+isolated function testValidationWithCloneWithTypeFailure2() {
     json rec = {"id": 1, "username": "Joy"};
     do {
         User _ = check validate(rec);
@@ -73,7 +73,7 @@ function testValidationWithCloneWithTypeFailure2() {
 }
 
 @test:Config {}
-function testValidationWithoutCloneSuccess1() {
+isolated function testValidationWithoutCloneSuccess1() {
     User rec = {"id": 1, "name": "Joy"};
     User|error validation = validate(rec);
     if validation is error {
@@ -86,7 +86,7 @@ function testValidationWithoutCloneSuccess1() {
 }
 
 @test:Config {}
-function testValidationWithoutCloneSuccess2() {
+isolated function testValidationWithoutCloneSuccess2() {
     User rec = {"id": 1, "name": "Joy"};
     do {
         User validation = check validate(rec);

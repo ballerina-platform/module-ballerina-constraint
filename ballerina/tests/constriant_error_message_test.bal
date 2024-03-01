@@ -34,7 +34,7 @@ import ballerina/time;
 type TraineeName string;
 
 @test:Config {}
-function testErrorMessageInStringType() {
+isolated function testErrorMessageInStringType() {
     TraineeName str = "abc";
     TraineeName|error validation = validate(str);
     if validation is error {
@@ -79,7 +79,7 @@ function testErrorMessageInStringType() {
 type DateOfBirth time:Date;
 
 @test:Config {}
-function testErrorMessageInDateType() {
+isolated function testErrorMessageInDateType() {
     DateOfBirth dob = {
         year: 2055,
         month: 10,
@@ -161,7 +161,7 @@ const Trainee TRAINEE = {
 };
 
 @test:Config {}
-function testErrorMessageInRecordTypePositive() returns error? {
+isolated function testErrorMessageInRecordTypePositive() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     Trainee|error validation = validate(trainee);
     if validation is error {
@@ -172,7 +172,7 @@ function testErrorMessageInRecordTypePositive() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative1() returns error? {
+isolated function testErrorMessageInRecordTypeNegative1() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.TraineeName = "abc";
     Trainee|error validation = validate(trainee);
@@ -192,7 +192,7 @@ function testErrorMessageInRecordTypeNegative1() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative2() returns error? {
+isolated function testErrorMessageInRecordTypeNegative2() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.dob = {
         year: 2055,
@@ -208,7 +208,7 @@ function testErrorMessageInRecordTypeNegative2() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative3() returns error? {
+isolated function testErrorMessageInRecordTypeNegative3() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.weight = -50.5;
     Trainee|error validation = validate(trainee);
@@ -220,7 +220,7 @@ function testErrorMessageInRecordTypeNegative3() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative4() returns error? {
+isolated function testErrorMessageInRecordTypeNegative4() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.height = -150.5;
     Trainee|error validation = validate(trainee);
@@ -232,7 +232,7 @@ function testErrorMessageInRecordTypeNegative4() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative5() returns error? {
+isolated function testErrorMessageInRecordTypeNegative5() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.dateOfJoining = {
         year: 2022,
@@ -248,7 +248,7 @@ function testErrorMessageInRecordTypeNegative5() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative6() returns error? {
+isolated function testErrorMessageInRecordTypeNegative6() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.badges = ["badge1", "badge2", "badge3", "badge4", "badge5", "badge6"];
     Trainee|error validation = validate(trainee);
@@ -260,7 +260,7 @@ function testErrorMessageInRecordTypeNegative6() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeNegative7() returns error? {
+isolated function testErrorMessageInRecordTypeNegative7() returns error? {
     Trainee trainee = check TRAINEE.cloneWithType();
     trainee.badges = ["badge1", "badge2", "bad"];
     Trainee|error validation = validate(trainee);
@@ -272,7 +272,7 @@ function testErrorMessageInRecordTypeNegative7() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInRecordTypeAllNegative() {
+isolated function testErrorMessageInRecordTypeAllNegative() {
     Trainee trainee = {
         TraineeName: "abc",
         dob: {
@@ -321,7 +321,7 @@ type Trainee0 record {|
 |};
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypePositive() returns error? {
+isolated function testErrorMessageInMixedRecordTypePositive() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     Trainee0|error validation = validate(trainee);
     if validation is error {
@@ -332,7 +332,7 @@ function testErrorMessageInMixedRecordTypePositive() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative1() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative1() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.TraineeName = "abc";
     Trainee0|error validation = validate(trainee);
@@ -352,7 +352,7 @@ function testErrorMessageInMixedRecordTypeNegative1() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative2() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative2() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.dob = {
         year: 2055,
@@ -368,7 +368,7 @@ function testErrorMessageInMixedRecordTypeNegative2() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative3() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative3() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.weight = -50.5;
     Trainee0|error validation = validate(trainee);
@@ -380,7 +380,7 @@ function testErrorMessageInMixedRecordTypeNegative3() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative4() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative4() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.height = -150.5;
     Trainee0|error validation = validate(trainee);
@@ -392,7 +392,7 @@ function testErrorMessageInMixedRecordTypeNegative4() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative5() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative5() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.height = 300;
     Trainee0|error validation = validate(trainee);
@@ -404,7 +404,7 @@ function testErrorMessageInMixedRecordTypeNegative5() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative6() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative6() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.dateOfJoining = {
         year: 2022,
@@ -420,7 +420,7 @@ function testErrorMessageInMixedRecordTypeNegative6() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeNegative7() returns error? {
+isolated function testErrorMessageInMixedRecordTypeNegative7() returns error? {
     Trainee0 trainee = check TRAINEE.cloneWithType();
     trainee.badges = ["badge1", "badge2", "bad"];
     Trainee0|error validation = validate(trainee);
@@ -432,7 +432,7 @@ function testErrorMessageInMixedRecordTypeNegative7() returns error? {
 }
 
 @test:Config {}
-function testErrorMessageInMixedRecordTypeAllNegative() {
+isolated function testErrorMessageInMixedRecordTypeAllNegative() {
     Trainee0 trainee = {
         TraineeName: "abc",
         dob: {

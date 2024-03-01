@@ -139,7 +139,7 @@ isolated function testStringConstraintMaxLengthOnTypeFailure() {
 type StringConstraintPatternOnType string;
 
 @test:Config {}
-function testStringConstraintPatternOnTypeSuccess1() {
+isolated function testStringConstraintPatternOnTypeSuccess1() {
     StringConstraintPatternOnType typ = "964537342V";
     StringConstraintPatternOnType|error validation = validate(typ);
     if validation is error {
@@ -148,7 +148,7 @@ function testStringConstraintPatternOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testStringConstraintPatternOnTypeSuccess2() {
+isolated function testStringConstraintPatternOnTypeSuccess2() {
     StringConstraintPatternOnType typ = "199645370342";
     StringConstraintPatternOnType|error validation = validate(typ);
     if validation is error {
@@ -157,7 +157,7 @@ function testStringConstraintPatternOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testStringConstraintPatternOnTypeFailure1() {
+isolated function testStringConstraintPatternOnTypeFailure1() {
     StringConstraintPatternOnType typ = "19964537034234";
     StringConstraintPatternOnType|error validation = validate(typ);
     if validation is error {
@@ -168,7 +168,7 @@ function testStringConstraintPatternOnTypeFailure1() {
 }
 
 @test:Config {}
-function testStringConstraintPatternOnTypeFailure2() {
+isolated function testStringConstraintPatternOnTypeFailure2() {
     StringConstraintPatternOnType typ = "199645345A";
     StringConstraintPatternOnType|error validation = validate(typ);
     if validation is error {
