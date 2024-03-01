@@ -161,13 +161,12 @@ const Trainee TRAINEE = {
 };
 
 @test:Config {}
-isolated function testErrorMessageInRecordTypePositive() returns error? {
-    Trainee trainee = check TRAINEE.cloneWithType();
-    Trainee|error validation = validate(trainee);
+isolated function testErrorMessageInRecordTypePositive() {
+    Trainee|error validation = validate(TRAINEE);
     if validation is error {
         test:assertFail("Unexpected error found.");
     } else {
-        test:assertEquals(validation, trainee);
+        test:assertEquals(validation, TRAINEE);
     }
 }
 
