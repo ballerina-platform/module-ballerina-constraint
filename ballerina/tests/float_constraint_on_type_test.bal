@@ -231,7 +231,7 @@ isolated function testFloatConstraintOnTypeFailure2() {
 type MaxDigitFloatType float;
 
 @test:Config {}
-function testMaxDigitFloatPositive() {
+isolated function testMaxDigitFloatPositive() {
     MaxDigitFloatType|error validation = validate(12934.8065);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -346,7 +346,7 @@ function testMaxDigitFloatPositive() {
 }
 
 @test:Config {}
-function testMaxDigitFloatNegative() {
+isolated function testMaxDigitFloatNegative() {
     MaxDigitFloatType|error validation = validate(1234567.435);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxIntegerDigits' constraint(s).");
@@ -415,7 +415,7 @@ type DigitFloat float;
 type MaxIntegerDigitFloatRefType DigitFloat;
 
 @test:Config {}
-function testMaxIntegerDigitsRefType() {
+isolated function testMaxIntegerDigitsRefType() {
     MaxIntegerDigitFloatRefType|error validation = validate(-1234.12345);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -454,7 +454,7 @@ function testMaxIntegerDigitsRefType() {
 type MaxFractionDigitFloatRefType DigitFloat;
 
 @test:Config {}
-function testMaxFractionDigitsRefType() {
+isolated function testMaxFractionDigitsRefType() {
     MaxFractionDigitFloatRefType|error validation = validate(1234.12);
     if validation is error {
         test:assertFail("Unexpected error found.");

@@ -503,7 +503,7 @@ isolated function testSampleFailure11() returns error? {
 }
 
 @test:Config {}
-function testSampleFailure12() returns error? {
+isolated function testSampleFailure12() returns error? {
     Order rec = check SAMPLE_PAYLOAD.cloneWithType();
     rec.phone = "1234abcd90";
     rec.email = "invalid_email?address@";

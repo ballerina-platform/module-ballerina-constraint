@@ -34,7 +34,7 @@ type App2 record {|
 type Users User[];
 
 @test:Config {}
-function testConstraintsOnArrayBasicMembersSuccess() {
+isolated function testConstraintsOnArrayBasicMembersSuccess() {
     UserId[] ids = ["1234", "4356", "9834", "3214"];
     do {
         ids = check validate(ids);
@@ -49,7 +49,7 @@ function testConstraintsOnArrayBasicMembersSuccess() {
 }
 
 @test:Config {}
-function testConstraintsOnArrayBasicMembersFailure() {
+isolated function testConstraintsOnArrayBasicMembersFailure() {
     UserId[] ids = ["1234", "43", "9834", "3214"];
     do {
         ids = check validate(ids);
@@ -74,7 +74,7 @@ function testConstraintsOnArrayBasicMembersFailure() {
 }
 
 @test:Config {}
-function testConstraintsOnRecordFieldArrayMembersSuccess() {
+isolated function testConstraintsOnRecordFieldArrayMembersSuccess() {
     UserId[] ids = ["1234", "4356", "9834", "3214"];
 
     App1|error validation1 = validate({ids: ids});
@@ -89,7 +89,7 @@ function testConstraintsOnRecordFieldArrayMembersSuccess() {
 }
 
 @test:Config {}
-function testConstraintsOnRecordFieldArrayMembersFailure() {
+isolated function testConstraintsOnRecordFieldArrayMembersFailure() {
     UserId[] ids = ["1234", "43", "9834", "3214"];
 
     App1|error validation1 = validate({ids: ids});
@@ -108,7 +108,7 @@ function testConstraintsOnRecordFieldArrayMembersFailure() {
 }
 
 @test:Config {}
-function testConstraintsOnRecordArrayMemberSuccess() {
+isolated function testConstraintsOnRecordArrayMemberSuccess() {
     User[] users = [
         {id: 1, name: "John"},
         {id: 2, name: "Joyce"}
@@ -127,7 +127,7 @@ function testConstraintsOnRecordArrayMemberSuccess() {
 }
 
 @test:Config {}
-function testConstraintsOnRecordArrayMemberFailure() {
+isolated function testConstraintsOnRecordArrayMemberFailure() {
     User[] users = [
         {id: 1, name: "John"},
         {id: 2, name: "a"}
