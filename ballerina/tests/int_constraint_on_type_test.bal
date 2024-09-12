@@ -230,7 +230,7 @@ isolated function testIntConstraintOnTypeFailure2() {
 type MaxDigitIntType int;
 
 @test:Config {}
-function testMaxDigitIntPositive() {
+isolated function testMaxDigitIntPositive() {
     MaxDigitIntType|error validation = validate(123425);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -282,7 +282,7 @@ function testMaxDigitIntPositive() {
 }
 
 @test:Config {}
-function testMaxDigitIntNegative() {
+isolated function testMaxDigitIntNegative() {
     MaxDigitIntType|error validation = validate(12342567890);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxDigits' constraint(s).");
@@ -337,7 +337,7 @@ type DigitInteger int;
 type MaxDigitIntRefType DigitInteger;
 
 @test:Config {}
-function testMaxDigitIntRefType() {
+isolated function testMaxDigitIntRefType() {
     MaxDigitIntRefType|error validation = validate(1234);
     if validation is error {
         test:assertFail("Unexpected error found.");

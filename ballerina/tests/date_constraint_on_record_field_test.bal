@@ -23,7 +23,7 @@ type NoDateConstraintsOnRecordField record {
 };
 
 @test:Config {}
-function testNoDateConstraintsOnRecordField() {
+isolated function testNoDateConstraintsOnRecordField() {
     NoDateConstraintsOnRecordField rec = {
         name: "John",
         dob: {
@@ -72,7 +72,7 @@ type SimpleDateConstraintOnRecordField record {
 };
 
 @test:Config {}
-function testSimpleDateConstraintOnRecordFieldSuccess1() {
+isolated function testSimpleDateConstraintOnRecordFieldSuccess1() {
     SimpleDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -90,7 +90,7 @@ function testSimpleDateConstraintOnRecordFieldSuccess1() {
 }
 
 @test:Config {}
-function testSimpleDateConstraintOnRecordFieldSuccess2() {
+isolated function testSimpleDateConstraintOnRecordFieldSuccess2() {
     SimpleDateConstraintOnRecordField rec = {
         name: "Alexander the Great",
         dob: {
@@ -108,7 +108,7 @@ function testSimpleDateConstraintOnRecordFieldSuccess2() {
 }
 
 @test:Config {}
-function testSimpleDateConstraintOnRecordFieldSuccess3() {
+isolated function testSimpleDateConstraintOnRecordFieldSuccess3() {
     SimpleDateConstraintOnRecordField rec = {
         name: "Alex",
         dob: time:utcToCivil(time:utcNow())
@@ -122,7 +122,7 @@ function testSimpleDateConstraintOnRecordFieldSuccess3() {
 }
 
 @test:Config {}
-function testSimpleDateConstraintOnRecordFieldFailure1() {
+isolated function testSimpleDateConstraintOnRecordFieldFailure1() {
     SimpleDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -140,7 +140,7 @@ function testSimpleDateConstraintOnRecordFieldFailure1() {
 }
 
 @test:Config {}
-function testSimpleDateConstraintOnRecordFieldFailure2() {
+isolated function testSimpleDateConstraintOnRecordFieldFailure2() {
     SimpleDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -166,7 +166,7 @@ type PastDateConstraintOnRecordField record {
 };
 
 @test:Config {}
-function testPastDateConstraintOnRecordFieldSuccess1() {
+isolated function testPastDateConstraintOnRecordFieldSuccess1() {
     PastDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -184,7 +184,7 @@ function testPastDateConstraintOnRecordFieldSuccess1() {
 }
 
 @test:Config {}
-function testPastDateConstraintOnRecordFieldSuccess2() {
+isolated function testPastDateConstraintOnRecordFieldSuccess2() {
     PastDateConstraintOnRecordField rec = {
         name: "Alexander the Great",
         dob: {
@@ -202,7 +202,7 @@ function testPastDateConstraintOnRecordFieldSuccess2() {
 }
 
 @test:Config {}
-function testPastDateConstraintOnRecordFieldFailure1() {
+isolated function testPastDateConstraintOnRecordFieldFailure1() {
     PastDateConstraintOnRecordField rec = {
         name: "John",
         dob: time:utcToCivil(time:utcNow())
@@ -216,7 +216,7 @@ function testPastDateConstraintOnRecordFieldFailure1() {
 }
 
 @test:Config {}
-function testPastDateConstraintOnRecordFieldFailure2() {
+isolated function testPastDateConstraintOnRecordFieldFailure2() {
     PastDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -242,7 +242,7 @@ type FutureOrPresentDateConstraintOnRecordField record {
 };
 
 @test:Config {}
-function testFutureOrPresentDateConstraintOnRecordFieldSuccess1() {
+isolated function testFutureOrPresentDateConstraintOnRecordFieldSuccess1() {
     FutureOrPresentDateConstraintOnRecordField rec = {
         name: "John",
         dob: time:utcToCivil(time:utcNow())
@@ -256,7 +256,7 @@ function testFutureOrPresentDateConstraintOnRecordFieldSuccess1() {
 }
 
 @test:Config {}
-function testFutureOrPresentDateConstraintOnRecordFieldSuccess2() {
+isolated function testFutureOrPresentDateConstraintOnRecordFieldSuccess2() {
     FutureOrPresentDateConstraintOnRecordField rec = {
         name: "Alex",
         dob: {
@@ -274,7 +274,7 @@ function testFutureOrPresentDateConstraintOnRecordFieldSuccess2() {
 }
 
 @test:Config {}
-function testFutureOrPresentDateConstraintOnRecordFieldFailure1() {
+isolated function testFutureOrPresentDateConstraintOnRecordFieldFailure1() {
     FutureOrPresentDateConstraintOnRecordField rec = {
         name: "John",
         dob: {
@@ -292,7 +292,7 @@ function testFutureOrPresentDateConstraintOnRecordFieldFailure1() {
 }
 
 @test:Config {}
-function testFutureOrPresentDateConstraintOnRecordFieldFailure2() {
+isolated function testFutureOrPresentDateConstraintOnRecordFieldFailure2() {
     FutureOrPresentDateConstraintOnRecordField rec = {
         name: "Alexander the Great",
         dob: {
@@ -325,7 +325,7 @@ type DateConstraintOnRecordRecordField record {
 };
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldSuccess1() {
+isolated function testDateConstraintOnRecordRecordFieldSuccess1() {
     DateConstraintOnRecordRecordField rec = {
         name: "John",
         dob: {
@@ -343,7 +343,7 @@ function testDateConstraintOnRecordRecordFieldSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldSuccess2() {
+isolated function testDateConstraintOnRecordRecordFieldSuccess2() {
     time:Date today = time:utcToCivil(time:utcNow());
     DateConstraintOnRecordRecordField rec = {
         name: "Alexander the Great",
@@ -362,7 +362,7 @@ function testDateConstraintOnRecordRecordFieldSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldFailure1() {
+isolated function testDateConstraintOnRecordRecordFieldFailure1() {
     DateConstraintOnRecordRecordField rec = {
         name: "John",
         dob: {
@@ -380,7 +380,7 @@ function testDateConstraintOnRecordRecordFieldFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldFailure2() {
+isolated function testDateConstraintOnRecordRecordFieldFailure2() {
     DateConstraintOnRecordRecordField rec = {
         name: "Alex",
         dob: {
@@ -398,7 +398,7 @@ function testDateConstraintOnRecordRecordFieldFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldFailure3() {
+isolated function testDateConstraintOnRecordRecordFieldFailure3() {
     DateConstraintOnRecordRecordField rec = {
         name: "George",
         dob: {
@@ -416,7 +416,7 @@ function testDateConstraintOnRecordRecordFieldFailure3() {
 }
 
 @test:Config {}
-function testDateConstraintOnRecordRecordFieldFailure4() {
+isolated function testDateConstraintOnRecordRecordFieldFailure4() {
     DateConstraintOnRecordRecordField rec = {
         name: "David",
         dob: {
@@ -448,7 +448,7 @@ type DateConstraintOnTypedRecordField record {
 };
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldSuccess1() {
+isolated function testDateConstraintOnTypedRecordFieldSuccess1() {
     DateConstraintOnTypedRecordField rec = {
         name: "John",
         dob: {
@@ -466,7 +466,7 @@ function testDateConstraintOnTypedRecordFieldSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldSuccess2() {
+isolated function testDateConstraintOnTypedRecordFieldSuccess2() {
     time:Date yesterday = time:utcToCivil(time:utcAddSeconds(time:utcNow(), -86400));
     DateConstraintOnTypedRecordField rec = {
         name: "Alex",
@@ -481,7 +481,7 @@ function testDateConstraintOnTypedRecordFieldSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldFailure1() {
+isolated function testDateConstraintOnTypedRecordFieldFailure1() {
     DateConstraintOnTypedRecordField rec = {
         name: "John",
         dob: {
@@ -499,7 +499,7 @@ function testDateConstraintOnTypedRecordFieldFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldFailure2() {
+isolated function testDateConstraintOnTypedRecordFieldFailure2() {
     DateConstraintOnTypedRecordField rec = {
         name: "Alex",
         dob: {
@@ -517,7 +517,7 @@ function testDateConstraintOnTypedRecordFieldFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldFailure3() {
+isolated function testDateConstraintOnTypedRecordFieldFailure3() {
     time:Date tomorrow = time:utcToCivil(time:utcAddSeconds(time:utcNow(), 86400));
     DateConstraintOnTypedRecordField rec = {
         name: "George",
@@ -532,7 +532,7 @@ function testDateConstraintOnTypedRecordFieldFailure3() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldFailure4() {
+isolated function testDateConstraintOnTypedRecordFieldFailure4() {
     time:Date today = time:utcToCivil(time:utcNow());
     DateConstraintOnTypedRecordField rec = {
         name: "David",
@@ -566,7 +566,7 @@ type DateConstraintOnTypedRecordFieldWithCustomValidDate record {
 };
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldWithCustomValidDateSuccess() {
+isolated function testDateConstraintOnTypedRecordFieldWithCustomValidDateSuccess() {
     DateConstraintOnTypedRecordFieldWithCustomValidDate rec = {
         name: "John",
         dob: {
@@ -584,7 +584,7 @@ function testDateConstraintOnTypedRecordFieldWithCustomValidDateSuccess() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure1() {
+isolated function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure1() {
     DateConstraintOnTypedRecordFieldWithCustomValidDate rec = {
         name: "John",
         dob: {
@@ -602,7 +602,7 @@ function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure2() {
+isolated function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure2() {
     DateConstraintOnTypedRecordFieldWithCustomValidDate rec = {
         name: "John",
         dob: {
@@ -620,7 +620,7 @@ function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure3() {
+isolated function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure3() {
     time:Date tomorrow = time:utcToCivil(time:utcAddSeconds(time:utcNow(), 86400));
     DateConstraintOnTypedRecordFieldWithCustomValidDate rec = {
         name: "John",
@@ -635,7 +635,7 @@ function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure3() {
 }
 
 @test:Config {}
-function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure4() {
+isolated function testDateConstraintOnTypedRecordFieldWithCustomValidDateFailure4() {
     DateConstraintOnTypedRecordFieldWithCustomValidDate rec = {
         name: "John",
         dob: {

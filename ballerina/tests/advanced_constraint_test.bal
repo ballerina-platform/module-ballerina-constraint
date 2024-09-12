@@ -542,7 +542,7 @@ int b = 0;
 type StringA string;
 
 @test:Config {}
-function testInvalidLengthConstraintOnStringType() {
+isolated function testInvalidLengthConstraintOnStringType() {
     StringA stringA = "s3cr3t";
     StringA|error validation = validate(stringA);
     if validation is error {
@@ -562,7 +562,7 @@ type RecordB record {
 };
 
 @test:Config {}
-function testInvalidLengthConstraintOnStringTypeAsRecordField() {
+isolated function testInvalidLengthConstraintOnStringTypeAsRecordField() {
     RecordB recordB = {stringB: "s3cr3t"};
     RecordB|error validation = validate(recordB);
     if validation is error {
@@ -580,7 +580,7 @@ type RecordA record {
 };
 
 @test:Config {}
-function testInvalidLengthConstraintOnArrayRecordField() {
+isolated function testInvalidLengthConstraintOnArrayRecordField() {
     RecordA recordA = {arrayA: ["s3cr3t"]};
     RecordA|error validation = validate(recordA);
     if validation is error {
@@ -689,7 +689,7 @@ type OrderNew record {|
 |};
 
 @test:Config {}
-function testCustomAnnotationSuccess() {
+isolated function testCustomAnnotationSuccess() {
     OrderNew rec = {
         id: "1000",
         productId: "23",
@@ -703,7 +703,7 @@ function testCustomAnnotationSuccess() {
 }
 
 @test:Config {}
-function testCustomAnnotationFailure() {
+isolated function testCustomAnnotationFailure() {
     OrderNew rec = {
         id: "1000",
         productId: "23",
@@ -736,7 +736,7 @@ type NickName Name;
 type Id int:Signed32;
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeSuccess1() {
+isolated function testConstraintAnnotationOnSubtypeSuccess1() {
     NickName|error validation = validate("J");
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -744,7 +744,7 @@ function testConstraintAnnotationOnSubtypeSuccess1() {
 }
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeSuccess2() {
+isolated function testConstraintAnnotationOnSubtypeSuccess2() {
     Id|error validation = validate(100);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -752,7 +752,7 @@ function testConstraintAnnotationOnSubtypeSuccess2() {
 }
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeFailure1() {
+isolated function testConstraintAnnotationOnSubtypeFailure1() {
     NickName|error validation = validate("James Maccurdy");
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxLength' constraint(s).");
@@ -762,7 +762,7 @@ function testConstraintAnnotationOnSubtypeFailure1() {
 }
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeFailure2() {
+isolated function testConstraintAnnotationOnSubtypeFailure2() {
     Id|error validation = validate(1001);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxValue' constraint(s).");
@@ -793,7 +793,7 @@ type UserNew record {
 };
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeAsRecordFieldSuccess() {
+isolated function testConstraintAnnotationOnSubtypeAsRecordFieldSuccess() {
     UserNew user = {
         id: 1,
         name: {
@@ -810,7 +810,7 @@ function testConstraintAnnotationOnSubtypeAsRecordFieldSuccess() {
 }
 
 @test:Config {}
-function testConstraintAnnotationOnSubtypeAsRecordFieldFailure() {
+isolated function testConstraintAnnotationOnSubtypeAsRecordFieldFailure() {
     UserNew user = {
         id: 1,
         name: {
@@ -836,7 +836,7 @@ type UserDetails record {|
 |};
 
 @test:Config {}
-function testConstraintOnFieldsWithEscapeCharsSuccess() {
+isolated function testConstraintOnFieldsWithEscapeCharsSuccess() {
     UserDetails user = {
         x\-name: "John Doe",
         x\-age\$: [18, 19]
@@ -848,7 +848,7 @@ function testConstraintOnFieldsWithEscapeCharsSuccess() {
 }
 
 @test:Config {}
-function testConstraintOnFieldsWithEscapeCharsFailure() {
+isolated function testConstraintOnFieldsWithEscapeCharsFailure() {
     UserDetails user = {
         x\-name: "J",
         x\-age\$: [17, 19, 20, 15]

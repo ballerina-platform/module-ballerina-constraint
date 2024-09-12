@@ -20,7 +20,7 @@ import ballerina/test;
 type NoDateConstraintOnTimeDateType time:Date;
 
 @test:Config {}
-function testNoDateConstraintsOnType() {
+isolated function testNoDateConstraintsOnType() {
     NoDateConstraintOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -46,7 +46,7 @@ function testNoDateConstraintsOnType() {
 type DateConstraintSimpleOnTimeDateType time:Date;
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeSuccess1() {
+isolated function testDateConstraintSimpleOnTypeSuccess1() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -61,7 +61,7 @@ function testDateConstraintSimpleOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeSuccess2() {
+isolated function testDateConstraintSimpleOnTypeSuccess2() {
     DateConstraintSimpleOnTimeDateType date = {
         year: -2018, // BC year
         month: 1,
@@ -76,7 +76,7 @@ function testDateConstraintSimpleOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeSuccess3() {
+isolated function testDateConstraintSimpleOnTypeSuccess3() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2016, // leap year
         month: 2,
@@ -91,7 +91,7 @@ function testDateConstraintSimpleOnTypeSuccess3() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeFailure1() {
+isolated function testDateConstraintSimpleOnTypeFailure1() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -106,7 +106,7 @@ function testDateConstraintSimpleOnTypeFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeFailure2() {
+isolated function testDateConstraintSimpleOnTypeFailure2() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2018,
         month: 15,
@@ -121,7 +121,7 @@ function testDateConstraintSimpleOnTypeFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeFailure3() {
+isolated function testDateConstraintSimpleOnTypeFailure3() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 1000000000, // limit is 999999999
         month: 1,
@@ -136,7 +136,7 @@ function testDateConstraintSimpleOnTypeFailure3() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeFailure4() {
+isolated function testDateConstraintSimpleOnTypeFailure4() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2022,
         month: 6,
@@ -151,7 +151,7 @@ function testDateConstraintSimpleOnTypeFailure4() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeFailure5() {
+isolated function testDateConstraintSimpleOnTypeFailure5() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2022,
         month: 2,
@@ -166,7 +166,7 @@ function testDateConstraintSimpleOnTypeFailure5() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeMultipleFailure1() {
+isolated function testDateConstraintSimpleOnTypeMultipleFailure1() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 2022,
         month: 20,
@@ -181,7 +181,7 @@ function testDateConstraintSimpleOnTypeMultipleFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeMultipleFailure2() {
+isolated function testDateConstraintSimpleOnTypeMultipleFailure2() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 1000000000000000, // Arithmetic overflow for java:Integer
         month: 12,
@@ -196,7 +196,7 @@ function testDateConstraintSimpleOnTypeMultipleFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintSimpleOnTypeMultipleFailure3() {
+isolated function testDateConstraintSimpleOnTypeMultipleFailure3() {
     DateConstraintSimpleOnTimeDateType date = {
         year: 1000000000,
         month: 0,
@@ -216,7 +216,7 @@ function testDateConstraintSimpleOnTypeMultipleFailure3() {
 type DateConstraintPastOnTimeDateType time:Date;
 
 @test:Config {}
-function testDateConstraintPastOnTypeSuccess1() {
+isolated function testDateConstraintPastOnTypeSuccess1() {
     DateConstraintPastOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -231,7 +231,7 @@ function testDateConstraintPastOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintPastOnTypeSuccess2() {
+isolated function testDateConstraintPastOnTypeSuccess2() {
     DateConstraintPastOnTimeDateType date = {
         year: -2018, // BC year
         month: 1,
@@ -246,7 +246,7 @@ function testDateConstraintPastOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintPastOnTypeSuccess3() {
+isolated function testDateConstraintPastOnTypeSuccess3() {
     time:Utc utcNow = time:utcNow();
     // Decrement by a day
     DateConstraintPastOnTimeDateType date = time:utcToCivil(time:utcAddSeconds(utcNow, -86400));
@@ -259,7 +259,7 @@ function testDateConstraintPastOnTypeSuccess3() {
 }
 
 @test:Config {}
-function testDateConstraintPastOnTypeFailure1() {
+isolated function testDateConstraintPastOnTypeFailure1() {
     DateConstraintPastOnTimeDateType date = {
         year: 10000,
         month: 10,
@@ -274,7 +274,7 @@ function testDateConstraintPastOnTypeFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintPastOnTypeFailure2() {
+isolated function testDateConstraintPastOnTypeFailure2() {
     DateConstraintPastOnTimeDateType date = time:utcToCivil(time:utcNow());
     DateConstraintPastOnTimeDateType|error validation = validate(date);
     if validation is error {
@@ -285,7 +285,7 @@ function testDateConstraintPastOnTypeFailure2() {
 }
 
 @test:Config {}
-function testDateConstraintPastOnTypeFailure3() {
+isolated function testDateConstraintPastOnTypeFailure3() {
     time:Utc utcNow = time:utcNow();
     // Increment by a day from today
     DateConstraintPastOnTimeDateType date = time:utcToCivil(time:utcAddSeconds(utcNow, 86640));
@@ -303,7 +303,7 @@ function testDateConstraintPastOnTypeFailure3() {
 type DateConstraintFutureOnTimeDateType time:Date;
 
 @test:Config {}
-function testDateConstraintFutureOnTypeSuccess1() {
+isolated function testDateConstraintFutureOnTypeSuccess1() {
     DateConstraintFutureOnTimeDateType date = {
         year: 10000,
         month: 10,
@@ -318,7 +318,7 @@ function testDateConstraintFutureOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOnTypeSuccess2() {
+isolated function testDateConstraintFutureOnTypeSuccess2() {
     time:Utc utcNow = time:utcNow();
     // Increment by a day from today
     DateConstraintFutureOnTimeDateType date = time:utcToCivil(time:utcAddSeconds(utcNow, 86640));
@@ -331,7 +331,7 @@ function testDateConstraintFutureOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOnTypeFailure1() {
+isolated function testDateConstraintFutureOnTypeFailure1() {
     DateConstraintFutureOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -346,7 +346,7 @@ function testDateConstraintFutureOnTypeFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOnTypeFailure2() {
+isolated function testDateConstraintFutureOnTypeFailure2() {
     DateConstraintFutureOnTimeDateType date = time:utcToCivil(time:utcNow());
     DateConstraintFutureOnTimeDateType|error validation = validate(date);
     if validation is error {
@@ -362,7 +362,7 @@ function testDateConstraintFutureOnTypeFailure2() {
 type DateConstraintPastOrPresentOnTimeDateType time:Date;
 
 @test:Config {}
-function testDateConstraintPastOrPresentOnTypeSuccess1() {
+isolated function testDateConstraintPastOrPresentOnTypeSuccess1() {
     DateConstraintPastOrPresentOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -377,7 +377,7 @@ function testDateConstraintPastOrPresentOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintPastOrPresentOnTypeSuccess2() {
+isolated function testDateConstraintPastOrPresentOnTypeSuccess2() {
     DateConstraintPastOrPresentOnTimeDateType date = time:utcToCivil(time:utcNow());
     DateConstraintPastOrPresentOnTimeDateType|error validation = validate(date);
     if validation is error {
@@ -388,7 +388,7 @@ function testDateConstraintPastOrPresentOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintPastOrPresentOnTypeFailure1() {
+isolated function testDateConstraintPastOrPresentOnTypeFailure1() {
     DateConstraintPastOrPresentOnTimeDateType date = {
         year: 10000,
         month: 1,
@@ -403,7 +403,7 @@ function testDateConstraintPastOrPresentOnTypeFailure1() {
 }
 
 @test:Config {}
-function testDateConstraintPastOrPresentOnTypeFailure2() {
+isolated function testDateConstraintPastOrPresentOnTypeFailure2() {
     time:Utc utcNow = time:utcNow();
     // Increment by a day from today
     DateConstraintPastOrPresentOnTimeDateType date = time:utcToCivil(time:utcAddSeconds(utcNow, 86640));
@@ -421,7 +421,7 @@ function testDateConstraintPastOrPresentOnTypeFailure2() {
 type DateConstraintFutureOrPresentOnTimeDateType time:Date;
 
 @test:Config {}
-function testDateConstraintFutureOrPresentOnTypeSuccess1() {
+isolated function testDateConstraintFutureOrPresentOnTypeSuccess1() {
     DateConstraintFutureOrPresentOnTimeDateType date = {
         year: 10000,
         month: 1,
@@ -436,7 +436,7 @@ function testDateConstraintFutureOrPresentOnTypeSuccess1() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOrPresentOnTypeSuccess2() {
+isolated function testDateConstraintFutureOrPresentOnTypeSuccess2() {
     DateConstraintFutureOrPresentOnTimeDateType date = time:utcToCivil(time:utcNow());
     DateConstraintFutureOrPresentOnTimeDateType|error validation = validate(date);
     if validation is error {
@@ -447,7 +447,7 @@ function testDateConstraintFutureOrPresentOnTypeSuccess2() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOrPresentOnTypeSuccess3() {
+isolated function testDateConstraintFutureOrPresentOnTypeSuccess3() {
     time:Utc utcNow = time:utcNow();
     // Increment by a day from today
     DateConstraintFutureOrPresentOnTimeDateType date = time:utcToCivil(time:utcAddSeconds(utcNow, 86640));
@@ -460,7 +460,7 @@ function testDateConstraintFutureOrPresentOnTypeSuccess3() {
 }
 
 @test:Config {}
-function testDateConstraintFutureOrPresentOnTypeFailure() {
+isolated function testDateConstraintFutureOrPresentOnTypeFailure() {
     DateConstraintFutureOrPresentOnTimeDateType date = {
         year: 2018,
         month: 10,
@@ -482,7 +482,7 @@ type DateSimple record {|
 |};
 
 @test:Config {}
-function testDateSimpleSuccess() {
+isolated function testDateSimpleSuccess() {
     DateSimple date = {
         year: 2018,
         month: 10,
@@ -497,7 +497,7 @@ function testDateSimpleSuccess() {
 }
 
 @test:Config {}
-function testDateSimpleFailure() {
+isolated function testDateSimpleFailure() {
     DateSimple date = {
         year: 2018,
         month: 10,
@@ -521,7 +521,7 @@ type DatePast record {|
 |};
 
 @test:Config {}
-function testDatePastSuccess() {
+isolated function testDatePastSuccess() {
     DatePast date = {
         year: 2018,
         month: 1,
@@ -536,7 +536,7 @@ function testDatePastSuccess() {
 }
 
 @test:Config {}
-function testDatePastFailure() {
+isolated function testDatePastFailure() {
     DatePast date = {
         year: 10000,
         month: 10,
@@ -563,7 +563,7 @@ type DateFuture record {|
 |};
 
 @test:Config {}
-function testDateFutureSuccess() {
+isolated function testDateFutureSuccess() {
     DateFuture date = {
         year: 2500,
         month: 1,
@@ -578,7 +578,7 @@ function testDateFutureSuccess() {
 }
 
 @test:Config {}
-function testDateFutureFailure1() {
+isolated function testDateFutureFailure1() {
     DateFuture date = {
         year: 10000,
         month: 10,
@@ -593,7 +593,7 @@ function testDateFutureFailure1() {
 }
 
 @test:Config {}
-function testDateFutureFailure2() {
+isolated function testDateFutureFailure2() {
     DateFuture date = {
         year: 2000,
         month: 10,
@@ -620,7 +620,7 @@ type DatePastOrPresent record {
 };
 
 @test:Config {}
-function testDatePastOrPresentSuccess1() {
+isolated function testDatePastOrPresentSuccess1() {
     DatePastOrPresent date = time:utcToCivil(time:utcNow());
     DatePastOrPresent|error validation = validate(date);
     if validation is error {
@@ -631,7 +631,7 @@ function testDatePastOrPresentSuccess1() {
 }
 
 @test:Config {}
-function testDatePastOrPresentSuccess2() {
+isolated function testDatePastOrPresentSuccess2() {
     DatePastOrPresent date = {
         year: 1980,
         month: 1,
@@ -646,7 +646,7 @@ function testDatePastOrPresentSuccess2() {
 }
 
 @test:Config {}
-function testDatePastOrPresentFailure1() {
+isolated function testDatePastOrPresentFailure1() {
     DatePastOrPresent date = {
         year: 100,
         month: 10,
@@ -661,7 +661,7 @@ function testDatePastOrPresentFailure1() {
 }
 
 @test:Config {}
-function testDatePastOrPresentFailure2() {
+isolated function testDatePastOrPresentFailure2() {
     DatePastOrPresent date = {
         year: 3000,
         month: 10,

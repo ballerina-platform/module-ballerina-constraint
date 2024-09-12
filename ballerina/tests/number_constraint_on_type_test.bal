@@ -641,7 +641,7 @@ isolated function testNumberConstraintOnUnionTypeFailure8() {
 type MaxDigitNumberType decimal;
 
 @test:Config {}
-function testMaxDigitNumberPositive() {
+isolated function testMaxDigitNumberPositive() {
     MaxDigitNumberType|error validation = validate(1.234d);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -700,7 +700,7 @@ function testMaxDigitNumberPositive() {
 }
 
 @test:Config {}
-function testMaxDigitNumberNegative() {
+isolated function testMaxDigitNumberNegative() {
     MaxDigitNumberType|error validation = validate(1.234568d);
     if validation is error {
         test:assertEquals(validation.message(), "Validation failed for '$:maxFractionDigits' constraint(s).");
@@ -748,7 +748,7 @@ type DigitNumber decimal;
 type MaxIntegerDigitNumberRefType DigitNumber;
 
 @test:Config {}
-function testMaxIntegerDigitsNumberRefType() {
+isolated function testMaxIntegerDigitsNumberRefType() {
     MaxIntegerDigitNumberRefType|error validation = validate(-1234.12345d);
     if validation is error {
         test:assertFail("Unexpected error found.");
@@ -787,7 +787,7 @@ function testMaxIntegerDigitsNumberRefType() {
 type MaxFractionDigitNumberRefType DigitNumber;
 
 @test:Config {}
-function testMaxFractionDigitsNumberRefType() {
+isolated function testMaxFractionDigitsNumberRefType() {
     MaxFractionDigitNumberRefType|error validation = validate(1234.12d);
     if validation is error {
         test:assertFail("Unexpected error found.");
