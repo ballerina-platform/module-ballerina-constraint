@@ -87,6 +87,7 @@ The following table illustrates all the supported annotations with respect to th
 | `int`&#124;`float`&#124;`decimal` | `@constraint:Number` |
 | `string`                          | `@constraint:String` |
 | `any[]`                           | `@constraint:Array`  |
+| `constraint:Date`                 | `@constraint:Date`   |
 
 ### 2.1. Constraint annotation on number types
 
@@ -135,9 +136,9 @@ All the supported constraints on number types are illustrated in the following t
 | maxValue          |                                v <= c                                |
 | minValueExclusive |                                v > c                                 |
 | maxValueExclusive |                                v < c                                 |
-|maxDigits          |                      Number of digits in v <= c                      |
-|maxIntegerDigits   |                Number of integer digits in v <= c                    |
-|maxFractionDigits  |               Number of fraction digits in v <= c                    |
+| maxDigits         |                      Number of digits in v <= c                      |
+| maxIntegerDigits  |                Number of integer digits in v <= c                    |
+| maxFractionDigits |               Number of fraction digits in v <= c                    |
 
 When defining constraints on number types, either `minValue` or `minValueExclusive` can be present. Similarly, either 
 `maxValue` or `maxValueExclusive` can be present.
