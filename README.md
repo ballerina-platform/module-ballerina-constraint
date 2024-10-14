@@ -8,11 +8,11 @@ Ballerina Constraint Library
   [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerina-constraint.svg?label=Last%20Commit)](https://github.com/ballerina-platform/module-ballerina-constraint/commits/master)
   [![GitHub issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/constraint.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fconstraint)
 
-The Ballerina `constraint` library facilitates APIs to do validations on the Ballerina types further with the use of annotations.
+The Ballerina `constraint` library provides annotations to add constraints to Ballerina types and API to validate the values with respect to the constraints defined in the respective types.
 
 ### Constraint annotations
 
-This library provides the following annotations to validate the values that have been assigned to Ballerina types.
+This library provides the following annotations on Ballerina types to validate the values created with the respective types.
 
 | Ballerina Type                    | Annotation           | Supported Constraints                                                                                                  |
 |-----------------------------------|----------------------|------------------------------------------------------------------------------------------------------------------------|
@@ -23,7 +23,7 @@ This library provides the following annotations to validate the values that have
 | `any[]`                           | `@constraint:Array`  | `length`, `minLength`, `maxLength`                                                                                     |
 | `constraint:Date`                 | `@constraint:Date`   | `option` - `PAST` or `FUTURE` or `PAST_OR_PRESENT` or `FUTURE_OR_PRESENT`                                              |
 
-The following example demonstrates how to apply constraint annotations to Ballerina types.
+The following example demonstrates how to apply constraint annotations to types.
 
 ```ballerina
 @constraint:String { pattern: re `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$` }
@@ -46,9 +46,9 @@ public type Person record {|
 
 ### Constraint validation
 
-The `validate` function in this library can be used to validate the values that have been assigned to Ballerina types with respect to the constraints defined using the annotations.
+The `validate` function in this library can be used to validate the values with respect to the constraints defined in the respective types.
 
-The following example demonstrates how to validate the values assigned to a Ballerina type.
+The following example demonstrates how to validate a value with respect to constraints in the type. The respective type is automatically inferred from the expression context.
 
 ```ballerina
 public function main() returns error? {
