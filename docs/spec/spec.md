@@ -80,14 +80,14 @@ type User record {|
 
 The following table illustrates all the supported annotations with respect to the Ballerina types.
 
-| Ballerina Type                    | Annotation           |
-|-----------------------------------|----------------------|
-| `int`                             | `@constraint:Int`    |
-| `float`                           | `@constraint:Float`  |
-| `int`&#124;`float`&#124;`decimal` | `@constraint:Number` |
-| `string`                          | `@constraint:String` |
-| `any[]`                           | `@constraint:Array`  |
-| `constraint:Date`                 | `@constraint:Date`   |
+| Annotation           | Associated Ballerina Type(s) |
+|----------------------|------------------------------|
+| `@constraint:Int`    | `int`                        |
+| `@constraint:Float`  | `float`                      |
+| `@constraint:Number` | `int`, `float`, `decimal`    |
+| `@constraint:String` | `string`                     |
+| `@constraint:Array`  | `any[]`                      |
+| `@constraint:Date`   | `constraint:Date`            |
 
 ### 2.1. Constraint annotation on number types
 

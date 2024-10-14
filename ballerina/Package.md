@@ -8,14 +8,14 @@ The Ballerina `constraint` package facilitates APIs to do validations on the Bal
 
 This library provides the following annotations on Ballerina types to validate the values created with the respective types.
 
-| Ballerina Type                    | Annotation           | Supported Constraints                                                                                                  |
-|-----------------------------------|----------------------|------------------------------------------------------------------------------------------------------------------------|
-| `int`                             | `@constraint:Int`    | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` |
-| `float`                           | `@constraint:Float`  | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` |
-| `int`&#124;`float`&#124;`decimal` | `@constraint:Number` | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` |
-| `string`                          | `@constraint:String` | `length`, `minLength`, `maxLength`, `pattern`                                                                          |
-| `any[]`                           | `@constraint:Array`  | `length`, `minLength`, `maxLength`                                                                                     |
-| `constraint:Date`                 | `@constraint:Date`   | `option` - `PAST` or `FUTURE` or `PAST_OR_PRESENT` or `FUTURE_OR_PRESENT`                                              |
+| Annotation           | Supported Constraints                                                                                                  | Associated Ballerina Type(s) |
+|----------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------|
+| `@constraint:Int`    | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` | `int`                        |
+| `@constraint:Float`  | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` | `float`                      |
+| `@constraint:Number` | `minValue`, `maxValue`, `minValueExclusive`, `maxValueExclusive`, `maxDigits`, `maxIntegerDigits`, `maxFractionDigits` | `int`, `float`, `decimal`    |
+| `@constraint:String` | `length`, `minLength`, `maxLength`, `pattern`                                                                          | `string`                     |
+| `@constraint:Array`  | `length`, `minLength`, `maxLength`                                                                                     | `any[]`                      |
+| `@constraint:Date`   | `option` - `PAST` or `FUTURE` or `PAST_OR_PRESENT` or `FUTURE_OR_PRESENT`                                              | `constraint:Date`            |
 
 The following example demonstrates how to apply constraint annotations to types.
 
