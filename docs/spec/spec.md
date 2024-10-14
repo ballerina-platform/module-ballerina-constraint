@@ -8,7 +8,7 @@ _Edition_: Swan Lake
 
 ## Introduction
 This is the specification for the Constraint standard library of [Ballerina language](https://ballerina.io/), which 
-provides annotations to add constraints to Ballerina types and API to validate the values with respect to the constraints defined in the respective types.
+provides annotations to add constraints to Ballerina types and an API to validate the values with respect to the constraints defined in the respective types.
 
 The Constraint library specification has evolved and may continue to evolve in the future. The released versions of the 
 specification can be found under the relevant GitHub tag.

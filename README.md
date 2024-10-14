@@ -8,7 +8,7 @@ Ballerina Constraint Library
   [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerina-constraint.svg?label=Last%20Commit)](https://github.com/ballerina-platform/module-ballerina-constraint/commits/master)
   [![GitHub issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/constraint.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fconstraint)
 
-The Ballerina `constraint` library provides annotations to add constraints to Ballerina types and API to validate the values with respect to the constraints defined in the respective types.
+The Ballerina `constraint` library provides annotations to add constraints to Ballerina types and an API to validate the values with respect to the constraints defined in the respective types.
 
 ### Constraint annotations
 
