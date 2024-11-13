@@ -14,11 +14,15 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/jballerina.java;
+
 # Represents the generic error type of the module.
 public type Error distinct error;
 
 # Represents the errors occurs during constraint validations.
+@java:ExternalDependency
 public type ValidationError distinct Error;
 
 # Represents the errors occurs during the type conversion.
+@java:ExternalDependency
 public type TypeConversionError distinct Error;
