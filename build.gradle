@@ -16,10 +16,10 @@
  */
 
 plugins {
-    id "com.github.spotbugs" version "6.0.18"
+    id "com.github.spotbugs" version "6.5.1"
     id "com.github.johnrengelman.shadow" version "7.1.2"
     id "de.undercouch.download" version "5.4.0"
-    id "net.researchgate.release" version "2.8.0"
+    id "net.researchgate.release" version "3.1.0"
 }
 
 ext.puppycrawlCheckstyleVersion = project.puppycrawlCheckstyleVersion
@@ -59,6 +59,15 @@ allprojects {
 }
 
 subprojects {
+
+    plugins.withId('java') {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(25)
+            }
+        }
+    }
+
     configurations {
         ballerinaStdLibs
         jbalTools
@@ -68,7 +77,7 @@ subprojects {
         jbalTools ("org.ballerinalang:jballerina-tools:${ballerinaLangVersion}") {
             transitive = false
         }
-        
+
         /* Standard libraries */
         ballerinaStdLibs "io.ballerina.stdlib:time-ballerina:${stdlibTimeVersion}"
     }
@@ -90,6 +99,6 @@ release {
     }
 }
 
-task build {
+tasks.named('build') {
     dependsOn('constraint-ballerina:build')
 }
