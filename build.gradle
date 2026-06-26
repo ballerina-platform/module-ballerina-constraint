@@ -32,6 +32,10 @@ allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'maven-publish'
 
+    jacoco {
+        toolVersion = jacocoVersion
+    }
+
     repositories {
         mavenLocal()
         maven {
