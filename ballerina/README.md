@@ -1,8 +1,16 @@
 ## Overview
 
-This module provides features to validate the values with respect to the constraints defined to the respective Ballerina types.
+The Ballerina `constraint` module provides annotations to add constraints to
+Ballerina types and an API to validate values with respect to the constraints
+defined in the respective types.
 
-The Ballerina `constraint` module facilitates APIs to do validations on the Ballerina types further with the use of annotations.
+## Key Features
+
+- Constraint annotations for `int`, `float`, `decimal`, `string`, array, and date types
+- A `validate` function to check values against their type's constraints
+- Support for custom error messages on validation failures
+
+## Module Details
 
 ### Constraint annotations
 
