@@ -10,8 +10,6 @@ defined in the respective types.
 - A `validate` function to check values against their type's constraints
 - Support for custom error messages on validation failures
 
-## Module Details
-
 ### Constraint annotations
 
 This library provides the following annotations on Ballerina types to validate the values created with the respective types.
