@@ -1,6 +1,6 @@
 ## Overview
 
-This Ballerina module provides annotations to add constraints to Ballerina types and an API to validate values with respect to the constraints defined in the respective types.
+This module provides annotations to add constraints to Ballerina types and an API to validate values with respect to the constraints defined in the respective types.
 
 ### Key Features
 
