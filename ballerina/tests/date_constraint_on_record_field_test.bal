@@ -58,6 +58,7 @@ isolated function testNoDateConstraintsOnRecordField() {
 
     rec.dob.year = 2025;
     rec.dob.day = 3;
+    validation = validate(rec);
     if validation is error {
         test:assertFail("Unexpected error found.");
     } else {
