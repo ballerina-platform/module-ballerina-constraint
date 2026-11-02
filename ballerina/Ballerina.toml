@@ -1,7 +1,7 @@
 [package]
 org = "ballerina"
 name = "constraint"
-version = "1.7.2"
+version = "1.7.3"
 authors = ["Ballerina"]
 keywords = ["constraint", "validation", "Type/Library", "Area/Data Formats & Utilities", "Name/Constraint"]
 repository = "https://github.com/ballerina-platform/module-ballerina-constraint"
@@ -15,5 +15,5 @@ graalvmCompatible = true
 [[platform.java21.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "constraint-native"
-version = "1.7.2"
-path = "../native/build/libs/constraint-native-1.7.2.jar"
+version = "1.7.3"
+path = "../native/build/libs/constraint-native-1.7.3-SNAPSHOT.jar"
