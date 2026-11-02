@@ -861,3 +861,62 @@ isolated function testConstraintOnFieldsWithEscapeCharsFailure() {
         test:assertFail("Expected error not found.");
     }
 }
+
+// Testing annotation validations with union of type references
+
+type Member record {|
+    @String {
+        minLength: 2
+    }
+    string name;
+|};
+
+type MemberRef Member;
+
+type MemberUnion Member|Member[];
+
+type MemberRefUnion MemberRef|MemberRef[];
+
+@test:Config {}
+isolated function testUnionOfTypeReferencesSuccess() returns error? {
+    json payload = {name: "Alice"};
+    MemberRef|MemberRef[] value = check payload.cloneWithType();
+    MemberRef|MemberRef[]|error validation = validate(value);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionOfTypeReferencesFailure() returns error? {
+    json payload = {name: "A"};
+    MemberRef|MemberRef[] value = check payload.cloneWithType();
+    MemberRef|MemberRef[]|error validation = validate(value);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionFailure() {
+    json payload = {name: "A"};
+    MemberUnion|error validation = validate(payload, MemberUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionOfTypeReferencesFailure() {
+    json payload = {name: "A"};
+    MemberRefUnion|error validation = validate(payload, MemberRefUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

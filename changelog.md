@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- [[#9433] Fix constraint validation on a union of type references](https://github.com/ballerina-platform/ballerina-library/issues/9433)
+
 ### Changed
 
 - [[#9301] Regroup standard library packages under new Area categories](https://github.com/ballerina-platform/ballerina-library/issues/9301)

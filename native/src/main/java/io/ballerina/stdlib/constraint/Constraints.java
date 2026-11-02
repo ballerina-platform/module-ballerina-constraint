@@ -109,13 +109,24 @@ public class Constraints {
         if (type instanceof AnnotatableType) {
             AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraintsInfo);
             annotations.validate(value, (AnnotatableType) type, path, isMemberValue);
-        } else if (type instanceof UnionType) {
-            Optional<Type> matchingType = getMatchingType(value, type);
-            if (matchingType.isPresent()) {
-                return validateAfterTypeConversionInternal(value, matchingType.get(), path, isMemberValue);
+            // A named union is a type reference; its members are not reached by the annotation validation.
+            Type referredType = TypeUtils.getReferredType(type);
+            if (referredType instanceof UnionType) {
+                failedConstraintsInfo.addAll(validateUnionMember(value, referredType, path, isMemberValue));
             }
+        } else if (type instanceof UnionType) {
+            return validateUnionMember(value, type, path, isMemberValue);
         }
         return failedConstraintsInfo;
+    }
+
+    private static List<ConstraintErrorInfo> validateUnionMember(Object value, Type unionType, String path,
+                                                                 boolean isMemberValue) {
+        Optional<Type> matchingType = getMatchingType(value, unionType);
+        if (matchingType.isPresent()) {
+            return validateAfterTypeConversionInternal(value, matchingType.get(), path, isMemberValue);
+        }
+        return new ArrayList<>();
     }
 
     private static Type getTypeFromReadOnly(Type type) {
@@ -150,6 +161,8 @@ public class Constraints {
             //  https://github.com/ballerina-platform/ballerina-lang/issues/37050
             valueType = TypeUtils.getType(value);
         }
+        // The value's type is itself a type reference when it was converted to a member such as `type A B;`.
+        valueType = TypeUtils.getReferredType(valueType);
         for (Type typ : ((UnionType) type).getMemberTypes()) {
             if (TypeUtils.getReferredType(typ).equals(valueType)) {
                 return Optional.of(typ);
