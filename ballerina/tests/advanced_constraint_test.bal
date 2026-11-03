@@ -861,3 +861,181 @@ isolated function testConstraintOnFieldsWithEscapeCharsFailure() {
         test:assertFail("Expected error not found.");
     }
 }
+
+// Testing annotation validations with union of type references
+
+type Member record {|
+    @String {
+        minLength: 2
+    }
+    string name;
+|};
+
+type MemberRef Member;
+
+type MemberUnion Member|Member[];
+
+type MemberRefUnion MemberRef|MemberRef[];
+
+@test:Config {}
+isolated function testUnionOfTypeReferencesSuccess() returns error? {
+    json payload = {name: "Alice"};
+    MemberRef|MemberRef[] value = check payload.cloneWithType();
+    MemberRef|MemberRef[]|error validation = validate(value);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testUnionOfTypeReferencesFailure() returns error? {
+    json payload = {name: "A"};
+    MemberRef|MemberRef[] value = check payload.cloneWithType();
+    MemberRef|MemberRef[]|error validation = validate(value);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionFailure() {
+    json payload = {name: "A"};
+    MemberUnion|error validation = validate(payload, MemberUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionOfTypeReferencesFailure() {
+    json payload = {name: "A"};
+    MemberRefUnion|error validation = validate(payload, MemberRefUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+// Testing annotation validations with array members of unions of type references
+
+type ReadOnlyMemberUnion readonly & MemberUnion;
+
+type ReadOnlyInlineUnion readonly & (Member|Member[]);
+
+type ReadOnlyMembers readonly & Member[];
+
+type IdOrString Id|string;
+
+@test:Config {}
+isolated function testUnionOfTypeReferencesArrayFailure() returns error? {
+    json payload = [{name: "A"}];
+    MemberRef|MemberRef[] value = check payload.cloneWithType();
+    MemberRef|MemberRef[]|error validation = validate(value);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$[0].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionArrayFailure() {
+    json payload = [{name: "A"}];
+    MemberUnion|error validation = validate(payload, MemberUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$[0].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionOfTypeReferencesArrayFailure() {
+    json payload = [{name: "A"}];
+    MemberRefUnion|error validation = validate(payload, MemberRefUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$[0].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionSuccess() {
+    json single = {name: "Alice"};
+    json multiple = [{name: "Alice"}, {name: "Bob"}];
+    MemberUnion|error validation1 = validate(single, MemberUnion);
+    MemberRefUnion|error validation2 = validate(multiple, MemberRefUnion);
+    if validation1 is error || validation2 is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testNamedUnionWithSubtypeMemberSuccess() {
+    IdOrString|error validation = validate(100, IdOrString);
+    if validation is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+// Testing annotation validations with readonly unions
+
+@test:Config {}
+isolated function testReadOnlyNamedUnionFailure() {
+    json payload = {name: "A"};
+    ReadOnlyMemberUnion|error validation = validate(payload, ReadOnlyMemberUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testReadOnlyInlineUnionFailure() {
+    json payload = {name: "A"};
+    ReadOnlyInlineUnion|error validation = validate(payload, ReadOnlyInlineUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$.name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testReadOnlyInlineUnionArrayFailure() {
+    json payload = [{name: "A"}];
+    ReadOnlyInlineUnion|error validation = validate(payload, ReadOnlyInlineUnion);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$[0].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}
+
+@test:Config {}
+isolated function testReadOnlyUnionSuccess() {
+    json payload = {name: "Alice"};
+    ReadOnlyMemberUnion|error validation1 = validate(payload, ReadOnlyMemberUnion);
+    ReadOnlyInlineUnion|error validation2 = validate(payload, ReadOnlyInlineUnion);
+    if validation1 is error || validation2 is error {
+        test:assertFail("Unexpected error found.");
+    }
+}
+
+@test:Config {}
+isolated function testReadOnlyArrayFailure() {
+    json payload = [{name: "A"}];
+    ReadOnlyMembers|error validation = validate(payload, ReadOnlyMembers);
+    if validation is error {
+        test:assertEquals(validation.message(), "Validation failed for '$[0].name:minLength' constraint(s).");
+    } else {
+        test:assertFail("Expected error not found.");
+    }
+}

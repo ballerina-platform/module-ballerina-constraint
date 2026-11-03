@@ -20,6 +20,7 @@ package io.ballerina.stdlib.constraint;
 
 import io.ballerina.runtime.api.types.AnnotatableType;
 import io.ballerina.runtime.api.types.ArrayType;
+import io.ballerina.runtime.api.types.FiniteType;
 import io.ballerina.runtime.api.types.IntersectionType;
 import io.ballerina.runtime.api.types.RecordType;
 import io.ballerina.runtime.api.types.Type;
@@ -36,6 +37,7 @@ import io.ballerina.stdlib.constraint.annotations.RecordFieldAnnotations;
 import io.ballerina.stdlib.constraint.annotations.TypeAnnotations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,23 +101,35 @@ public class Constraints {
 
     private static List<ConstraintErrorInfo> validateAfterTypeConversionInternal(Object value, Type type, String path,
                                                                                  boolean isMemberValue) {
+        if (type.isReadOnly()) {
+            type = getTypeFromReadOnly(type);
+        }
         if (type instanceof ArrayType) {
             return validateArrayMembers(value, (ArrayType) type, path);
         }
         List<ConstraintErrorInfo> failedConstraintsInfo = new ArrayList<>();
-        if (type.isReadOnly()) {
-            type = getTypeFromReadOnly(type);
-        }
         if (type instanceof AnnotatableType) {
             AbstractAnnotations annotations = getAnnotationImpl(type, failedConstraintsInfo);
             annotations.validate(value, (AnnotatableType) type, path, isMemberValue);
-        } else if (type instanceof UnionType) {
-            Optional<Type> matchingType = getMatchingType(value, type);
-            if (matchingType.isPresent()) {
-                return validateAfterTypeConversionInternal(value, matchingType.get(), path, isMemberValue);
+            // A named union is a type reference, possibly to a readonly intersection; the annotation validation
+            // does not reach its members.
+            Type impliedType = TypeUtils.getImpliedType(type);
+            if (impliedType instanceof UnionType) {
+                failedConstraintsInfo.addAll(validateUnionMember(value, impliedType, path, isMemberValue));
             }
+        } else if (type instanceof UnionType) {
+            return validateUnionMember(value, type, path, isMemberValue);
         }
         return failedConstraintsInfo;
+    }
+
+    private static List<ConstraintErrorInfo> validateUnionMember(Object value, Type unionType, String path,
+                                                                 boolean isMemberValue) {
+        Optional<Type> matchingType = getMatchingType(value, unionType);
+        if (matchingType.isPresent()) {
+            return validateAfterTypeConversionInternal(value, matchingType.get(), path, isMemberValue);
+        }
+        return Collections.emptyList();
     }
 
     private static Type getTypeFromReadOnly(Type type) {
@@ -145,17 +159,39 @@ public class Constraints {
         Type valueType;
         if (value instanceof BMap) {
             valueType = ((BMap<?, ?>) value).getTypedesc().getDescribingType();
+            // The describing type of an immutable value is a singleton type of that value.
+            if (TypeUtils.getImpliedType(valueType) instanceof FiniteType) {
+                valueType = TypeUtils.getType(value);
+            }
         } else {
             // TODO: This flow is not working as expected due to
             //  https://github.com/ballerina-platform/ballerina-lang/issues/37050
             valueType = TypeUtils.getType(value);
         }
         for (Type typ : ((UnionType) type).getMemberTypes()) {
-            if (TypeUtils.getReferredType(typ).equals(valueType)) {
+            if (isMatchingMember(valueType, typ)) {
                 return Optional.of(typ);
             }
         }
         return Optional.empty();
+    }
+
+    private static boolean isMatchingMember(Type valueType, Type memberType) {
+        Type value = TypeUtils.getImpliedType(valueType);
+        Type member = TypeUtils.getImpliedType(memberType);
+        if (value.equals(member)) {
+            return true;
+        }
+        if (value instanceof ArrayType && member instanceof ArrayType) {
+            return isMatchingMember(((ArrayType) value).getElementType(), ((ArrayType) member).getElementType());
+        }
+        // An immutable record is a distinct type that records the mutable record in its intersection.
+        if (value instanceof RecordType) {
+            Optional<IntersectionType> intersectionType = ((RecordType) value).getIntersectionType();
+            return intersectionType.isPresent() && intersectionType.get().getConstituentTypes().stream()
+                    .anyMatch(constituent -> TypeUtils.getImpliedType(constituent).equals(member));
+        }
+        return false;
     }
 
     private static AbstractAnnotations getAnnotationImpl(Type type, List<ConstraintErrorInfo> failedConstraints) {
